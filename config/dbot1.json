@@ -1,7 +1,32 @@
 {
-    "description": "this is the description of the DBOT1",
-    "name": "dbot_name1",
-    "input": "{}",
-    "ouput": "{}"
+	"dbot_profile": {
+	    "description": "this is the description of the DBOT1",
+	    "name": "dbot_name1",
+	    "input": "{}",
+	    "ouput": "{}",
+	    "ai_type": "image recognition",
+	    "pool_value": "3554",
+	    "fee_to_pool": "4",
+	    "curated_value": "3234",
+	    "curators": [
+	    	{
+	    		"address": "0xfjkfjweiofjweiofjio",
+	    		"quantity": "1234"
+	    	},
+	    	{
+	    		"address": "0xfjkfjweiwejweiofjio",
+	    		"quantity": "134"
+	    	},
+	    	{
+	    		"address": "0xfjkfjgfghgweiofjio",
+	    		"quantity": "2234"
+	    	}
+	    ]
+	},
+	"dbot_metrics": {
+		"db_server": "up",
+		"api_service": "up",
+		"total_number_tx": "234543234"
+	}
 }
 
