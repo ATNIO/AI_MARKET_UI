@@ -1,14 +1,18 @@
 <template>
   <div class="home">
+    <bot-list></bot-list>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import BotList from "./DbotList";
 
 export default {
   name: "home",
-  components: {},
+  components: {
+    BotList
+  },
   mounted() {
     // this._getBalance();
   },

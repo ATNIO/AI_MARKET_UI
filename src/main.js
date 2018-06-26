@@ -1,5 +1,9 @@
 import Vue from "vue";
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+import "normalize.css";
 
+import "whatwg-fetch";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 
@@ -42,6 +46,7 @@ requireComponent.keys().forEach(fileName => {
 });
 
 Vue.use(web3);
+Vue.use(ElementUI);
 
 new Vue({
   router,
