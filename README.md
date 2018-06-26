@@ -1,7 +1,8 @@
-## 本地运行
+## 本地运行 (local deployment)
+npm install        
 yarn serve  or  npm run serve
 
-## 构建代码
+## 构建代码  (build project)
 yarn build or npm run build
 
 ## 环境变量
