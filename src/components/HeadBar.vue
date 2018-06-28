@@ -20,7 +20,7 @@ header {
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  background: #2b85e4;
+  background: url("../assets/header_bg.png") #498fe1 repeat;
 
   p {
     font-size: 48px;
