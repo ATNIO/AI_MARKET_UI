@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
+
+const Home = () => import("./views/Home.vue");
+const Detail = () => import("./views/Detail.vue");
 
 Vue.use(Router);
 
@@ -11,6 +13,11 @@ export default new Router({
       path: "/",
       name: "home",
       component: Home
+    },
+    {
+      path: "/detail/:id",
+      name: "detail",
+      component: Detail
     }
   ]
 });

@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <!-- this is footer -->
+    <span>Copyright &#169; {{ new Date().getFullYear() }}</span>
   </footer>
 </template>
 
@@ -9,3 +9,13 @@ export default {
   name: "footBar"
 };
 </script>
+
+<style lang="less" scoped>
+footer {
+  text-align: center;
+
+  span {
+    color: #80848f;
+  }
+}
+</style>

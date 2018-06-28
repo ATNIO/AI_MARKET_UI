@@ -1,16 +1,24 @@
 import Vue from "vue";
-import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
 import "normalize.css";
+import "iview/dist/styles/iview.css";
 
 import "whatwg-fetch";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 
-import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+
 import web3 from "./plugins/web3";
+
+import App from "./App.vue";
+
+import { Row, Col, Button, Progress } from "iview";
+
+Vue.component("i-row", Row);
+Vue.component("i-col", Col);
+Vue.component("i-button", Button);
+Vue.component("i-progress", Progress);
 
 Vue.config.productionTip = false;
 
@@ -46,7 +54,6 @@ requireComponent.keys().forEach(fileName => {
 });
 
 Vue.use(web3);
-Vue.use(ElementUI);
 
 new Vue({
   router,

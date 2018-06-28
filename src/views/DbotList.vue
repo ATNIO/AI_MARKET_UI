@@ -1,50 +1,95 @@
 <template>
   <section class="list">
-    <el-table
-      :data="list"
-      style="width: 100%"
-    >
-      <el-table-column
-        prop="name"
-        label="Dbot Name"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="reputation"
-        label="Reputation"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="num_api_call_24h"
-        label="Query(24h)">
-      </el-table-column>
-      <el-table-column
-        prop="pool_size"
-        label="Pool Value">
-      </el-table-column>
-    </el-table>
-
-    <el-pagination
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="pagination"
-    >
-    </el-pagination>
+    <ul>
+      <li>
+        <i-row type="flex">
+          <i-col :lg="6" class-name="center">Name</i-col>
+          <i-col :lg="6" class-name="center">Reputation</i-col>
+          <i-col :lg="6" class-name="center">Query(24h)</i-col>
+          <i-col :lg="6" class-name="center">Pool Value</i-col>
+        </i-row>
+      </li>
+      <li 
+        v-for="(item, idx) in list" 
+        :key="`${ item.name }_${ idx }`"
+        @click="gotoDetail(idx)"
+      >
+        <i-row type="flex">
+          <i-col :lg="6" class-name="center">
+            {{ item.name }}
+          </i-col>
+          <i-col :lg="6" class-name="center">
+            {{ item.reputation }}
+          </i-col>
+          <i-col :lg="6" class-name="center">
+            {{ item.num_api_call_24h }}
+          </i-col>
+          <i-col :lg="6" class-name="center">
+            {{ item.pool_size }}
+          </i-col>
+        </i-row>
+      </li>
+    </ul>
   </section>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
+const filters = [
+  {
+    name: "Computer vision",
+    checked: false
+  },
+  {
+    name: "Voice recognition",
+    checked: false
+  },
+  {
+    name: "Optimization",
+    checked: false
+  },
+  {
+    name: "Finance",
+    checked: false
+  },
+  {
+    name: "Tracking AI",
+    checked: false
+  },
+  {
+    name: "Robotics",
+    checked: false
+  },
+  {
+    name: "Data",
+    checked: false
+  },
+  {
+    name: "Security",
+    checked: false
+  },
+  {
+    name: "AI type",
+    checked: false
+  }
+];
+
 export default {
   name: "botList",
   data() {
     return {
-      list: [],
+      filters,
       total: 400
     };
   },
+  computed: {
+    ...mapGetters(["list"])
+  },
   mounted() {
-    this.getDbotList();
+    if (this.list.length === 0) {
+      this.getDbotList();
+    }
   },
   methods: {
     async getDbotList() {
@@ -53,7 +98,15 @@ export default {
       // TODOS: judge the status of response
       const data = await response.json();
 
-      this.list = data.dbots;
+      this.$store.dispatch("setList", data.dbots);
+    },
+    gotoDetail(index) {
+      this.$router.push({
+        name: "detail",
+        params: {
+          id: index
+        }
+      });
     }
   }
 };
@@ -61,10 +114,31 @@ export default {
 
 <style lang="less" scoped>
 .list {
-  .pagination {
-    margin: 1rem 0;
-    display: flex;
-    justify-content: center;
+  max-width: 1600px;
+  margin: 0 auto;
+
+  ul {
+    list-style: none;
+
+    li {
+      padding: 1rem 0;
+      border-bottom: thin solid #dddee1;
+      cursor: pointer;
+
+      &:hover {
+        background: #f8f8f9;
+      }
+
+      &:first-of-type {
+        font-size: 16px;
+        color: #1c2438;
+        cursor: default;
+      }
+
+      .center {
+        text-align: center;
+      }
+    }
   }
 }
 </style>

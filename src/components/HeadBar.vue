@@ -1,7 +1,7 @@
 <template>
   <header>
     <p>ATN</p>
-    <el-button size="mini">Login</el-button>
+    <i-button>Login</i-button>
   </header>
 </template>
 
@@ -20,10 +20,11 @@ header {
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  background: #5db9cf;
+  background: #2b85e4;
 
   p {
     font-size: 48px;
+    color: #ffffff;
   }
 }
 </style>
