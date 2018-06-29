@@ -3,32 +3,32 @@
     <Filters></Filters>
     <ul>
       <li>
-        <i-row type="flex">
-          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">Name</i-col>
-          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">Reputation</i-col>
-          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">Query(24h)</i-col>
-          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">Pool Value</i-col>
-        </i-row>
+        <a-row type="flex">
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Name</a-col>
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Reputation</a-col>
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Query(24h)</a-col>
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Pool Value</a-col>
+        </a-row>
       </li>
       <li 
         v-for="(item, idx) in list" 
         :key="`${ item.name }_${ idx }`"
         @click="gotoDetail(idx)"
       >
-        <i-row type="flex">
-          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">
+        <a-row type="flex">
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
             {{ item.name }}
-          </i-col>
-          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">
+          </a-col>
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
             {{ item.reputation }}
-          </i-col>
-          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">
+          </a-col>
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
             {{ item.num_api_call_24h }}
-          </i-col>
-          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">
+          </a-col>
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
             {{ item.pool_size }}
-          </i-col>
-        </i-row>
+          </a-col>
+        </a-row>
       </li>
     </ul>
   </section>
@@ -87,6 +87,9 @@ export default {
 
   ul {
     list-style: none;
+    padding: 0 2rem;
+    margin: 0;
+    box-sizing: border-box;
 
     li {
       padding: 1rem 0;
@@ -102,6 +105,10 @@ export default {
         border-top: thin solid #dddee1;
         color: #1c2438;
         cursor: default;
+
+        &:hover {
+          background: transparent;
+        }
       }
 
       .center {

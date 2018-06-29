@@ -1,6 +1,5 @@
 import Vue from "vue";
 import "normalize.css";
-import "iview/dist/styles/iview.css";
 
 import "whatwg-fetch";
 import upperFirst from "lodash/upperFirst";
@@ -10,17 +9,9 @@ import router from "./router";
 import store from "./store";
 
 import web3 from "./plugins/web3";
+import "./antd";
 
 import App from "./App.vue";
-
-import { Row, Col, Button, CheckboxGroup, Checkbox, Input } from "iview";
-
-Vue.component("i-row", Row);
-Vue.component("i-col", Col);
-Vue.component("i-button", Button);
-Vue.component("i-checkboxGroup", CheckboxGroup);
-Vue.component("i-checkbox", Checkbox);
-Vue.component("i-input", Input);
 
 Vue.config.productionTip = false;
 

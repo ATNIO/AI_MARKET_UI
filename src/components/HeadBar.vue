@@ -1,7 +1,7 @@
 <template>
   <header>
     <p>ATN</p>
-    <i-button>Login</i-button>
+    <a-button size="large">Login</a-button>
   </header>
 </template>
 
@@ -23,8 +23,13 @@ header {
   background: url("../assets/header_bg.png") #498fe1 repeat;
 
   p {
+    margin: 0;
     font-size: 48px;
     color: #ffffff;
+  }
+
+  button {
+    width: 120px;
   }
 }
 </style>

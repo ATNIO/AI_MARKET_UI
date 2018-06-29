@@ -1,28 +1,49 @@
 <template>
   <section class="filters">
     <h2>Filters</h2>
-    <i-row class-name="filter-wrapper">
-      <i-col :lg="12">
-        <i-checkboxGroup v-model="filterChecked">
-          <i-checkbox 
-            v-for="item in filters" 
-            :key="item.name" 
-            :label="item.name"
-          >
-            <span class="checkbox-text">{{ item.name }}</span>
-          </i-checkbox>
-        </i-checkboxGroup>
+    <a-row 
+      type="flex" 
+      justify="space-between" 
+      class="filter-wrapper"
+    >
+      <!-- left filter -->
+      <a-col :xs="24" :md="14" :lg="12" class="filter-col">
+
+        <!-- checkbox group -->
+        <a-checkbox-group v-model="filterCheckedList">
+          <a-row>
+              <a-col 
+                :xs="12"
+                :sm="8"
+                :md="8"
+                :lg="8"
+                v-for="item in filters"
+                :key="item.name"
+              >
+                <a-checkbox :value="item.name">
+                  {{ item.name }}
+                </a-checkbox>
+              </a-col>
+          </a-row>
+        </a-checkbox-group>
+        
+        <!-- button group -->
         <div class="btn-group">
-          <i-button size="large" type="warning" @click="resetFilterChecked">reset</i-button>
-          <i-button size="large" type="primary" @click="filter">filter</i-button>
+          <a-button size="large" @click="resetFilterChecked">Reset</a-button>
+          <a-button size="large" type="primary" @click="filter">Filter</a-button>
         </div>
-      </i-col>
-      <i-col :lg="4" offset="8">
-        <i-input v-model="searchValue">
-          <i-button slot="append" icon="ios-search"></i-button>
-        </i-input>
-      </i-col>
-    </i-row>
+      </a-col>
+
+      <!-- right search -->
+      <a-col :xs="24" :md="10" :lg="6">
+        <a-input-search 
+          placeholder="Search Dbot" 
+          @search="onSearch" 
+          enterButton="Search" 
+          size="large"
+        />
+      </a-col>
+    </a-row>
   </section>
 </template>
 
@@ -71,18 +92,22 @@ export default {
   data() {
     return {
       filters,
-      filterChecked: [],
+      filterCheckedList: [],
       searchValue: ""
     };
   },
   methods: {
     // reset checked filters array
     resetFilterChecked() {
-      this.filterChecked = [];
+      this.filterCheckedList = [];
       // TODOS: storage the checked filters array in store for page refresh or page switch
     },
     filter() {
       // TODOS: will filter base on checked filters
+    },
+    onSearch(value) {
+      console.log(value);
+      // TODOS: search
     }
   }
 };
@@ -90,22 +115,23 @@ export default {
 
 <style lang="less" scoped>
 .filters {
-  margin-bottom: 1rem;
   padding: 0 2rem;
 
   .filter-wrapper {
     padding: 1rem 0;
 
-    .checkbox-text {
-      margin-left: 4px;
-    }
+    .filter-col {
+      margin-bottom: 1rem;
 
-    .btn-group {
-      margin-top: 1rem;
+      .btn-group {
+        margin-top: 1rem;
 
-      button {
-        &:first-child {
-          margin-right: 1rem;
+        button {
+          width: 100px;
+
+          &:first-child {
+            margin-right: 1rem;
+          }
         }
       }
     }
