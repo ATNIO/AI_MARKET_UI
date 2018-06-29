@@ -13,12 +13,14 @@ import web3 from "./plugins/web3";
 
 import App from "./App.vue";
 
-import { Row, Col, Button, Progress } from "iview";
+import { Row, Col, Button, CheckboxGroup, Checkbox, Input } from "iview";
 
 Vue.component("i-row", Row);
 Vue.component("i-col", Col);
 Vue.component("i-button", Button);
-Vue.component("i-progress", Progress);
+Vue.component("i-checkboxGroup", CheckboxGroup);
+Vue.component("i-checkbox", Checkbox);
+Vue.component("i-input", Input);
 
 Vue.config.productionTip = false;
 

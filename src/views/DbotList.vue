@@ -1,12 +1,13 @@
 <template>
   <section class="list">
+    <Filters></Filters>
     <ul>
       <li>
         <i-row type="flex">
-          <i-col :lg="6" class-name="center">Name</i-col>
-          <i-col :lg="6" class-name="center">Reputation</i-col>
-          <i-col :lg="6" class-name="center">Query(24h)</i-col>
-          <i-col :lg="6" class-name="center">Pool Value</i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">Name</i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">Reputation</i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">Query(24h)</i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">Pool Value</i-col>
         </i-row>
       </li>
       <li 
@@ -15,16 +16,16 @@
         @click="gotoDetail(idx)"
       >
         <i-row type="flex">
-          <i-col :lg="6" class-name="center">
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">
             {{ item.name }}
           </i-col>
-          <i-col :lg="6" class-name="center">
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">
             {{ item.reputation }}
           </i-col>
-          <i-col :lg="6" class-name="center">
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">
             {{ item.num_api_call_24h }}
           </i-col>
-          <i-col :lg="6" class-name="center">
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class-name="center">
             {{ item.pool_size }}
           </i-col>
         </i-row>
@@ -36,52 +37,15 @@
 <script>
 import { mapGetters } from "vuex";
 
-const filters = [
-  {
-    name: "Computer vision",
-    checked: false
-  },
-  {
-    name: "Voice recognition",
-    checked: false
-  },
-  {
-    name: "Optimization",
-    checked: false
-  },
-  {
-    name: "Finance",
-    checked: false
-  },
-  {
-    name: "Tracking AI",
-    checked: false
-  },
-  {
-    name: "Robotics",
-    checked: false
-  },
-  {
-    name: "Data",
-    checked: false
-  },
-  {
-    name: "Security",
-    checked: false
-  },
-  {
-    name: "AI type",
-    checked: false
-  }
-];
+import Filters from "./Filters";
 
 export default {
+  components: {
+    Filters
+  },
   name: "botList",
   data() {
-    return {
-      filters,
-      total: 400
-    };
+    return {};
   },
   computed: {
     ...mapGetters(["list"])
@@ -96,9 +60,13 @@ export default {
       const response = await fetch("/list");
 
       // TODOS: judge the status of response
-      const data = await response.json();
+      try {
+        const data = await response.json();
 
-      this.$store.dispatch("setList", data.dbots);
+        this.$store.dispatch("setList", data.dbots);
+      } catch (err) {
+        console.error(err);
+      }
     },
     gotoDetail(index) {
       this.$router.push({
@@ -131,6 +99,7 @@ export default {
 
       &:first-of-type {
         font-size: 16px;
+        border-top: thin solid #dddee1;
         color: #1c2438;
         cursor: default;
       }
