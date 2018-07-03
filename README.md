@@ -41,3 +41,9 @@ npm run lint
 ```
 yarn build --mode development   // 构建开发环境的代码，可通过 process.env.NODE_ENV 获取环境变量.
 ```
+
+## backend
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/ATNIO/AI_market_plan/master/images/ai-market-tables.png?token=AFXvyLI-7KuGhxH3QY1QRJrlSV6XcNJ9ks5bQys5wA%3D%3D" />
+</p>
