@@ -15,17 +15,11 @@ const router = new Router({
       component: Home
     },
     {
-      path: "/detail/:id",
+      path: "/detail/:dbot",
       name: "detail",
       component: Detail
     }
   ]
 });
-
-router.beforeEach((to, from, next) => {
-  next();
-});
-
-router.afterEach(() => {});
 
 export default router;

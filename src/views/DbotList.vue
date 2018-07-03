@@ -63,7 +63,7 @@ export default {
       try {
         const data = await response.json();
 
-        this.$store.dispatch("setList", data.dbots);
+        this.$store.dispatch("setList", data);
       } catch (err) {
         console.error(err);
       }
@@ -72,7 +72,7 @@ export default {
       this.$router.push({
         name: "detail",
         params: {
-          id: index
+          dbot: index
         }
       });
     }

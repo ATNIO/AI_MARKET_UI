@@ -7,23 +7,37 @@ import * as types from "./types";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage
+    })
+  ],
   state: {
-    list: []
+    list: [],
+    account: ""
   },
   mutations: {
     [types.SET_LIST](state, list) {
       state.list = list;
+    },
+    [types.SET_ACCOUNT](state, account) {
+      state.account = account;
     }
   },
   actions: {
     setList({ commit }, list) {
       commit(types.SET_LIST, list);
+    },
+    setAccount({ commit }, account) {
+      commit(types.SET_ACCOUNT, account);
     }
   },
   getters: {
     list(state) {
       return state.list;
+    },
+    account(state) {
+      return state.account;
     }
   }
 });

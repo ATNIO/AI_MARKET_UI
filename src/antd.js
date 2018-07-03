@@ -1,8 +1,23 @@
 import Vue from "vue";
-import { row, col, Button, Checkbox, Input, List, message } from "vue-antd-ui";
+import {
+  row,
+  col,
+  Button,
+  Checkbox,
+  Input,
+  List,
+  Message,
+  Progress,
+  Modal,
+  Dropdown,
+  Icon,
+  Menu
+} from "vue-antd-ui";
 
 Vue.component(Button.name, Button);
-Vue.prototype.$message = message;
+
+Vue.prototype.$message = Message;
+Vue.prototype.$progress = Progress;
 
 const components = [
   row,
@@ -12,7 +27,12 @@ const components = [
   Checkbox.Group,
   Input,
   Input.Search,
-  List
+  List,
+  Modal,
+  Dropdown,
+  Icon,
+  Menu,
+  Menu.Item
 ];
 
 components.forEach(component => {
