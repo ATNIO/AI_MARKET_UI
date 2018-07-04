@@ -11,12 +11,14 @@ import {
   Modal,
   Dropdown,
   Icon,
-  Menu
+  Menu,
+  Notification
 } from "vue-antd-ui";
 
 Vue.component(Button.name, Button);
 
 Vue.prototype.$message = Message;
+Vue.prototype.$notification = Notification;
 Vue.prototype.$progress = Progress;
 
 const components = [

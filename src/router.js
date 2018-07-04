@@ -15,7 +15,7 @@ const router = new Router({
       component: Home
     },
     {
-      path: "/detail/:dbot",
+      path: "/detail/:address",
       name: "detail",
       component: Detail
     }

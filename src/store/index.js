@@ -9,19 +9,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   plugins: [
     createPersistedState({
-      storage: window.sessionStorage
+      storage: window.sessionStorage,
+      paths: ["account"]
     })
   ],
   state: {
     list: [],
-    account: ""
+    account: "",
+    dbotDetail: {}
   },
   mutations: {
-    [types.SET_LIST](state, list) {
+    [types.SET_LIST](state, list = []) {
       state.list = list;
     },
-    [types.SET_ACCOUNT](state, account) {
+    [types.SET_ACCOUNT](state, account = "") {
       state.account = account;
+    },
+    [types.SET_DBOT_DETAIL](state, detail = {}) {
+      state.dbotDetail = detail;
     }
   },
   actions: {
@@ -30,14 +35,20 @@ export default new Vuex.Store({
     },
     setAccount({ commit }, account) {
       commit(types.SET_ACCOUNT, account);
+    },
+    setDbotDetail({ commit }, detail) {
+      commit(types.SET_DBOT_DETAIL, detail);
     }
   },
   getters: {
     list(state) {
-      return state.list;
+      return [...state.list];
     },
     account(state) {
       return state.account;
+    },
+    dbotDetail(state) {
+      return state.dbotDetail;
     }
   }
 });

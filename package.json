@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "normalize.css": "^8.0.0",
-    "nprogress": "^0.2.0",
     "vue": "^2.5.16",
     "vue-antd-ui": "^0.6.4",
     "vue-router": "^3.0.1",

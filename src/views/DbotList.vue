@@ -5,28 +5,28 @@
       <li>
         <a-row type="flex">
           <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Name</a-col>
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Reputation</a-col>
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Query(24h)</a-col>
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Pool Value</a-col>
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Description</a-col>
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Stars</a-col>
+          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Comments</a-col>
         </a-row>
       </li>
       <li 
         v-for="(item, idx) in list" 
         :key="`${ item.name }_${ idx }`"
-        @click="gotoDetail(idx)"
+        @click="gotoDetail(item.address)"
       >
         <a-row type="flex">
           <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
             {{ item.name }}
           </a-col>
           <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
-            {{ item.reputation }}
+            {{ item.description }}
           </a-col>
           <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
-            {{ item.num_api_call_24h }}
+            {{ item.stars }}
           </a-col>
           <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
-            {{ item.pool_size }}
+            {{ item.comments }}
           </a-col>
         </a-row>
       </li>
@@ -38,6 +38,7 @@
 import { mapGetters } from "vuex";
 
 import Filters from "./Filters";
+import { dbots } from "@/common/api";
 
 export default {
   components: {
@@ -57,22 +58,26 @@ export default {
   },
   methods: {
     async getDbotList() {
-      const response = await fetch("/list");
+      const response = await fetch(dbots);
 
-      // TODOS: judge the status of response
-      try {
-        const data = await response.json();
+      if (response.status === 200) {
+        // TODOS: judge the status of response
+        try {
+          const data = await response.json();
 
-        this.$store.dispatch("setList", data);
-      } catch (err) {
-        console.error(err);
+          this.$store.dispatch("setList", data);
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        console.log(response);
       }
     },
-    gotoDetail(index) {
+    gotoDetail(address) {
       this.$router.push({
         name: "detail",
         params: {
-          dbot: index
+          address
         }
       });
     }
@@ -104,6 +109,7 @@ export default {
         font-size: 16px;
         border-top: thin solid #dddee1;
         color: #1c2438;
+        background: #dddee1;
         cursor: default;
 
         &:hover {
