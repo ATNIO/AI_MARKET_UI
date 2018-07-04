@@ -48,12 +48,6 @@ requireComponent.keys().forEach(fileName => {
 
 Vue.use(web3);
 
-router.beforeEach((to, from, next) => {
-  next();
-});
-
-router.afterEach(() => {});
-
 new Vue({
   router,
   store,
