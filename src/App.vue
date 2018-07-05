@@ -7,7 +7,11 @@
 </template>
 
 <style lang="less" scoped>
-.content {
-  padding: 2rem 0;
+#app {
+  font-size: 16px;
+
+  .content {
+    padding: 2rem 0;
+  }
 }
 </style>

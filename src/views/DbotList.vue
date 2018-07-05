@@ -3,32 +3,32 @@
     <Filters></Filters>
     <ul>
       <li>
-        <a-row type="flex">
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Name</a-col>
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Description</a-col>
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Stars</a-col>
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Comments</a-col>
-        </a-row>
+        <Row type="flex">
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Name</i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Description</i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Stars</i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class="center">Comments</i-col>
+        </Row>
       </li>
       <li 
         v-for="(item, idx) in list" 
         :key="`${ item.name }_${ idx }`"
         @click="gotoDetail(item.address)"
       >
-        <a-row type="flex">
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
+        <Row type="flex">
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
             {{ item.name }}
-          </a-col>
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
+          </i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
             {{ item.description }}
-          </a-col>
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
+          </i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
             {{ item.stars }}
-          </a-col>
-          <a-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
+          </i-col>
+          <i-col :xs="6" :sm="6" :md="6" :lg="6" class="center">
             {{ item.comments }}
-          </a-col>
-        </a-row>
+          </i-col>
+        </Row>
       </li>
     </ul>
   </section>
@@ -95,26 +95,24 @@ export default {
     padding: 0 2rem;
     margin: 0;
     box-sizing: border-box;
+    background: #ffffff;
 
     li {
       padding: 1rem 0;
       border-bottom: thin solid #dddee1;
       cursor: pointer;
+      transition: all 0.3s ease;
 
-      &:hover {
+      &:not(:first-of-type):hover {
         background: #f8f8f9;
       }
 
       &:first-of-type {
-        font-size: 16px;
+        font-weight: 400;
         border-top: thin solid #dddee1;
         color: #1c2438;
         background: #dddee1;
         cursor: default;
-
-        &:hover {
-          background: transparent;
-        }
       }
 
       .center {

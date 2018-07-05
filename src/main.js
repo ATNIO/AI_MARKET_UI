@@ -1,4 +1,5 @@
 import Vue from "vue";
+import "./assets/styles/base.less";
 import "normalize.css";
 
 import "whatwg-fetch";
@@ -9,7 +10,8 @@ import router from "./router";
 import store from "./store";
 
 import web3 from "./plugins/web3";
-import "./antd";
+// import "./antd";
+import "./iview_components";
 
 import App from "./App.vue";
 

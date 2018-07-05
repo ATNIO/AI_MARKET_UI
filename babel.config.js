@@ -4,8 +4,8 @@ module.exports = {
     [
       "import",
       {
-        libraryName: "vue-antd-ui",
-        style: "css"
+        libraryName: "iview",
+        libraryDirectory: "src/components"
       }
     ]
   ]

@@ -2,35 +2,35 @@
   <header>
     <p>ATN</p>
     <template v-if="!account">
-      <a-button size="large" @click="() => setModalShow(true)">Login</a-button>
+      <Button size="large" @click="() => setModalShow(true)">Login</Button>
     </template>
     <template v-else>
-      <a-dropdown>
+      <Dropdown>
         <a class="ant-dropdown-link" href="#">
           <span style="color: #fff;">Account</span>
-          <a-icon type="down" style="color: #fff;" />
+          <icon type="down" style="color: #fff;" />
         </a>
-        <a-menu slot="overlay" @click="menuClick">
-          <a-menu-item key="1">
+        <Menu slot="overlay" @click="menuClick">
+          <Menu-item key="1">
             <span>{{ account }}</span>
-          </a-menu-item>
-          <a-menu-item key="2">
+          </Menu-item>
+          <Menu-item key="2">
             <span>TX VERIFICATION: OFF</span>
-          </a-menu-item>
-          <a-menu-item key="3">
+          </Menu-item>
+          <Menu-item key="3">
             <span>CHANGE WALLET</span>
-          </a-menu-item>
-          <a-menu-item key="4">
+          </Menu-item>
+          <Menu-item key="4">
             <span>NEW WALLET</span>
-          </a-menu-item>
-          <a-menu-item key="5">
+          </Menu-item>
+          <Menu-item key="5">
             <span>SIGN OUT</span>
-          </a-menu-item>
-        </a-menu>
-      </a-dropdown>
+          </Menu-item>
+        </Menu>
+      </Dropdown>
     </template>
     
-    <a-modal
+    <Modal
       title="Login methods"
       wrapClassName="vertical-center-modal"
       type="info"
@@ -38,18 +38,18 @@
       :visible="loginModalShow"
       @cancel="() => setModalShow(false)"
     >
-      <a-button 
+      <Button 
         size="large"
         :loading="loading"
         type="primary" 
         @click="login"
-      >{{ loading ? loginBtnLoadingText : loginBtnText }}</a-button>
-      <a-button
+      >{{ loading ? loginBtnLoadingText : loginBtnText }}</Button>
+      <Button
         disabled
         style="margin-left: 1rem;"
         size="large"
-      >Create new account</a-button>
-    </a-modal>
+      >Create new account</Button>
+    </Modal>
   </header>
 </template>
 

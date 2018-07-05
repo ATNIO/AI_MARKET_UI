@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <span>Copyright &#169; {{ new Date().getFullYear() }}</span>
+    <span>Copyright &#169; ATN {{ new Date().getFullYear() }}</span>
   </footer>
 </template>
 
@@ -15,6 +15,7 @@ footer {
   text-align: center;
 
   span {
+    font-size: 12px;
     color: #80848f;
   }
 }

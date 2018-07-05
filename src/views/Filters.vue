@@ -1,18 +1,18 @@
 <template>
   <section class="filters">
     <h2>Filters</h2>
-    <a-row 
+    <Row 
       type="flex" 
       justify="space-between" 
-      class="filter-wrapper"
+      class-name="filter-wrapper"
     >
       <!-- left filter -->
-      <a-col :xs="24" :md="14" :lg="12" class="filter-col">
+      <i-col :xs="24" :md="14" :lg="12" class="filter-col">
 
         <!-- checkbox group -->
-        <a-checkbox-group v-model="filterCheckedList">
-          <a-row>
-              <a-col 
+        <Checkbox-group v-model="filterCheckedList">
+          <Row>
+              <i-col 
                 :xs="12"
                 :sm="8"
                 :md="8"
@@ -20,30 +20,31 @@
                 v-for="item in filters"
                 :key="item.name"
               >
-                <a-checkbox :value="item.name">
+                <Checkbox size="large" :label="item.name">
                   {{ item.name }}
-                </a-checkbox>
-              </a-col>
-          </a-row>
-        </a-checkbox-group>
+                </Checkbox>
+              </i-col>
+          </Row>
+        </Checkbox-group>
         
         <!-- button group -->
         <div class="btn-group">
-          <a-button size="large" @click="resetFilterChecked">Reset</a-button>
-          <a-button size="large" type="primary" @click="filter">Filter</a-button>
+          <Button size="large" @click="resetFilterChecked">Reset</Button>
+          <Button size="large" type="primary" @click="filter">Filter</Button>
         </div>
-      </a-col>
+      </i-col>
 
       <!-- right search -->
-      <a-col :xs="24" :md="10" :lg="6">
-        <a-input-search 
-          placeholder="Search Dbot" 
-          @search="onSearch" 
-          enterButton="Search" 
-          size="large"
-        />
-      </a-col>
-    </a-row>
+      <i-Col :xs="24" :md="10" :lg="6">
+        <Input size="large" v-model="searchValue" placeholder="Search Dbot">
+          <Button 
+            slot="append"
+            icon="ios-search"
+            @click="onSearch"
+          >Search</Button>
+        </Input>
+      </i-Col>
+    </Row>
   </section>
 </template>
 
