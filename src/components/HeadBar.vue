@@ -2,7 +2,10 @@
   <header>
     <p>ATN</p>
     <template v-if="!account">
-      <Button size="large" @click="() => setModalShow(true)">Login</Button>
+      <Button size="large" @click="() => setModalShow(true)">
+        Login
+        <Icon type="log-in"></Icon>
+      </Button>
     </template>
     <template v-else>
       <Dropdown>

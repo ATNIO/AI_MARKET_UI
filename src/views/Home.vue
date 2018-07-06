@@ -1,17 +1,19 @@
 <template>
   <section class="home">
-    <bot-list></bot-list>
+    <Filters></Filters>
+    <list-view></list-view>
   </section>
 </template>
 
 <script>
-// @ is an alias to /src
-import BotList from "./DbotList";
+import Filters from "./Filters";
+import ListView from "./ListView";
 
 export default {
   name: "home",
   components: {
-    BotList
+    Filters,
+    ListView
   },
   mounted() {
     // this._getBalance();
@@ -29,4 +31,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.home {
+  padding: 2rem 0;
+}
 </style>
