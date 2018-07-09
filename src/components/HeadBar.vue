@@ -8,28 +8,28 @@
       </Button>
     </template>
     <template v-else>
-      <Dropdown>
+      <Dropdown placement="bottom-end" v-on:on-click="menuClick">
         <a class="ant-dropdown-link" href="#">
           <span style="color: #fff;">Account</span>
-          <icon type="down" style="color: #fff;" />
+          <icon type="chevron-down" style="color: #fff; margin-left: .5rem" />
         </a>
-        <Menu slot="overlay" @click="menuClick">
-          <Menu-item key="1">
+        <DropdownMenu slot="list">
+          <DropdownItem :name="1">
             <span>{{ account }}</span>
-          </Menu-item>
-          <Menu-item key="2">
+          </DropdownItem>
+          <DropdownItem :name="2">
             <span>TX VERIFICATION: OFF</span>
-          </Menu-item>
-          <Menu-item key="3">
+          </DropdownItem>
+          <DropdownItem :name="3">
             <span>CHANGE WALLET</span>
-          </Menu-item>
-          <Menu-item key="4">
+          </DropdownItem>
+          <DropdownItem :name="4">
             <span>NEW WALLET</span>
-          </Menu-item>
-          <Menu-item key="5">
+          </DropdownItem>
+          <DropdownItem :name="5">
             <span>SIGN OUT</span>
-          </Menu-item>
-        </Menu>
+          </DropdownItem>
+        </DropdownMenu>
       </Dropdown>
     </template>
     
@@ -37,8 +37,7 @@
       title="Login methods"
       wrapClassName="vertical-center-modal"
       type="info"
-      :footer="null"
-      :visible="loginModalShow"
+      v-model="loginModalShow"
       @cancel="() => setModalShow(false)"
     >
       <Button 
@@ -82,9 +81,9 @@ export default {
     setModalShow(isShow) {
       this.loginModalShow = isShow;
     },
-    menuClick({ key }) {
+    menuClick(key) {
       switch (key) {
-        case "5":
+        case 5:
           this.signout();
           break;
         default:
@@ -99,9 +98,9 @@ export default {
 
       coinbase = await getCoinbase();
 
-      this.$notification.success({
-        message: "Your wallet has been unlocked successfully.",
-        description:
+      this.$Notice.success({
+        title: "Your wallet has been unlocked successfully.",
+        desc:
           "Good job. Now you can experience the Loopr wallet. Be sure to let us know your feedback."
       });
       this.$store.dispatch("setAccount", coinbase);
@@ -113,14 +112,19 @@ export default {
       this.$router.replace({
         name: "home"
       });
+      this.$Notice.success({
+        title: "Your account has been exited successfully.",
+        desc:
+          "Good job. Now you can experience the Loopr wallet. Be sure to let us know your feedback."
+      });
     },
     metamaskChange({ selectedAddress }) {
       if (!this.account || selectedAddress === this.account) return;
 
-      this.$notification.warning(
+      this.$Notice.warning(
         {
-          message: "Account changed in MetaMask",
-          description:
+          title: "Account changed in MetaMask",
+          desc:
             "we detected your address in MetaMask has just changed. The old one is closed and the new one will be used instead."
         },
         5
