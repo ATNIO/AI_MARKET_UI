@@ -1,5 +1,8 @@
 <template>
-  <section>
-    <el-button>默认按钮</el-button>
+  <section class="home">
+   
   </section>
 </template>
+
+<style lang="less" scoped>
+</style>

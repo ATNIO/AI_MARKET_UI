@@ -1,11 +1,22 @@
 <template>
   <main id="app">
-    <router-view />
+    <navigation></navigation>
+    <section class="containor">
+      <top-bar></top-bar>
+      <router-view />
+    </section>
   </main>
 </template>
 
 <style lang="less" scoped>
 #app {
-  font-size: 16px;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  // background: url("./assets/design.jpg") no-repeat left top / cover;
+
+  .containor {
+    flex: 1;
+  }
 }
 </style>
