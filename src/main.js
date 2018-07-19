@@ -5,19 +5,17 @@ import "normalize.css";
 import "whatwg-fetch";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
-import iView from "iview";
-import "iview/dist/styles/iview.css";
 
 import router from "./router";
 import store from "./store";
 
 import web3 from "./plugins/web3";
+import "./element";
 
 import App from "./App.vue";
 
 Vue.config.productionTip = false;
 
-Vue.use(iView);
 Vue.use(web3);
 
 const requireComponent = require.context(
@@ -51,20 +49,11 @@ requireComponent.keys().forEach(fileName => {
   );
 });
 
-iView.LoadingBar.config({
-  color: "#19be6b",
-  failedColor: "#ed3f14",
-  height: 4
-});
-
 router.beforeEach((to, from, next) => {
-  iView.LoadingBar.start();
   next();
 });
 
-router.afterEach(() => {
-  iView.LoadingBar.finish();
-});
+router.afterEach(() => {});
 
 new Vue({
   router,

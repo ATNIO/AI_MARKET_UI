@@ -37,6 +37,7 @@
   "paths": {
     "/pet": {
       "post": {
+        "price": 1000,
         "tags": ["pet"],
         "summary": "Add a new pet to the store",
         "description": "",

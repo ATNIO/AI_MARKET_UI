@@ -1,8 +1,6 @@
 <template>
   <main id="app">
-    <head-bar></head-bar>
     <router-view />
-    <foot-bar></foot-bar>
   </main>
 </template>
 
