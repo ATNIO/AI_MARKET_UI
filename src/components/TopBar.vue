@@ -1,18 +1,47 @@
 <template>
-  <header class="top-bar">
-    <span>ATN: 2,000.00</span>
-    <div class="wrapper">
-      <el-input 
-        placeholder="Search APIs" 
-        v-model="searchVal" 
-        class="search-input"
-        prefix-icon="el-icon-search"
+  <el-row
+    class="top-bar"
+    type="flex"
+    align="middle"
+  >
+    <el-col :push="1">
+      <span>ATN: 2,000.00</span>
+    </el-col>
+    <el-col :pull="1">
+      <el-row 
+        class="wrapper"
+        type="flex"
+        justify="end"  
       >
-        <!-- <el-button slot="append" icon="el-icon-search"></el-button> -->
-      </el-input>
-      <i class="el-icon-bell"></i>
-    </div>
-  </header>
+        <el-col :md="20" :lg="16" :xl="12" class="hidden-sm-and-down">
+          <el-input 
+            placeholder="Search APIs" 
+            v-model="searchVal" 
+            class="search-input"
+            prefix-icon="el-icon-search"
+          >
+            <el-button 
+              slot="append" 
+              icon="el-icon-search"
+            ></el-button>
+          </el-input>
+        </el-col>
+        <el-col 
+          :xs="3"
+          :sm="1"
+          :md="{
+            span: 2,
+            offset: 2
+          }"
+          :xl="{
+            span: 1
+          }"
+        >
+          <i class="el-icon-bell"></i>
+        </el-col>
+      </el-row>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -32,22 +61,12 @@ export default {
   height: 6vw;
   max-height: 8em;
   min-height: 4em;
-  padding: 0 5rem;
   border-bottom: thin solid rgba(128, 128, 128, 0.425);
   font-size: 1.5rem;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
   .wrapper {
-    width: 40%;
-    display: flex;
-    align-items: center;
-
     .search-input {
-      width: 30rem;
-      margin-right: 10rem;
+      width: 100%;
     }
 
     .el-icon-bell {
@@ -55,10 +74,30 @@ export default {
       color: #711ecf;
     }
 
-    & /deep/ .el-input__inner {
-      //深度作用选择器
-      border-radius: 40px;
-      border-style: none;
+    & /deep/ .el-input-group__append,
+    & /deep/ input {
+      border: none;
+    }
+
+    & /deep/ input {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: 20px;
+      border-top-left-radius: 20px;
+    }
+
+    & /deep/ button {
+      height: 40px;
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
+      border: none;
+      color: #ffffff;
+      background: #409eff;
+      border-bottom-right-radius: 20px;
+      border-top-right-radius: 20px;
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
     }
   }
 }
