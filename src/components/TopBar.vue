@@ -2,8 +2,13 @@
   <header class="top-bar">
     <span>ATN: 2,000.00</span>
     <div class="wrapper">
-      <el-input placeholder="请输入内容" v-model="searchVal" class="search-input">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-input 
+        placeholder="Search APIs" 
+        v-model="searchVal" 
+        class="search-input"
+        prefix-icon="el-icon-search"
+      >
+        <!-- <el-button slot="append" icon="el-icon-search"></el-button> -->
       </el-input>
       <i class="el-icon-bell"></i>
     </div>
@@ -48,6 +53,12 @@ export default {
     .el-icon-bell {
       font-size: 2.5rem;
       color: #711ecf;
+    }
+
+    & /deep/ .el-input__inner {
+      //深度作用选择器
+      border-radius: 40px;
+      border-style: none;
     }
   }
 }

@@ -1,23 +1,27 @@
 <template>
   <section class="navigation">
     <div class="logo">
-      <img src="@/assets/logo.png" alt="">
+      <img src="../assets/home/icon-64.png" alt="">
     </div>
     <nav>
       <ul>
         <li
           v-for="item in menu"
-          :key="item"
+          :key="item.title"
         >
-          <span>{{ item }}</span>
+        <div class="wrapper">
+          <span :class="item.icon"></span>
+          <span>{{ item.title }}</span>
+        </div>
         </li>
       </ul>
+    
     </nav>
   </section>
 </template>
 
 <script>
-const menu = ["Markets", "Account", "Login"];
+import { menu } from "@/common/constants.js";
 
 export default {
   name: "Navigation",
@@ -63,6 +67,19 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .wrapper {
+          width: 5em;
+
+          display: flex;
+          align-items: center;
+
+          span {
+            &:last-of-type {
+              margin-left: 0.5em;
+            }
+          }
+        }
       }
     }
   }

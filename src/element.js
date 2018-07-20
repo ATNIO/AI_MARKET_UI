@@ -68,7 +68,7 @@ import {
   Notification
 } from "element-ui";
 
-Vue.prototype.$ELEMENT = { size: "medium", zIndex: 3000 };
+Vue.prototype.$ELEMENT = { size: "large", zIndex: 3000 };
 
 {
   Vue.use(Pagination);
