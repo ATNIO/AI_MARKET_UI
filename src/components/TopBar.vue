@@ -24,7 +24,9 @@ export default {
 <style lang="less" scoped>
 .top-bar {
   position: sticky;
-  height: 8em;
+  height: 6vw;
+  max-height: 8em;
+  min-height: 4em;
   padding: 0 5rem;
   border-bottom: thin solid rgba(128, 128, 128, 0.425);
   font-size: 1.5rem;

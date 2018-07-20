@@ -1,6 +1,7 @@
 import Vue from "vue";
 import "./assets/styles/base.less";
 import "normalize.css";
+import "element-ui/lib/theme-chalk/display.css";
 
 import "whatwg-fetch";
 import upperFirst from "lodash/upperFirst";
