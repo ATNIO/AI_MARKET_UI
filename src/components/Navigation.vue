@@ -39,6 +39,7 @@ export default {
   max-width: 20em;
   height: 100vh;
   background: #ffffff;
+  border-top: thin solid transparent;
 
   .logo {
     width: 6rem;
@@ -82,6 +83,12 @@ export default {
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 1199px) {
+  .navigation {
+    display: none;
   }
 }
 </style>

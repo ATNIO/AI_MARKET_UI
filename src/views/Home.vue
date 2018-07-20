@@ -1,6 +1,6 @@
 <template>
   <section class="home">
-   
+    <filters></filters>
   </section>
 </template>
 

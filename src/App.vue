@@ -1,12 +1,19 @@
 <template>
   <main id="app">
-    <navigation></navigation>
-    <section class="containor">
-      <top-bar></top-bar>
-      <filters></filters>
-      <list></list>
-      <router-view />
-    </section>
+    <el-container>
+      <el-aside width="auto">
+        <navigation></navigation>
+      </el-aside>
+      <el-container>
+        <el-header height="auto">
+          <top-bar></top-bar>
+        </el-header>
+        <el-main>
+          <router-view />
+        </el-main>
+        <el-footer>Footer</el-footer>
+      </el-container>
+    </el-container>
   </main>
 </template>
 
@@ -17,8 +24,9 @@
   display: flex;
   // background: url("./assets/design.jpg") no-repeat left top / cover;
 
-  .containor {
-    flex: 1;
+  & /deep/ .el-header,
+  & /deep/ .el-footer {
+    padding: 0;
   }
 }
 </style>
