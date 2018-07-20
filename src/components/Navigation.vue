@@ -21,20 +21,7 @@
 </template>
 
 <script>
-const menu = [
-  {
-    icon: "icon-store_2",
-    title: "Markets"
-  },
-  {
-    icon: "icon-user",
-    title: "Account"
-  },
-  {
-    icon: "icon-login",
-    title: "Login"
-  }
-];
+import { menu } from "@/common/constants.js";
 
 export default {
   name: "Navigation",
