@@ -1,5 +1,6 @@
 import Vue from "vue";
 import "./assets/styles/base.less";
+import "./assets/fonts/style.css";
 import "normalize.css";
 
 import "whatwg-fetch";
