@@ -3,6 +3,8 @@
     <navigation></navigation>
     <section class="containor">
       <top-bar></top-bar>
+      <filters></filters>
+      <list></list>
       <router-view />
     </section>
   </main>
