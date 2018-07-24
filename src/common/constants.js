@@ -1,7 +1,7 @@
 // left menu config
 export const menu = [
   {
-    icon: "icon-store_2",
+    icon: "icon-store",
     title: "Markets"
   },
   {
