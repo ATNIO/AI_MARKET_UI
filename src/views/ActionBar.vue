@@ -1,7 +1,7 @@
 <template>
   <section class="actionBar">
-      <span class="icon-menu"></span> 
-      <span class="icon-sort"></span> 
+      <span class="icon-sort" @click="_click('grid')"></span> 
+      <span class="icon-menu" @click="_click('fluent')"></span> 
   </section>
 </template>
 
@@ -10,6 +10,11 @@ export default {
   name: "ActionBar",
   data() {
     return {};
+  },
+  methods: {
+    _click(layout) {
+      this.$emit("changeLayout", layout);
+    }
   }
 };
 </script>

@@ -1,23 +1,27 @@
 <template>
   <section class="listView">
-  <component :is="itemType"></component>
+      <component :is="layout"></component>
   </section>
 </template>
 
 <script>
-import ListItemCard from "./ListItemGrid";
+import ListItemGrid from "./ListItemGrid";
 import ListItemFluent from "./ListItemFluent";
+import currentList from "./ActionBar"
 
 export default {
   name: "ListView",
   components: {
-    ListItemCard,
+    ListItemGrid,
     ListItemFluent
   },
   data() {
     return {
-      itemType: ListItemCard
     };
+  },
+  props: ["layout"],
+  computed:{
+   
   }
 };
 </script>
