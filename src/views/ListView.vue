@@ -7,7 +7,6 @@
 <script>
 import ListItemGrid from "./ListItemGrid";
 import ListItemFluent from "./ListItemFluent";
-import currentList from "./ActionBar"
 
 export default {
   name: "ListView",
@@ -16,13 +15,10 @@ export default {
     ListItemFluent
   },
   data() {
-    return {
-    };
+    return {};
   },
   props: ["layout"],
-  computed:{
-   
-  }
+  computed: {}
 };
 </script>
 

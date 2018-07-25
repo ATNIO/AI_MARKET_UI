@@ -15,9 +15,9 @@
           <div>
             <span class="price">FREE</span>
             <div class="bottom clearfix">
-                <span class="icon-users">number</span> 
+                <span class="icon-user">number</span> 
                 <span class="icon-star">like</span>
-                <span class="icon-rise">100%</span>
+                <span class="icon-arrow">100%</span>
             </div>
           </div>
         </el-card>
@@ -60,8 +60,13 @@ export default {
     .bottom {
       display: flex;
       background-color: #7f6fe7;
-      span {
+
+      span[class^="icon-"] {
         flex: 1;
+
+        &::before {
+          color: #ffffff;
+        }
       }
     }
   }

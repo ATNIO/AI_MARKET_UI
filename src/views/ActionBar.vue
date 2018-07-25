@@ -25,8 +25,8 @@
     </div>
 
       
-      <span class="icon-sort" @click="_click('grid')"></span> 
-      <span class="icon-menu" @click="_click('fluent')"></span> 
+      <span class="icon-grid" @click="_click('grid')"></span> 
+      <span class="icon-list" @click="_click('fluent')"></span> 
   </section>
 </template>
 
