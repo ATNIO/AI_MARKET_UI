@@ -71,7 +71,7 @@ export default {
 
     .icon-bell {
       font-size: 2.5rem;
-      color: #711ecf;
+      color: #888888;
     }
 
     & /deep/ .el-input-group__append,

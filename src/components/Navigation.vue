@@ -112,23 +112,19 @@ export default {
         height: 5rem;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: center;
         cursor: pointer;
         transition: all 0.2s;
-        position: relative;
 
         &:hover {
           background: rgba(209, 209, 209, 0.425);
         }
 
         .wrapper {
+          width: 130px;
           height: 100%;
           display: flex;
           align-items: center;
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translate3d(-50%, 0, 0);
 
           span {
             &:last-of-type {

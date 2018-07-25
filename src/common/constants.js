@@ -5,7 +5,7 @@ export const menu = [
     title: "Markets"
   },
   {
-    icon: "icon-account",
+    icon: "icon-user",
     title: "Account"
   },
   {
