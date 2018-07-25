@@ -1,25 +1,28 @@
 <template>
   <section class="ListItemGrid">
-    <h1>你还是个人吗</h1>
-    <el-row>
-    <el-col :span="8" v-for="(o, index) in 1" :key="o" :offset="index > 0 ? 2 : 0">
-    <el-card :body-style="{ padding: '0px' }">
-      <img src="../assets/icon-128.png" class="image">
-      <div>
-        <span class="price">FREE</span>
-        <div class="bottom clearfix">
-          
-          <div class="lastLine">
-            <span>number</span> 
-            <span>like</span>
-            <span>100%</span>
+    <el-row class="row">
+      <el-col v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
+      <!-- <el-col> -->
+        <el-card :body-style="{ padding: '0px' }" class="card">
+          <span class="title">RANDOM FMAOUS QUOTES</span><br>
+          <span class="provider">
+            <span class="icon-user"></span>
+            <span>ANDRUXNET</span>
+          </span><br>
+          <img src="../assets/icon-64.png" alt="">
+          <p>Get a random quote in JSON format.</p>
+          <p>Current categories are:- fa mous-movies.</p>
+          <div>
+            <span class="price">FREE</span>
+            <div class="bottom clearfix">
+                <span class="icon-user">number</span> 
+                <span class="icon-star">like</span>
+                <span class="icon-arrow">100%</span>
+            </div>
           </div>
-
-        </div>
-      </div>
-    </el-card>
-  </el-col>
-</el-row>
+        </el-card>
+      </el-col>
+    </el-row>
   </section>
 </template>
 
@@ -35,15 +38,37 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.image {
-  display: block;
-}
-.price {
-  width: 100%;
-  display: block;
-  text-align: center;
-  background: #bebffe;
-  color: #ffffff;
-  font-size: 3rem;
+.row {
+  display: flex;
+  margin: 5em 5em;
+  .card {
+    flex: 1;
+    text-align: center;
+    .title {
+      color: #705db1;
+      font-weight: 800;
+      font-size: 1.3rem;
+    }
+    .price {
+      width: 100%;
+      display: block;
+      text-align: center;
+      background: #bebffe;
+      color: #ffffff;
+      font-size: 3rem;
+    }
+    .bottom {
+      display: flex;
+      background-color: #7f6fe7;
+
+      span[class^="icon-"] {
+        flex: 1;
+
+        &::before {
+          color: #ffffff;
+        }
+      }
+    }
+  }
 }
 </style>
