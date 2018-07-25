@@ -1,22 +1,34 @@
 <template>
   <section class="ListItemGrid">
     <el-row class="row">
-      <el-col v-for="(o, index) in 4" :key="o" :offset="index > 0 ? 1 : 0">
-      <!-- <el-col> -->
+      <el-col>
         <el-card :body-style="{ padding: '0px' }" class="card">
           <span class="icon-star star"></span><br>
           <h3 class="title">RANDOM FMAOUS QUOTES</h3>
           <div class="provider">
             <span class="icon-user"></span>
-            <span> ANDRUXNET</span>
+            <span>ANDRUXNET</span>
           </div>
-          <div class="img"><img src="../assets/icon-64.png" alt=""></div>
-          <p class="describe">Get a random quote in JSON format.Current categories are:- fa mous-movies.</p>
+          <div class="img">
+            <img src="../assets/icon-64.png" alt="">
+          </div>
+          <p class="describe">
+            Get a random quote in JSON format.Current categories are:- fa mous-movies.
+          </p>
           <span class="price">FREE</span>
           <div class="bottom">
-            <div><span class="icon-user"></span><span>15442</span></div>
-            <div><span class="icon-star"></span><span>15202</span></div>
-            <div><span class="icon-arrow"></span><span>100%</span></div>
+            <div>
+              <span class="icon-user"></span>
+              <span>15442</span>
+            </div>
+            <div>
+              <span class="icon-star"></span>
+              <span>15202</span>
+            </div>
+            <div>
+              <span class="icon-arrow"></span>
+              <span>100%</span>
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -38,7 +50,7 @@ export default {
 <style lang="less" scoped>
 .row {
   display: flex;
-  margin: 5em 5em;
+  margin: 3em;
   .card {
     width: 20em;
     flex: 1;
@@ -61,6 +73,9 @@ export default {
       text-align: center;
       margin: 0 0 1.5em 0;
       color: #888888;
+      [class^="icon-"] {
+        margin-right: 5px;
+      }
     }
     .img {
       display: block;

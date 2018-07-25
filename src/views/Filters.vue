@@ -49,7 +49,7 @@ export default {
 
   .hide {
     color: #878787;
-    font-size: 1.7em;
+    font-size: 1.5em;
     margin-top: 2.2em;
     text-align: center;
     cursor: pointer;
