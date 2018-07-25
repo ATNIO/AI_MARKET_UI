@@ -25,7 +25,8 @@
   // background: url("./assets/design.jpg") no-repeat left top / cover;
 
   & /deep/ .el-header,
-  & /deep/ .el-footer {
+  & /deep/ .el-footer,
+  & /deep/ .el-main {
     padding: 0;
   }
 }
