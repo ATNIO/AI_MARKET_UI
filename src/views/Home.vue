@@ -1,9 +1,9 @@
 <template>
   <section class="home">
-    <filters class="filters"></filters>
+    <filters></filters>
     <div class="containor">
-      <action-bar class="actionBar" v-on:changeLayout="changeLayout"></action-bar>
-      <list-view class="listView" :layout="layout"></list-view>
+      <action-bar v-on:changeLayout="changeLayout"></action-bar>
+      <list-view :layout="layout"></list-view>
     </div>   
   </section>
 </template>
@@ -39,14 +39,13 @@ export default {
   display: flex;
 
   .containor {
+    padding: 0 5rem;
     flex: 1;
 
     .actionBar {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-    }
-    .listView {
     }
   }
 }

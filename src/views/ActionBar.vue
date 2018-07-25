@@ -1,10 +1,12 @@
 <template>
   <section class="actionBar">
-    <div class="optionOne">
-      <span>Sort By: </span>
-      <el-select v-model="value1" clearable filterable placeholder="请选择">
+
+    <!-- sort by popular -->
+    <div class="option-sort">
+      <span class="title">Sort By: </span>
+      <el-select v-model="sortVal" clearable placeholder="请选择">
         <el-option
-          v-for="item in options1"
+          v-for="item in options_sort"
           :key="item.value"
           :label="item.label"
           :value="item.value">
@@ -12,11 +14,12 @@
       </el-select>
     </div>
 
-      <div class="optionTwo">
-      <span>Price Range: </span>
-      <el-select v-model="value2" clearable filterable placeholder="请选择">
+    <!-- sort by price -->
+    <div class="option-price">
+      <span class="title">Price Range: </span>
+      <el-select v-model="priceType" clearable placeholder="请选择">
         <el-option
-          v-for="item in options2"
+          v-for="item in options_price"
           :key="item.value"
           :label="item.label"
           :value="item.value">
@@ -24,9 +27,18 @@
       </el-select>
     </div>
 
-      
-      <span class="icon-grid" @click="_click('grid')"></span> 
-      <span class="icon-list" @click="_click('fluent')"></span> 
+    <template v-for="item in layoutArr">
+      <div 
+        :key="item" 
+        class="wrapper"
+        :class="{
+          active: layout === item
+        }" 
+        @click="_click(item)"
+      >
+        <span :class="`icon-${ item }`"></span>
+      </div>
+    </template>
   </section>
 </template>
 
@@ -35,56 +47,39 @@ export default {
   name: "ActionBar",
   data() {
     return {
-      options1: [
+      layoutArr: ["grid", "fluent"],
+      layout: "grid",
+      options_sort: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          value: "Popular",
+          label: "Popular"
         },
         {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
+          value: "Hot",
+          label: "Hot"
         }
       ],
-      value1: "",
-      options2: [
+      sortVal: "Popular",
+      options_price: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          value: "All",
+          label: "All"
         },
         {
-          value: "选项2",
-          label: "双皮奶"
+          value: "Up",
+          label: "Up"
         },
         {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
+          value: "Down",
+          label: "Down"
         }
       ],
-      value2: ""
+      priceType: "All"
     };
   },
   methods: {
     _click(layout) {
+      this.layout = layout;
       this.$emit("changeLayout", layout);
     }
   }
@@ -93,27 +88,55 @@ export default {
 
 <style lang="less" scoped>
 .actionBar {
-  div {
-    align-items: center;
-    span {
+  padding: 3em 0;
+  border-bottom: thin solid rgba(128, 128, 128, 0.425);
+
+  .option-sort,
+  .option-price {
+    margin-right: 2em;
+
+    .title {
       color: #9b9b9b;
-      font-size: 1.2rem;
+      font-size: 1rem;
+      margin-right: 0.5rem;
     }
+
     & /deep/ .el-select .el-input__inner {
       border-style: none;
       color: #9b9b9b;
-      border-radius: 1em;
+      border-radius: 4px;
+      font-size: 1rem;
     }
   }
 
-  span {
-    font-size: 1.5rem;
+  .wrapper {
+    height: 40px;
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    [class^="icon-"] {
+      font-size: 1.2rem;
+      transition: all 0.2s;
+    }
+
+    &.active {
+      background: #9b9b9b;
+
+      [class^="icon-"] {
+        color: #ffffff;
+      }
+    }
   }
 }
-.optionOne {
-  margin: 0 10em;
-}
-.optionTwo {
-  margin: 0 5em;
-}
+
+// .optionOne {
+//   margin: 0 10em;
+// }
+// .optionTwo {
+//   margin: 0 5em;
+// }
 </style>
