@@ -1,6 +1,8 @@
 <template>
   <section class="listView">
-      <component :is="layout"></component>
+      <template v-for="item in [1,2,3,4,5,6,7,8]">
+        <component :is="layout" :key="item"></component>
+      </template>
   </section>
 </template>
 
@@ -24,5 +26,7 @@ export default {
 
 <style lang="less" scoped>
 .listView {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
