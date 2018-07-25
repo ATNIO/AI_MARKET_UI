@@ -37,7 +37,7 @@
             span: 1
           }"
         >
-          <i class="el-icon-bell"></i>
+          <span class="icon-bell"></span>
         </el-col>
       </el-row>
     </el-col>
@@ -69,7 +69,7 @@ export default {
       width: 100%;
     }
 
-    .el-icon-bell {
+    .icon-bell {
       font-size: 2.5rem;
       color: #711ecf;
     }
