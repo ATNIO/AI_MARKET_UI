@@ -4,7 +4,7 @@
     <!-- sort by popular -->
     <div class="option-sort">
       <span class="title">Sort By: </span>
-      <el-select v-model="sortVal" clearable placeholder="请选择">
+      <el-select v-model="sortVal" clearable placeholder="Please select">
         <el-option
           v-for="item in options_sort"
           :key="item.value"
@@ -17,7 +17,7 @@
     <!-- sort by price -->
     <div class="option-price">
       <span class="title">Price Range: </span>
-      <el-select v-model="priceType" clearable placeholder="请选择">
+      <el-select v-model="priceType" clearable placeholder="Please select">
         <el-option
           v-for="item in options_price"
           :key="item.value"
