@@ -39,14 +39,9 @@ export default {
   display: flex;
 
   .containor {
-    padding: 0 5rem;
+    padding: 0 2rem;
     flex: 1;
-
-    .actionBar {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-    }
+    transition: all 0.2s;
   }
 }
 </style>

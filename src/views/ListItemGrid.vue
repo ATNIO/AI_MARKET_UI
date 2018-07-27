@@ -48,9 +48,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.ListItemGrid {
+  & /deep/ .is-always-shadow {
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      transform: translate3d(0, -5px, 0);
+      box-shadow: 0 10px 12px 0 rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
 .row {
   display: flex;
-  margin: 3em;
+  margin: 1.5em;
   .card {
     width: 20em;
     flex: 1;

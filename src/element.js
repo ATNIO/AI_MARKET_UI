@@ -1,4 +1,5 @@
 import Vue from "vue";
+import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 import {
   Pagination,
   Dialog,
@@ -144,3 +145,5 @@ Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
+
+Vue.component(CollapseTransition.name, CollapseTransition);

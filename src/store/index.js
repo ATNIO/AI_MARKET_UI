@@ -17,7 +17,8 @@ export default new Vuex.Store({
     total: 0,
     list: [],
     account: "",
-    dbotDetail: {}
+    dbotDetail: {},
+    filterLayerShow: false
   },
   mutations: {
     [types.SET_LIST](state, list = []) {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     [types.SET_DBOT_DETAIL](state, detail = {}) {
       state.dbotDetail = detail;
+    },
+    [types.SET_FILTER_SHOW](state, status = false) {
+      state.filterLayerShow = status;
     }
   },
   actions: {
@@ -45,6 +49,9 @@ export default new Vuex.Store({
     },
     setDbotDetail({ commit }, detail) {
       commit(types.SET_DBOT_DETAIL, detail);
+    },
+    setFilterShow({ commit }, status) {
+      commit(types.SET_FILTER_SHOW, status);
     }
   },
   getters: {
@@ -59,6 +66,9 @@ export default new Vuex.Store({
     },
     dbotDetail(state) {
       return state.dbotDetail;
+    },
+    filterLayerShow(state) {
+      return state.filterLayerShow;
     }
   }
 });
