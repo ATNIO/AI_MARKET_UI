@@ -32,18 +32,20 @@
         </el-select>
       </div>
 
-      <template v-for="item in layoutArr">
-        <div 
-          :key="item" 
-          class="wrapper"
-          :class="{
-            active: layout === item
-          }" 
-          @click="_click(item)"
-        >
-          <span :class="`icon-${ item }`"></span>
-        </div>
-      </template>
+      <div class="layout-btn">
+        <template v-for="item in layoutArr">
+          <div 
+            :key="item" 
+            class="wrapper"
+            :class="{
+              active: layout === item
+            }" 
+            @click="_click(item)"
+          >
+            <span :class="`icon-${ item }`"></span>
+          </div>
+        </template>
+      </div>
     </div>
 
   </section>
@@ -111,7 +113,6 @@ export default {
   justify-content: space-between;
   color: #9b9b9b;
   font-size: 1rem;
-  margin-right: 0.5rem;
 
   .left {
     cursor: pointer;
@@ -129,11 +130,11 @@ export default {
     .option-price {
       margin-right: 2em;
 
-      // .title {
-      //   color: #9b9b9b;
-      //   font-size: 1rem;
-      //   margin-right: 0.5rem;
-      // }
+      .title {
+        // color: #9b9b9b;
+        // font-size: 1rem;
+        margin-right: 0.5rem;
+      }
 
       & /deep/ .el-select .el-input__inner {
         border-style: none;
@@ -143,35 +144,39 @@ export default {
       }
     }
 
-    .wrapper {
-      height: 40px;
-      padding: 1em;
+    .layout-btn {
       display: flex;
-      align-items: center;
-      background: #ffffff;
-      cursor: pointer;
-      transition: all 0.2s;
 
-      &:first-of-type {
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
-      }
-
-      &:last-of-type {
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-      }
-
-      [class^="icon-"] {
-        font-size: 1.2rem;
+      .wrapper {
+        height: 40px;
+        padding: 1em;
+        display: flex;
+        align-items: center;
+        background: #ffffff;
+        cursor: pointer;
         transition: all 0.2s;
-      }
 
-      &.active {
-        background: #9b9b9b;
+        &:first-of-type {
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+        }
+
+        &:last-of-type {
+          border-top-right-radius: 4px;
+          border-bottom-right-radius: 4px;
+        }
 
         [class^="icon-"] {
-          color: #ffffff;
+          font-size: 1.2rem;
+          transition: all 0.2s;
+        }
+
+        &.active {
+          background: #9b9b9b;
+
+          [class^="icon-"] {
+            color: #ffffff;
+          }
         }
       }
     }

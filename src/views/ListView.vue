@@ -1,11 +1,10 @@
 <template>
-  <section 
-    class="listView"
-    :class="{ center: layout === 'list-item-fluent' }"
-  >
+  <section class="listView">
+    <div class="inner-wrapper">
       <template v-for="item in [1,2,3,4,5,6,7,8]">
         <component :is="layout" :key="item"></component>
       </template>
+    </div>
   </section>
 </template>
 
@@ -31,10 +30,12 @@ export default {
 .listView {
   padding-bottom: 2em;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
 
-  &.center {
-    justify-content: center;
+  .inner-wrapper {
+    flex: 1 0 50%;
+    display: flex;
+    flex-wrap: wrap;
   }
 }
 </style>

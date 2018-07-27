@@ -57,12 +57,13 @@ export default {
 
 <style lang="less" scoped>
 .top-bar {
-  position: sticky;
+  // position: sticky;
   height: 6vw;
   max-height: 8em;
   min-height: 4em;
-  border-bottom: thin solid rgba(128, 128, 128, 0.425);
+  // border-bottom: thin solid rgba(128, 128, 128, 0.425);
   font-size: 1.5rem;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 
   .wrapper {
     .search-input {

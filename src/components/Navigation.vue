@@ -59,9 +59,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #ffffff;
+  background: #ffffff url("../assets/images/bg.jpg") no-repeat center bottom /
+    contain;
   border-top: 0 solid transparent;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  box-shadow: 1px 0 10px 0px rgba(0, 0, 0, 0.1);
 
   .logo {
     width: 100%;
@@ -72,8 +74,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: thin solid rgba(128, 128, 128, 0.425);
-    border-bottom: thin solid rgba(128, 128, 128, 0.425);
+    // border-right: thin solid rgba(128, 128, 128, 0.425);
+    // border-bottom: thin solid rgba(128, 128, 128, 0.425);
 
     img {
       width: 4vw;
