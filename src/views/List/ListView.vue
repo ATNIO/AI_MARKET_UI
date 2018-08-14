@@ -25,6 +25,7 @@ export default {
 <style lang="less" scoped>
 .list-view {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
   list-style: none;
 }

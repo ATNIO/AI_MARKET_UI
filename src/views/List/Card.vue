@@ -52,7 +52,7 @@ export default {
 <style lang="less" scoped>
 .card {
   width: 290px;
-  margin-right: 10px;
+  // margin-right: 10px;
   margin-bottom: 10px;
   flex: 0 0 auto;
   background: #ffffff;
