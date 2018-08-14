@@ -1,6 +1,8 @@
 <template>
   <section class="home">
-    <div class="category"></div>
+    <div class="category">
+      <home-categories></home-categories>
+    </div>
     <div class="container">
       <action-bar></action-bar>
       <list-view></list-view>
