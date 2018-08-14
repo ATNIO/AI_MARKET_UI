@@ -2,8 +2,8 @@
   <div class="home-categories">
         <ul  class="items">
           <li
-            v-for="item in filters"
-            :key="item"
+            v-for="(item, index) in filters"
+            :key="index"
           >
             <span>{{item}}</span>
           </li>
@@ -15,7 +15,7 @@
 import { filters } from "@/common/constants.js";
 
 export default {
-  name: "home-categories",
+  name: "HomeCategories",
   data() {
     return {
       filters
@@ -29,7 +29,8 @@ export default {
   width: 290px;
   height: 764px;
   background: #ffffff;
-  box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
+  // box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
+  box-shadow: 1px 0 10px 0 rgba(200, 199, 232, 0.2);
   .items {
     margin-left: 20px;
     padding-top: 64px;

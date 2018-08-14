@@ -10,6 +10,8 @@ import "iview/dist/styles/iview.css";
 
 import { upperFirst, camelCase } from "lodash";
 
+import "@/assets/styles/base.less";
+
 Vue.use(iView);
 
 Vue.config.productionTip = false;

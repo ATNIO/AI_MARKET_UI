@@ -1,7 +1,7 @@
 <template>
   <section class="home">
     <div class="category">
-      <home-categories></home-categories>
+      <categories></categories>
     </div>
     <div class="container">
       <action-bar></action-bar>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import HomeCategories from "./HomeCategories";
 import HomeActionBar from "./HomeActionBar";
 import ListView from "./List/ListView";
 
@@ -19,6 +20,7 @@ import Swagger from "swagger-client";
 export default {
   name: "home",
   components: {
+    categories: HomeCategories,
     "action-bar": HomeActionBar,
     ListView
   },

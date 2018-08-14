@@ -52,8 +52,7 @@ export default {
 <style lang="less" scoped>
 .card {
   width: 290px;
-  // margin-right: 10px;
-  margin-bottom: 10px;
+  margin: 0 10px 10px 0;
   flex: 0 0 auto;
   background: #ffffff;
   // box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
@@ -61,8 +60,13 @@ export default {
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
 
+  &:nth-of-type(3n) {
+    margin-right: 0;
+  }
+
   &:hover {
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+    transform: translate3d(0, -2px, 0);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
 
   .logo {
