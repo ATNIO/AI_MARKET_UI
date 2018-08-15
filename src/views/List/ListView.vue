@@ -9,7 +9,6 @@
 
 <script>
 import Card from "./Card";
-
 import data from "../../mock/listData.js";
 
 export default {
