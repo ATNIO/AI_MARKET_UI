@@ -25,7 +25,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .bottom-bar {
-  margin-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
