@@ -1,5 +1,5 @@
 <template>
-  <li class="card">
+  <li class="card" :data-address="item.address">
     <div class="logo" :style="logo"></div>
     <div class="content">
       <h2>{{ item.name }}</h2>
@@ -59,6 +59,7 @@ export default {
   border: thin solid rgba(0, 0, 0, 0.05);
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
+  cursor: pointer;
 
   &:nth-of-type(3n) {
     margin-right: 0;
@@ -74,6 +75,7 @@ export default {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 50% 20%;
+    pointer-events: none;
   }
 
   .content {
@@ -82,6 +84,7 @@ export default {
     h2 {
       font-size: 18px;
       margin: 0 0 4px;
+      pointer-events: none;
     }
 
     .description {
@@ -94,6 +97,7 @@ export default {
       font-size: 14px;
       color: #788091;
       line-height: 1.2;
+      pointer-events: none;
     }
 
     .auther {
@@ -118,6 +122,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      pointer-events: none;
 
       .left {
         display: flex;
