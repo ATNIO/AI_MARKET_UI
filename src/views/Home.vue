@@ -18,7 +18,7 @@ import ListView from "./List/ListView";
 import Swagger from "swagger-client";
 
 export default {
-  name: "home",
+  name: "Home",
   components: {
     categories: HomeCategories,
     "action-bar": HomeActionBar,
