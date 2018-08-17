@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section class="detail-container">
     <Tabs value="documention">
       <TabPane label="DOCUMENTION" name="documention">
         <detail-doc v-once></detail-doc>
@@ -28,9 +28,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.container {
-  width: 1200px;
-  margin: 0 auto;
+.detail-container {
+  margin-top: 40px;
 
   & /deep/ .ivu-tabs-ink-bar {
     height: 5px;
