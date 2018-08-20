@@ -18,7 +18,8 @@ export default [
     stars: 889,
     createdTime: "July 2018",
     updataTime: "August 5th",
-    tag: ["image", "computer", "vision", "recognization"]
+    tag: ["image", "computer", "vision", "recognization"],
+    chanel: 0
   },
   {
     logoUrl: logo,

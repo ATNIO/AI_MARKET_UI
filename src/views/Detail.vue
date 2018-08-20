@@ -41,7 +41,9 @@
           </div>  
         </div>
 
-        <chanel class="chanel"></chanel>
+
+        <channel></channel>
+
     </div>
   </section>
 </template>
@@ -49,12 +51,12 @@
 <script>
 import Swagger from "swagger-client";
 import data from "../mock/listData.js";
-import chanel from "./chanel/Chanel";
+import Channel from "./Channel";
 
 export default {
   name: "Detail",
   components: {
-    chanel
+    Channel
   },
   data() {
     return {
@@ -76,7 +78,6 @@ export default {
     const res = Swagger("https://petstore.swagger.io/v2/swagger.json");
     console.log(res);
     // console.log(data[0].name);
-
     // this.fetch({ address: this.address });
   }
   // methods: {
