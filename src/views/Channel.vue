@@ -123,7 +123,7 @@ export default {
   methods: {
     nextStep(value) {
       console.log(value);
-      console.log(data[0].chanel);
+      // console.log(data[0].chanel);
       data[0].chanel++;
     }
   }

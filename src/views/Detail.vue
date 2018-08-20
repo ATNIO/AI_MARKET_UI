@@ -44,19 +44,26 @@
 
         <channel></channel>
 
+
+        <detail-container></detail-container>
     </div>
   </section>
 </template>
 
 <script>
 import Swagger from "swagger-client";
+import { mapActions } from "vuex";
+
 import data from "../mock/listData.js";
 import Channel from "./Channel";
+
+import DetailContainer from "./DetailContainer";
 
 export default {
   name: "Detail",
   components: {
-    Channel
+    Channel,
+    "detail-container": DetailContainer
   },
   data() {
     return {
@@ -75,14 +82,16 @@ export default {
     }
   },
   mounted() {
-    const res = Swagger("https://petstore.swagger.io/v2/swagger.json");
-    console.log(res);
-    // console.log(data[0].name);
+    Swagger("https://petstore.swagger.io/v2/swagger.json").then(data => {
+      this.setDocData({ data });
+    });
+
     // this.fetch({ address: this.address });
+  },
+  methods: {
+    ...mapActions(["setDocData"]),
+    fetch() {}
   }
-  // methods: {
-  //   fetch(param) {}
-  // }
 };
 </script>
 

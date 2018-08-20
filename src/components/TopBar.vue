@@ -28,11 +28,11 @@ export default {
   width: 100%;
   height: 60px;
   background: linear-gradient(to right, #787af8, #88c6ff);
+
   .wrapper {
-    width: 1210px;
+    width: 1200px;
     height: 100%;
     margin: 0 auto;
-    font-family: SourceHanSansCN-Medium;
     display: flex;
     justify-content: space-between;
     align-items: center;
