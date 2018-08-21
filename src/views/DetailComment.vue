@@ -4,7 +4,7 @@
       <div class="content">
           <!-- 头像和input -->
           <div class="photo"></div>
-          <Input class="input" type="textarea" :rows="9" placeholder="What do you think of this API?" />
+          <Input class="input" type="textarea" :autosize="{minRows: 9,maxRows: 9}" placeholder="What do you think of this API?" />
       </div>
       <button class="button">发表评论</button>
     </div>
@@ -20,8 +20,10 @@
             </div>            
           </div>
         </div>  
-      </ul>  
+      </ul>
     </div>
+    <Page class-name="page" :total="100" />
+
   </section>
 </template>
 
@@ -45,7 +47,7 @@ export default {
 
   .publish {
     width: 1160px;
-    height: 335px;
+    // height: 335px;
     border-bottom: 1px solid #dfdfdf;
     margin-left: 20px;
 
@@ -77,6 +79,7 @@ export default {
       font-size: 16px;
       color: #ffffff;
       margin-left: 848px;
+      margin-bottom: 40px;
     }
   }
 
@@ -112,6 +115,13 @@ export default {
         color: #727272;
       }
     }
+  }
+
+  .page {
+    margin-top: 33px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
   }
 }
 </style>
