@@ -1,17 +1,20 @@
 <template>
  <div class="top-bar">
   <div class="wrapper">
-    <div class="i-title">
-      <img src="../assets/logo.png" alt="" class="image">
-      <span class="title">AI Market</span>
-    </div>
+    <router-link to="/">
+      <div class="i-title">
+        <img src="../assets/logo.png" alt="" class="image">
+        <span class="title">AI Market</span>
+      </div>
+    </router-link>
+    
 
     <Input prefix="ios-search" placeholder="Search APIs" class="search" />
 
     <div class="personal-center">
       <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
       <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/>
-      <img src="" alt="">头像<Icon type="ios-arrow-down" color="#ffffff" class="via"/>
+      <router-link to="/my-account"><img src="" alt="">头像</router-link><Icon type="ios-arrow-down" color="#ffffff" class="via"/>
       <Button @click="modal1 = true">login</Button>
       <Modal 
       v-model="modal1" 
