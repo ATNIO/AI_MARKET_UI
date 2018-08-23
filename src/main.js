@@ -3,14 +3,13 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
-import "normalize.css";
-
-import iView from "iview";
-import "iview/dist/styles/iview.css";
-
 import { upperFirst, camelCase } from "lodash";
+import iView from "iview";
 
+import "normalize.css";
+import "iview/dist/styles/iview.css";
 import "@/assets/styles/base.less";
+import "json-schema-view-js/dist/style.min.css";
 
 Vue.use(iView);
 
@@ -45,6 +44,14 @@ requireComponent.keys().forEach(fileName => {
     // 否则回退到使用模块的根。
     componentConfig.default || componentConfig
   );
+});
+
+Vue.mixin({
+  filters: {
+    toUpper(value) {
+      return value ? value.toUpperCase() : "";
+    }
+  }
 });
 
 new Vue({
