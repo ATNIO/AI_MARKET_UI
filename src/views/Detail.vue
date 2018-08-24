@@ -41,7 +41,9 @@
           </div>  
         </div>
 
-        <chanel class="chanel"></chanel>
+
+        <channel></channel>
+
 
         <detail-container></detail-container>
     </div>
@@ -53,15 +55,15 @@ import Swagger from "swagger-client";
 import { mapActions } from "vuex";
 
 import data from "../mock/listData.js";
-import chanel from "./chanel/Chanel";
+import Channel from "./Channel";
 
 import DetailContainer from "./DetailContainer";
 
 export default {
   name: "Detail",
   components: {
-    "detail-container": DetailContainer,
-    chanel
+    Channel,
+    "detail-container": DetailContainer
   },
   data() {
     return {

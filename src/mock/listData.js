@@ -18,7 +18,11 @@ export default [
     stars: 889,
     createdTime: "July 2018",
     updataTime: "August 5th",
-    tag: ["image", "computer", "vision", "recognization"]
+    tag: ["image", "computer", "vision", "recognization"],
+    chanel: 0,
+    reviewer: "Max Sullivan",
+    time: "1 minute ago",
+    details: "Cook Eggs Don T Boil"
   },
   {
     logoUrl: logo,
@@ -45,7 +49,10 @@ export default [
       "computer",
       "computer",
       "computer"
-    ]
+    ],
+    reviewer: "Max Sullivan",
+    time: "1 minute ago",
+    details: "Cook Eggs Don T Boil"
   },
   {
     logoUrl: logo,
@@ -72,7 +79,10 @@ export default [
       "computer",
       "computer",
       "computer"
-    ]
+    ],
+    reviewer: "Max Sullivan",
+    time: "1 minute ago",
+    details: "Cook Eggs Don T Boil"
   },
   {
     logoUrl: logo,
@@ -99,7 +109,10 @@ export default [
       "computer",
       "computer",
       "computer"
-    ]
+    ],
+    reviewer: "Max Sullivan",
+    time: "1 minute ago",
+    details: "Cook Eggs Don T Boil"
   },
   {
     logoUrl: logo,
@@ -126,7 +139,10 @@ export default [
       "computer",
       "computer",
       "computer"
-    ]
+    ],
+    reviewer: "Max Sullivan",
+    time: "1 minute ago",
+    details: "Cook Eggs Don T Boil"
   },
   {
     logoUrl: logo,
@@ -153,7 +169,10 @@ export default [
       "computer",
       "computer",
       "computer"
-    ]
+    ],
+    reviewer: "Max Sullivan",
+    time: "1 minute ago",
+    details: "Cook Eggs Don T Boil"
   },
   {
     logoUrl: logo,
@@ -180,7 +199,10 @@ export default [
       "computer",
       "computer",
       "computer"
-    ]
+    ],
+    reviewer: "Max Sullivan",
+    time: "1 minute ago",
+    details: "Cook Eggs Don T Boil"
   },
   {
     logoUrl: logo,
@@ -207,7 +229,10 @@ export default [
       "computer",
       "computer",
       "computer"
-    ]
+    ],
+    reviewer: "Max Sullivan",
+    time: "1 minute ago",
+    details: "Cook Eggs Don T Boil"
   },
   {
     logoUrl: logo,
@@ -234,6 +259,9 @@ export default [
       "computer",
       "computer",
       "computer"
-    ]
+    ],
+    reviewer: "Max Sullivan",
+    time: "1 minute ago",
+    details: "Cook Eggs Don T Boil"
   }
 ];
