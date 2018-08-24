@@ -1,29 +1,29 @@
 <template>
-  <li class="card" :data-address="item.address">
+  <li class="card" :data-address="item.addr">
     <div class="logo" :style="logo"></div>
     <div class="content">
       <h2>{{ item.name }}</h2>
       <p class="description">
-        {{ item.des }}
+        {{ item.description }}
       </p>
       <div class="auther">
         <div class="avatar"></div>
-        <a href="#" target="_blank">{{ item.auther }}</a>
+        <a href="#" target="_blank">{{ item.owner }}</a>
       </div>
       <div class="footer">
         <div class="left">
           <div class="comment">
             <Icon type="ios-text" />
-            <span>{{ item.comment }}</span>
+            <span>{{ item.comment || 1000 }}</span>
           </div>
           <div class="star">
             <Icon type="ios-star" />
-            <span>{{ item.star }}</span>
+            <span>{{ item.star || 100 }}</span>
           </div>
         </div>
         <div class="price">
           <span>ATN</span>
-          <span>{{ item.price }}</span>
+          <span>{{ item.floor_price | priceFormat }}</span>
         </div>
       </div>
     </div>
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import BN from "bignumber.js";
+
 export default {
   name: "Card",
   props: {
@@ -42,8 +44,17 @@ export default {
   computed: {
     logo() {
       return {
-        backgroundImage: `url(${this.item.logoUrl})`
+        backgroundImage: `url(${this.item.logo})`
       };
+    }
+  },
+  filters: {
+    priceFormat(price) {
+      const a = new BN(price, 10);
+      const b = new BN(10, 10);
+      const c = new BN(18, 10);
+
+      return a.div(b.pow(c)).toString(10);
     }
   }
 };
@@ -74,7 +85,7 @@ export default {
     height: 175px;
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 50% 20%;
+    background-size: 50% 50%;
     pointer-events: none;
   }
 
@@ -91,7 +102,7 @@ export default {
       margin: 0;
       display: -webkit-box;
       -webkit-box-orient: vertical;
-      -web-line-clamp: 2;
+      -webkit-line-clamp: 2;
       text-overflow: ellipsis;
       overflow: hidden;
       font-size: 14px;

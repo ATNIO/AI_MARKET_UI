@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import api from "@/common/api"; // 导入api接口
 
 import { upperFirst, camelCase } from "lodash";
 import iView from "iview";
@@ -14,6 +15,8 @@ import "json-schema-view-js/dist/style.min.css";
 Vue.use(iView);
 
 Vue.config.productionTip = false;
+
+Vue.prototype.$api = api; // 将api挂载到vue的原型上
 
 const requireComponent = require.context(
   // 其组件目录的相对路径

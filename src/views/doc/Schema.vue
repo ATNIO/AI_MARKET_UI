@@ -70,10 +70,12 @@ export default {
   },
   computed: {
     jsonData() {
-      const { properties, type } = this.schema;
-      const jsonData = schema2json(properties);
+      const { properties, type, items } = this.schema;
+      const jsonData = schema2json(
+        type === "array" ? items.properties : properties
+      );
 
-      return JSON.stringify(jsonData, null, 2);
+      return JSON.stringify(type === "array" ? [jsonData] : jsonData, null, 2);
     }
   }
 };

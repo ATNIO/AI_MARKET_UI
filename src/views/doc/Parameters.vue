@@ -31,18 +31,18 @@
                 <p class="description">{{ parameter.description }}</p>
 
                 <Schema
-                  v-if="parameter.schema && parameter.schema.properties" 
+                  v-if="parameter.in === 'body'" 
                   :schema="parameter.schema"
                 ></Schema>
 
-                <template v-if="parameter.type === 'array' && parameter.items.enum">
+                <parameter-field v-else :parameter="parameter"></parameter-field>
+
+                <!-- <template v-if="parameter.type === 'array' && parameter.items.enum">
                   <Select v-model="param" style="width:100%">
                     <Option v-for="item in parameter.items.enum" :value="item" :key="item">{{ item }}</Option>
                   </Select>
                 </template>
                 <template v-if="parameter.type === 'string' || parameter.type === 'integer'">
-                  <Input 
-                    :placeholder="`${ parameter.name }${ parameter.description ? ' - ' + parameter.description : '' }`" style="width: 100%" />
                 </template>
                 <template v-if="parameter.type === 'file'">
                   <Upload
@@ -57,7 +57,7 @@
                       <Icon type="ios-close" size="24" @click.native="handleRemove(file)" />
                     </li>
                   </ul>
-                </template>
+                </template> -->
               </div>
             </li>
           </ul>
@@ -76,10 +76,11 @@ import { upperFirst } from "lodash";
 import FormSchema, { Components } from "@formschema/native";
 
 import Schema from "./Schema";
+import ParameterField from "./ParameterField";
 
 export default {
   name: "Parameters",
-  components: { Schema },
+  components: { Schema, ParameterField },
   data() {
     return {};
   },

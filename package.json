@@ -9,10 +9,13 @@
   },
   "dependencies": {
     "@formschema/native": "^2.0.0-alpha.2",
+    "atn-js": "^0.0.20",
     "axios": "^0.18.0",
+    "bignumber.js": "^7.2.1",
     "iview": "^3.0.0",
     "json-schema-view-js": "^2.0.0",
     "normalize.css": "^8.0.0",
+    "qs": "^6.5.2",
     "swagger-client": "^3.8.13",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",

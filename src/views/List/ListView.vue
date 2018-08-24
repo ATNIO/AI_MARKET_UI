@@ -1,15 +1,16 @@
 <template>
   <div class="list">
     <ul class="list-view" @click="_click($event)">
-      <card v-for="(item, index) in data" :key="index" :item="item"></card>
+      <card v-for="(item, index) in dbots" :key="index" :item="item"></card>
     </ul>
-    <Page class-name="page" :total="100" />
+    <Page class-name="page" :total="count" :current="current" />
   </div>
 </template>
 
 <script>
 import Card from "./Card";
-import data from "../../mock/listData.js";
+
+import { mapGetters } from "vuex";
 
 export default {
   name: "ListView",
@@ -17,9 +18,10 @@ export default {
     Card
   },
   data() {
-    return {
-      data
-    };
+    return {};
+  },
+  computed: {
+    ...mapGetters(["dbots", "count", "current"])
   },
   methods: {
     _click(e) {

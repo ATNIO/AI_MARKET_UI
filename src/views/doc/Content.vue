@@ -10,11 +10,15 @@
           }">{{ endpoint.path }}</span>
           <Tag v-if="isDeprecated" color="red">Deprecated</Tag>
         </p>
-        <p class="description" v-if="content.description">{{ content.description }}</p>
+        <p class="summary" v-if="content.summary">{{ content.summary }}</p>
       </div>
       <div class="price">
         <span>8 ATN</span>
       </div>
+    </div>
+
+    <div class="description" v-if="content.description">
+      <span>{{ content.description }}</span>
     </div>
 
     <div class="content-body">
@@ -111,6 +115,7 @@ article {
   .header {
     height: 80px;
     padding: 0 20px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -131,7 +136,7 @@ article {
       }
     }
 
-    .description {
+    .summary {
       margin-top: 10px;
       font-size: 12px;
       color: #fff;
@@ -142,8 +147,12 @@ article {
     }
   }
 
+  .description {
+    margin: 0 20px;
+  }
+
   .content-body {
-    padding: 40px 20px 20px;
+    padding: 20px 20px 20px;
   }
 }
 </style>
