@@ -4,7 +4,7 @@
     <div class="category">
       <categories></categories>
     </div>
-    <div class="container">
+    <div class="container" v-if="!DBotsErr">
       <action-bar></action-bar>
       <list-view></list-view>
     </div>
@@ -29,7 +29,8 @@ export default {
   },
   data() {
     return {
-      spinShow: false
+      spinShow: false,
+      DBotsErr: false
     };
   },
   mounted() {
@@ -53,10 +54,13 @@ export default {
               ...data,
               current: 1
             });
+          } else {
+            this.DBotsErr = true;
           }
         })
         .catch(e => {
           this.spinShow = false;
+          this.DBotsErr = true;
           console.log(e);
         });
     }

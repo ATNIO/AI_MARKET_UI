@@ -7,7 +7,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    docData: {},
+    detailData: {},
+    specification: {},
     dbots: [],
     count: 0,
     current: 1,
@@ -15,10 +16,10 @@ export default new Vuex.Store({
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
-      state.docData = Object.freeze(data);
+      state.specification = Object.freeze(data);
     },
     [types.SET_DBOTS](state, dbots = []) {
-      state.dbots = dbots;
+      state.dbots = Object.freeze(dbots);
     },
     [types.SET_COUNT](state, count = 0) {
       state.count = count;
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     },
     [types.SET_ADDRESS](state, address = "") {
       state.address = address;
+    },
+    [types.SET_DETAIL_DATA](state, payload = {}) {
+      state.detailData = payload;
     }
   },
   actions: {
@@ -43,11 +47,14 @@ export default new Vuex.Store({
     },
     setAddress({ commit }, address) {
       commit(types.SET_ADDRESS, address);
+    },
+    setDetailData({ commit }, payload) {
+      commit(types.SET_DETAIL_DATA, payload);
     }
   },
   getters: {
-    docData(state) {
-      return state.docData;
+    specification(state) {
+      return state.specification;
     },
     count(state) {
       return state.count;
@@ -60,6 +67,12 @@ export default new Vuex.Store({
     },
     address(state) {
       return state.address;
+    },
+    addressInDetail(state) {
+      return state.detailData.addr;
+    },
+    endpoints(state) {
+      return state.detailData.endpoints || [];
     }
   }
 });

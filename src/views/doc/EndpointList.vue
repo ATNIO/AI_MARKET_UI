@@ -5,14 +5,14 @@
       <ul class="list">
         <li 
           v-for="(endpoint, index) in endpoints" 
-          :key="`${ endpoint.path }_${ endpoint.type }`"
+          :key="`${ endpoint.path }_${ endpoint.method }`"
           :class="{
             current: current === index
           }"
           @click="_click(index)"
         >
-          <p>{{ endpoint.path }}</p>
-          <p>{{ endpoint.type | toUpper }}</p>
+          <p>{{ endpoint.uri }}</p>
+          <p>{{ endpoint.method | toUpper }}</p>
         </li>
       </ul>
     </section>

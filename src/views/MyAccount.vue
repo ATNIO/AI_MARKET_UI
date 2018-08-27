@@ -4,26 +4,36 @@
     <div class="photo"></div>
     <div class="address">{{address}}</div>
     <div class="balance">
-      <span>
-        <span>0000.00</span>
-         ATN 
-        <Icon type="ios-eye-outline" />
+      <span class="visible" v-show="visible">
+        <span class="number">
+          <span class="number-visible">0000.00</span>
+          <span class="unit"> ATN</span>
+        </span>
+        <Icon type="ios-eye-outline" @click="visible = !visible" size="28" color="#B7B9CE" class="icon"/>
       </span>
-      <span>
-        <span>****</span>
-         ATN 
-        <Icon type="ios-eye-off-outline" />
+      <span class="unvisible" v-show="!visible">
+        <span class="number">
+          <span class="number-unvisible">****</span>
+          <span class="unit"> ATN</span>
+        </span>
+         
+        <Icon type="ios-eye-off-outline" @click="visible = !visible" size="28" color="#B7B9CE" class="icon"/>
       </span>
         
     </div>
-    <div>
-      <Icon type="ios-person-outline" />
-      <span>Profile</span>
+
+
+    <div class="list">
+      <div class="profile">
+        <Icon type="ios-person-outline" size="41" color="#ffffff" class="list-icon"/>
+        <span> Profile</span>
+      </div>
+      <div class="channel-list">
+        <Icon type="ios-list-box-outline" size="41" color="#ffffff" class="list-icon"/>
+        <span> Channel list</span>
+      </div>
     </div>
-    <div>
-      <Icon type="ios-list-box-outline" />
-      <span>Channel list</span>
-    </div>
+    
   </div>
 </div>
   
@@ -35,7 +45,7 @@ export default {
   name: "my-account",
   data() {
     return {
-      balance: 1000
+      visible: true
     };
   },
   computed: {
@@ -78,6 +88,66 @@ export default {
     width: 230px;
     height: 54px;
     border: 1px solid #dfdfdf;
+    text-align: center;
+    position: relative;
+
+    .unit {
+      font-size: 16px;
+      color: #000000;
+      position: absolute;
+      top: 8px;
+      left: 92px;
+    }
+    .number {
+      position: absolute;
+      display: flex;
+      flex-direction: row;
+      top: 8px;
+      margin-left: 40px;
+    }
+    .number-visible {
+      font-size: 24px;
+      color: #87c5ff;
+    }
+    .number-unvisible {
+      font-size: 46px;
+      color: #87c5ff;
+      position: absolute;
+      top: -6px;
+      left: 15px;
+    }
+    .icon {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+    }
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 35px;
+
+    .list-icon {
+      margin-left: 25px;
+      margin-right: 20px;
+    }
+    .profile {
+      width: 290px;
+      height: 60px;
+      background: #797bf8;
+      color: #ffffff;
+      font-size: 24px;
+      padding-top: 8px;
+    }
+    .channel-list {
+      width: 290px;
+      height: 60px;
+      background: #797bf8;
+      color: #ffffff;
+      font-size: 24px;
+      padding-top: 8px;
+    }
   }
 }
 </style>

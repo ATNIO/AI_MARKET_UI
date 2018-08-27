@@ -4,10 +4,10 @@
     <div class="header" :class="isDeprecated ? 'gray' : 'normal'">
       <div class="left">
         <p class="endpoint">
-          <span>{{ endpoint.type | toUpper }}</span>
+          <span>{{ endpoint.method | toUpper }}</span>
           <span :class="{
             deprecated: isDeprecated
-          }">{{ endpoint.path }}</span>
+          }">{{ endpoint.uri }}</span>
           <Tag v-if="isDeprecated" color="red">Deprecated</Tag>
         </p>
         <p class="summary" v-if="content.summary">{{ content.summary }}</p>
@@ -62,9 +62,9 @@ export default {
     content() {
       if (!this.paths) return {};
 
-      const { path, type } = this.endpoint;
+      const { uri, method } = this.endpoint;
 
-      return this.paths[path][type];
+      return this.paths[uri][method];
     },
     isDeprecated() {
       return this.content.deprecated;
