@@ -12,10 +12,14 @@
     <Input prefix="ios-search" placeholder="Search APIs" class="search" />
 
     <div class="personal-center">
-      <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
-      <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/>
-      <router-link to="/my-account"><img src="" alt="">头像</router-link><Icon type="ios-arrow-down" color="#ffffff" class="via"/>
+      <span class="prefsession" v-show="loginShow">
+        <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
+        <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/>
+        <router-link to="/my-account"><img src="" alt="">头像</router-link><Icon type="ios-arrow-down" color="#ffffff" class="via"/>
+      </span>
+     <div v-show="!loginShow">
       <Button @click="modal1 = true">login</Button>
+     </div>
     </div>
 
     <Modal 
@@ -24,60 +28,74 @@
       width="890px"
       class-name="vertical-center-modal">
 
-      <!-- login的卡片在这里添加 -->
-       <Card class="metamask">
-         <div class="fox-img"></div>
-        <!-- <img src="../assets/metamask-logo.c51e1a45.svg" alt="" class="fox-img"> -->
-        <div class="word">
-          <span class="login">Connect to the </span>
-          <span class="wallet">MetaMask browser wallet.</span>
-        </div>
-        <button class="metamask-button">Connect to MetaMask.</button>
-      </Card>
-
-      <Card class="ledger">
-        <div class="ledger-left">
-          <img src="../assets/ledger-logo.15c0fba6 copy.png" alt="">
-          <div>
-            <span class="login">Connect and sign with your </span>
-            <span class="wallet">Ledger hardware wallet. </span>
+        <!-- login的卡片在这里添加 -->
+        <Card class="metamask">
+          <div class="fox-img"></div>
+          <!-- <img src="../assets/metamask-logo.c51e1a45.svg" alt="" class="fox-img"> -->
+          <div class="word">
+            <span class="login">Connect to the </span>
+            <span class="wallet">MetaMask browser wallet.</span>
           </div>
-        </div>
-        <button class="ledger-button">Connect to Ledger</button>
-      </Card>
+          <button class="metamask-button" @click="loginByMetamask">Connect to MetaMask.</button>
+        </Card>
 
-      <Card class="trezor">
-        <div class="trezor-left">
-          <img src="../assets/trezor-logo.05bf1698 copy.png" alt="">
-          <div>
-            <span class="login">Connect and sign with your </span>
-            <span class="wallet">Trezor hardware wallet.</span>
+        <Card class="ledger">
+          <div class="ledger-left">
+            <img src="../assets/ledger-logo.15c0fba6 copy.png" alt="">
+            <div>
+              <span class="login">Connect and sign with your </span>
+              <span class="wallet">Ledger hardware wallet. </span>
+            </div>
           </div>
-        </div>
-        <button class="trezor-button">Connect to Trezor</button>
-      </Card>
+          <button class="ledger-button">Connect to Ledger</button>
+        </Card>
 
-      <Card class="walletconnect">
-        <div class="walletconnect-left">
-          <img src="../assets/walletconnect-logo-and-type.044b39a9 copy.png" alt="">
-          <div>
-            <span class="login">Scan a QR code to link your mobile wallet </span>
-            <span class="wallet">using WalletConnect.</span>
+        <Card class="trezor">
+          <div class="trezor-left">
+            <img src="../assets/trezor-logo.05bf1698 copy.png" alt="">
+            <div>
+              <span class="login">Connect and sign with your </span>
+              <span class="wallet">Trezor hardware wallet.</span>
+            </div>
           </div>
-        </div>
-        <button class="walletconnect-button">Use WalletConnect</button>
-      </Card>
+          <button class="trezor-button">Connect to Trezor</button>
+        </Card>
+
+        <Card class="walletconnect">
+          <div class="walletconnect-left">
+            <img src="../assets/walletconnect-logo-and-type.044b39a9 copy.png" alt="">
+            <div>
+              <span class="login">Scan a QR code to link your mobile wallet </span>
+              <span class="wallet">using WalletConnect.</span>
+            </div>
+          </div>
+          <button class="walletconnect-button">Use WalletConnect</button>
+        </Card>
     </Modal>
   </div>
  </div>  
 </template>
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "TopBar",
   data() {
     return {
-      modal1: false
+      modal1: false,
+      loginShow: false
     };
+  },
+  methods: {
+    ...mapActions(["setAddress"]),
+    loginByMetamask() {
+      const eth = this.$web3.eth;
+      eth.getAccounts().then(accounts => {
+        console.log(accounts);
+        this.setAddress(accounts[0]);
+        this.loginShow = !this.loginShow;
+      });
+    }
   }
 };
 </script>
