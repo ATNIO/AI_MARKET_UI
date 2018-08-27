@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import api from "@/common/api"; // 导入api接口
 
+import Web3 from "web3";
 import { upperFirst, camelCase } from "lodash";
 import iView from "iview";
 
@@ -17,6 +18,7 @@ Vue.use(iView);
 Vue.config.productionTip = false;
 
 Vue.prototype.$api = api; // 将api挂载到vue的原型上
+Vue.prototype.$web3 = new Web3(Web3.givenProvider); // 挂载 web3 实例
 
 const requireComponent = require.context(
   // 其组件目录的相对路径
