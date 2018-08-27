@@ -16,9 +16,12 @@
       <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/>
       <router-link to="/my-account"><img src="" alt="">头像</router-link><Icon type="ios-arrow-down" color="#ffffff" class="via"/>
       <Button @click="modal1 = true">login</Button>
-      <Modal 
+    </div>
+
+    <Modal 
       v-model="modal1" 
       :footer-hide="true" 
+      width="890px"
       class-name="vertical-center-modal">
 
       <!-- login的卡片在这里添加 -->
@@ -64,15 +67,7 @@
         </div>
         <button class="walletconnect-button">Use WalletConnect</button>
       </Card>
-      
-
-
-      </Modal>
-     
-    
-    </div>
-   
-   
+    </Modal>
   </div>
  </div>  
 </template>
@@ -134,7 +129,6 @@ export default {
   margin-top: 160px;
 }
 .ivu-modal-content {
-  width: 890px;
   height: 525px;
   background-color: transparent;
 }
@@ -148,7 +142,6 @@ export default {
   padding: 0;
 }
 .ive-card-body {
-  width: 890px;
   height: 120px;
 }
 
@@ -162,7 +155,6 @@ export default {
   line-height: 24px;
 }
 .metamask {
-  width: 890px;
   height: 120px;
   margin-bottom: 15px;
 
@@ -193,7 +185,6 @@ export default {
   }
 }
 .ledger {
-  width: 890px;
   height: 120px;
   margin-bottom: 15px;
   .ledger-left {
@@ -215,7 +206,6 @@ export default {
   }
 }
 .trezor {
-  width: 890px;
   height: 120px;
   margin-bottom: 15px;
 
@@ -237,7 +227,6 @@ export default {
   }
 }
 .walletconnect {
-  width: 890px;
   height: 120px;
 
   .walletconnect-left {
