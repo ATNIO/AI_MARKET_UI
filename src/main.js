@@ -6,6 +6,7 @@ import api from "@/common/api"; // 导入api接口
 
 import { upperFirst, camelCase } from "lodash";
 import iView from "iview";
+import VueClipboard from "vue-clipboard2";
 
 import "normalize.css";
 import "iview/dist/styles/iview.css";
@@ -13,6 +14,7 @@ import "@/assets/styles/base.less";
 import "json-schema-view-js/dist/style.min.css";
 
 Vue.use(iView);
+Vue.use(VueClipboard);
 
 Vue.config.productionTip = false;
 
