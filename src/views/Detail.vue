@@ -82,15 +82,32 @@ export default {
     }
   },
   mounted() {
-    Swagger("https://petstore.swagger.io/v2/swagger.json").then(data => {
-      this.setDocData({ data });
-    });
+    this.fetch();
 
-    // this.fetch({ address: this.address });
+    // Swagger("https://petstore.swagger.io/v2/swagger.json").then(data => {
+    //   this.setDocData({ data });
+    // });
   },
   methods: {
     ...mapActions(["setDocData"]),
-    fetch() {}
+    fetch() {
+      const { getDetail } = this.$api.detail;
+
+      getDetail(this.address).then(res => {
+        const { data, status } = res;
+
+        if (status === 200) {
+          new Swagger({ spec: JSON.parse(data.specification.data) })
+            .then(data => {
+              console.log(data);
+              this.setDocData({ data });
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        }
+      });
+    }
   }
 };
 </script>

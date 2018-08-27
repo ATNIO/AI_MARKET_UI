@@ -10,7 +10,8 @@ export default new Vuex.Store({
     docData: {},
     dbots: [],
     count: 0,
-    current: 1
+    current: 1,
+    address: ""
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
     [types.SET_CURRENT](state, current = 1) {
       state.current = current;
+    },
+    [types.SET_ADDRESS](state, address = "") {
+      state.address = address;
     }
   },
   actions: {
@@ -36,6 +40,9 @@ export default new Vuex.Store({
       commit(types.SET_DBOTS, data);
       commit(types.SET_COUNT, count);
       commit(types.SET_CURRENT, current);
+    },
+    setAddress({ commit }, address) {
+      commit(types.SET_ADDRESS, address);
     }
   },
   getters: {
@@ -50,6 +57,9 @@ export default new Vuex.Store({
     },
     dbots(state) {
       return state.dbots;
+    },
+    address(state) {
+      return state.address;
     }
   }
 });

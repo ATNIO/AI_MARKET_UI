@@ -2,10 +2,19 @@
 <div class="myaccount">
   <div class="nav">
     <div class="photo"></div>
-    <span class="address">{{address}}</span>
-    <div class="balance" @click="hello">
-        {{balance}} ATN 
-        <icon></icon>
+    <div class="address">{{address}}</div>
+    <div class="balance">
+      <span>
+        <span>0000.00</span>
+         ATN 
+        <Icon type="ios-eye-outline" />
+      </span>
+      <span>
+        <span>****</span>
+         ATN 
+        <Icon type="ios-eye-off-outline" />
+      </span>
+        
     </div>
     <div>
       <Icon type="ios-person-outline" />
@@ -21,21 +30,16 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "my-account",
   data() {
     return {
-      address: 123,
       balance: 1000
     };
   },
-  methods: {
-    hello() {
-      const eth = this.$web3.eth;
-      eth.getAccounts().then(accounts => {
-        console.log(accounts);
-      });
-    }
+  computed: {
+    ...mapGetters(["address"])
   }
 };
 </script>
@@ -50,13 +54,30 @@ export default {
   height: 810px;
   background: #ffffff;
   box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .photo {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     background: #797bf8;
-    margin: 0 auto;
+    margin-top: 75px;
+    margin-bottom: 15px;
+  }
+  .address {
+    font-size: 24px;
+    color: #788091;
+    width: 176px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .balance {
+    width: 230px;
+    height: 54px;
+    border: 1px solid #dfdfdf;
   }
 }
 </style>

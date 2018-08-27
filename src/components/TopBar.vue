@@ -17,12 +17,16 @@
         <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/>
         <router-link to="/my-account"><img src="" alt="">头像</router-link><Icon type="ios-arrow-down" color="#ffffff" class="via"/>
       </span>
-     <span v-show="!loginShow">
+     <div v-show="!loginShow">
       <Button @click="modal1 = true">login</Button>
-        <Modal 
-        v-model="modal1" 
-        :footer-hide="true" 
-        class-name="vertical-center-modal">
+     </div>
+    </div>
+
+    <Modal 
+      v-model="modal1" 
+      :footer-hide="true" 
+      width="890px"
+      class-name="vertical-center-modal">
 
         <!-- login的卡片在这里添加 -->
         <Card class="metamask">
@@ -32,7 +36,7 @@
             <span class="login">Connect to the </span>
             <span class="wallet">MetaMask browser wallet.</span>
           </div>
-          <button class="metamask-button" @click="loginByMetamask, loginShow = !loginShow">Connect to MetaMask.</button>
+          <button class="metamask-button" @click="loginByMetamask">Connect to MetaMask.</button>
         </Card>
 
         <Card class="ledger">
@@ -67,21 +71,13 @@
           </div>
           <button class="walletconnect-button">Use WalletConnect</button>
         </Card>
-        
-
-
-      </Modal>
-     </span>
-
-     
-    
-    </div>
-   
-   
+    </Modal>
   </div>
  </div>  
 </template>
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "TopBar",
   data() {
@@ -91,10 +87,13 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["setAddress"]),
     loginByMetamask() {
       const eth = this.$web3.eth;
       eth.getAccounts().then(accounts => {
         console.log(accounts);
+        this.setAddress(accounts[0]);
+        this.loginShow = !this.loginShow;
       });
     }
   }
@@ -148,7 +147,6 @@ export default {
   margin-top: 160px;
 }
 .ivu-modal-content {
-  width: 890px;
   height: 525px;
   background-color: transparent;
 }
@@ -162,7 +160,6 @@ export default {
   padding: 0;
 }
 .ive-card-body {
-  width: 890px;
   height: 120px;
 }
 
@@ -176,7 +173,6 @@ export default {
   line-height: 24px;
 }
 .metamask {
-  width: 890px;
   height: 120px;
   margin-bottom: 15px;
 
@@ -207,7 +203,6 @@ export default {
   }
 }
 .ledger {
-  width: 890px;
   height: 120px;
   margin-bottom: 15px;
   .ledger-left {
@@ -229,7 +224,6 @@ export default {
   }
 }
 .trezor {
-  width: 890px;
   height: 120px;
   margin-bottom: 15px;
 
@@ -251,7 +245,6 @@ export default {
   }
 }
 .walletconnect {
-  width: 890px;
   height: 120px;
 
   .walletconnect-left {
