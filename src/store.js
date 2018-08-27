@@ -7,23 +7,27 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    docData: {},
+    detailData: {},
+    specification: {},
     dbots: [],
     count: 0,
     current: 1
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
-      state.docData = Object.freeze(data);
+      state.specification = Object.freeze(data);
     },
     [types.SET_DBOTS](state, dbots = []) {
-      state.dbots = dbots;
+      state.dbots = Object.freeze(dbots);
     },
     [types.SET_COUNT](state, count = 0) {
       state.count = count;
     },
     [types.SET_CURRENT](state, current = 1) {
       state.current = current;
+    },
+    [types.SET_DETAIL_DATA](state, payload = {}) {
+      state.detailData = payload;
     }
   },
   actions: {
@@ -36,11 +40,14 @@ export default new Vuex.Store({
       commit(types.SET_DBOTS, data);
       commit(types.SET_COUNT, count);
       commit(types.SET_CURRENT, current);
+    },
+    setDetailData({ commit }, payload) {
+      commit(types.SET_DETAIL_DATA, payload);
     }
   },
   getters: {
-    docData(state) {
-      return state.docData;
+    specification(state) {
+      return state.specification;
     },
     count(state) {
       return state.count;
@@ -50,6 +57,12 @@ export default new Vuex.Store({
     },
     dbots(state) {
       return state.dbots;
+    },
+    addressInDetail(state) {
+      return state.detailData.addr;
+    },
+    endpoints(state) {
+      return state.detailData.endpoints || [];
     }
   }
 });

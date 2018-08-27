@@ -24,44 +24,44 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["docData"]),
+    ...mapGetters(["specification", "endpoints"]),
     spec() {
-      return this.docData.spec || {};
+      return this.specification.spec || {};
     },
     show() {
       return !isEmpty(this.spec);
     },
     paths() {
       return this.spec.paths;
-    },
-    endpoints() {
-      const paths = this.paths;
-      const endpoints = [];
-
-      if (!paths) return [];
-
-      for (let path in paths) {
-        if (paths.hasOwnProperty(path)) {
-          const types = paths[path];
-
-          for (let type in types) {
-            if (types.hasOwnProperty(type)) {
-              endpoints.push({ path, type });
-            }
-          }
-        }
-      }
-
-      return endpoints;
-    },
-    content() {
-      if (!this.paths) return {};
-
-      const endpoint = this.endpoints[this.current];
-      const { path, type } = endpoint;
-
-      return this.paths[path][type];
     }
+    // endpoints() {
+    //   const paths = this.paths;
+    //   const endpoints = [];
+
+    //   if (!paths) return [];
+
+    //   for (let path in paths) {
+    //     if (paths.hasOwnProperty(path)) {
+    //       const types = paths[path];
+
+    //       for (let type in types) {
+    //         if (types.hasOwnProperty(type)) {
+    //           endpoints.push({ path, type });
+    //         }
+    //       }
+    //     }
+    //   }
+
+    //   return endpoints;
+    // },
+    // content() {
+    //   if (!this.paths) return {};
+
+    //   const endpoint = this.endpoints[this.current];
+    //   const { path, type } = endpoint;
+
+    //   return this.paths[path][type];
+    // }
   },
   methods: {
     _click(index) {

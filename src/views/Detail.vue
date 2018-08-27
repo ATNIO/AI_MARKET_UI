@@ -52,7 +52,7 @@
 
 <script>
 import Swagger from "swagger-client";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import data from "../mock/listData.js";
 import Channel from "./Channel";
@@ -72,6 +72,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["addressInDetail"]),
     address() {
       return this.$route.params.address;
     },
@@ -89,24 +90,39 @@ export default {
     // });
   },
   methods: {
-    ...mapActions(["setDocData"]),
+    ...mapActions(["setDocData", "setDetailData"]),
     fetch() {
       const { getDetail } = this.$api.detail;
 
-      getDetail(this.address).then(res => {
-        const { data, status } = res;
+      if (this.address === this.addressInDetail) return;
 
-        if (status === 200) {
-          new Swagger({ spec: JSON.parse(data.specification.data) })
-            .then(data => {
-              console.log(data);
-              this.setDocData({ data });
-            })
-            .catch(e => {
-              console.log(e);
-            });
-        }
-      });
+      this.setDocData({});
+
+      this.$Spin.show();
+      getDetail(this.address)
+        .then(res => {
+          this.$Spin.hide();
+
+          const { data, status } = res;
+          const { addr, create_at, endpoints, update_at, specification } = data;
+
+          if (status === 200) {
+            this.setDetailData({ addr, create_at, endpoints, update_at });
+
+            new Swagger({ spec: JSON.parse(specification.data) })
+              .then(data => {
+                console.log(data);
+                this.setDocData({ data });
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          }
+        })
+        .catch(e => {
+          this.$Spin.hide();
+          console.log(e);
+        });
     }
   }
 };
