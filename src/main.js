@@ -5,7 +5,10 @@ import store from "./store";
 import api from "@/common/api"; // 导入api接口
 
 import { upperFirst, camelCase } from "lodash";
+import BN from "bignumber.js";
+
 import iView from "iview";
+import locale from "iview/dist/locale/en-US";
 import VueClipboard from "vue-clipboard2";
 
 import "normalize.css";
@@ -13,7 +16,7 @@ import "iview/dist/styles/iview.css";
 import "@/assets/styles/base.less";
 import "json-schema-view-js/dist/style.min.css";
 
-Vue.use(iView);
+Vue.use(iView, { locale });
 Vue.use(VueClipboard);
 
 Vue.config.productionTip = false;
@@ -55,6 +58,13 @@ Vue.mixin({
   filters: {
     toUpper(value) {
       return value ? value.toUpperCase() : "";
+    },
+    priceFormat(price) {
+      const a = new BN(price, 10);
+      const b = new BN(10, 10);
+      const c = new BN(18, 10);
+
+      return a.div(b.pow(c)).toString(10);
     }
   }
 });

@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import BN from "bignumber.js";
-
 export default {
   name: "Card",
   props: {
@@ -46,15 +44,6 @@ export default {
       return {
         backgroundImage: `url(${this.item.logo})`
       };
-    }
-  },
-  filters: {
-    priceFormat(price) {
-      const a = new BN(price, 10);
-      const b = new BN(10, 10);
-      const c = new BN(18, 10);
-
-      return a.div(b.pow(c)).toString(10);
     }
   }
 };

@@ -18,7 +18,7 @@ import ListView from "./List/ListView";
 
 import Swagger from "swagger-client";
 
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Home",
@@ -33,6 +33,9 @@ export default {
       DBotsErr: false
     };
   },
+  computed: {
+    ...mapGetters(["dbots"])
+  },
   mounted() {
     this.init();
   },
@@ -40,6 +43,8 @@ export default {
     ...mapActions(["setDbots"]),
     init() {
       const { getDbots } = this.$api.home;
+
+      if (this.dbots.length > 0) return;
 
       this.spinShow = true;
 

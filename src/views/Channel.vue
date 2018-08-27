@@ -125,6 +125,13 @@ export default {
       console.log(value);
       // console.log(data[0].chanel);
       data[0].chanel++;
+    },
+    openChannel() {
+      // TODO: createChannel 创建channel
+      // getChannelDeposit 获取存款
+      // getChannelDetail 获取channel
+      // topUpChannel 增加channel的deposit
+      // closeChannel 关闭Channel
     }
   }
 };
