@@ -4,9 +4,12 @@
     <div class="category">
       <categories></categories>
     </div>
-    <div class="container" v-if="!DBotsErr">
+    <div class="container" v-if="!noDBots">
       <action-bar></action-bar>
       <list-view></list-view>
+    </div>
+    <div v-else class="no-dbots">
+      <p>Sorry, no DBots searched.</p>
     </div>
   </section>
 </template>
@@ -30,7 +33,7 @@ export default {
   data() {
     return {
       spinShow: false,
-      DBotsErr: false
+      noDBots: false
     };
   },
   computed: {
@@ -48,24 +51,27 @@ export default {
 
       this.spinShow = true;
 
-      getDbots(3, 1)
+      getDbots({
+        limit: 3,
+        page: 1
+      })
         .then(res => {
           this.spinShow = false;
 
           const { status, data } = res;
 
-          if (status === 200) {
+          if (status === 200 && data.count > 0) {
             this.setDbots({
               ...data,
               current: 1
             });
           } else {
-            this.DBotsErr = true;
+            this.noDBots = true;
           }
         })
         .catch(e => {
           this.spinShow = false;
-          this.DBotsErr = true;
+          this.noDBots = true;
           console.log(e);
         });
     }
@@ -86,8 +92,19 @@ export default {
     width: 290px;
   }
 
-  .container {
+  .container,
+  .no-dbots {
     margin-left: 20px;
+    flex: 1;
+  }
+
+  .no-dbots {
+    p {
+      margin-top: 200px;
+      font-size: 24px;
+      text-align: center;
+      color: #999;
+    }
   }
 }
 </style>

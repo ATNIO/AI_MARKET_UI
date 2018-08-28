@@ -15,6 +15,7 @@ import VueClipboard from "vue-clipboard2";
 import "normalize.css";
 import "iview/dist/styles/iview.css";
 import "@/assets/styles/base.less";
+import "@/assets/styles/style.css";
 import "json-schema-view-js/dist/style.min.css";
 
 Vue.use(iView, { locale });

@@ -6,6 +6,9 @@
       <Select v-model="sortValue" size="small" style="width:96px">
         <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
+      <div class="btn-sort">
+        <Icon custom="i-icon icon-sort" size="20" />
+      </div>
     </div>
   </section>
 </template>
@@ -43,10 +46,20 @@ export default {
   }
 
   .right {
+    display: flex;
+    align-items: center;
+
     span {
       margin-right: 8px;
       font-size: 12px;
       color: #b7b9ce;
+    }
+
+    .btn-sort {
+      margin-left: 6px;
+      padding: 1px;
+      background: #797bf8;
+      border-radius: 2px;
     }
   }
 }

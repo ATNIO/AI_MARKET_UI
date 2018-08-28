@@ -217,7 +217,7 @@ export default {
       position: relative;
 
       .bg {
-        background-image: url(../assets/channel-背景.png);
+        background-image: url(../assets/channel-bg.png);
         width: 495px;
         height: 300px;
       }

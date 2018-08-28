@@ -1,21 +1,23 @@
 <template>
   <aside>
-    <section>
-      <h2>Endpoint</h2>
-      <ul class="list">
-        <li 
-          v-for="(endpoint, index) in endpoints" 
-          :key="`${ endpoint.path }_${ endpoint.method }`"
-          :class="{
-            current: current === index
-          }"
-          @click="_click(index)"
-        >
-          <p>{{ endpoint.uri }}</p>
-          <p>{{ endpoint.method | toUpper }}</p>
-        </li>
-      </ul>
-    </section>
+    <Affix :offset-top="60">
+      <section>
+        <h2>Endpoint</h2>
+        <ul class="list">
+          <li 
+            v-for="(endpoint, index) in endpoints" 
+            :key="`${ endpoint.path }_${ endpoint.method }`"
+            :class="{
+              current: current === index
+            }"
+            @click="_click(index)"
+          >
+            <p>{{ endpoint.uri }}</p>
+            <p>{{ endpoint.method | toUpper }}</p>
+          </li>
+        </ul>
+      </section>
+    </Affix>
   </aside>
 </template>
 
