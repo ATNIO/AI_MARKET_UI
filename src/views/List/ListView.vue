@@ -1,6 +1,6 @@
 <template>
   <div class="list">
-    <ul class="list-view" @click.stop="_click($event)">
+    <ul class="list-view">
       <card v-for="(item, index) in dbots" :key="index" :item="item"></card>
     </ul>
     <Page class-name="page" :total="count" :current="current" />
@@ -24,27 +24,6 @@ export default {
   },
   computed: {
     ...mapGetters(["dbots", "count", "current"])
-  },
-  methods: {
-    _click(e) {
-      const target = e.target || e.currentTarget;
-      let listView = this.listView
-        ? this.listView
-        : (listView = this.listView = this.$el.querySelector(".list-view"));
-
-      console.log(target, listView.contains(target));
-
-      if (listView.contains(target)) {
-        const address = target.dataset.address;
-
-        this.$router.push({
-          name: "detail",
-          params: {
-            address: address
-          }
-        });
-      }
-    }
   }
 };
 </script>

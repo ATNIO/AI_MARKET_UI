@@ -52,7 +52,7 @@
             <span class="login">Connect to the </span>
             <span class="wallet">MetaMask browser wallet.</span>
           </div>
-          <button class="metamask-button" @click="loginByMetamask">Connect to MetaMask.</button>
+          <button class="metamask-button" @click="login('metamask')">Connect to MetaMask.</button>
         </Card>
 
         <!-- <Card class="ledger">
@@ -103,11 +103,19 @@ export default {
   data() {
     return {
       modal1: false,
-      loginShow: true
+      loginShow: true,
+      isLogin: false
     };
   },
   computed: {
     ...mapGetters(["address"])
+  },
+  mounted() {
+    this.$web3.currentProvider.publicConfigStore.on(
+      "update",
+      ({ selectedAddress, networkVersion }) =>
+        this.accountChange(selectedAddress, networkVersion)
+    );
   },
   methods: {
     ...mapActions(["setAddress"]),
@@ -116,6 +124,24 @@ export default {
         title: title ? title : "",
         desc: desc ? desc : ""
       });
+    },
+    accountChange(address, network) {
+      if (this.isLogin) {
+        if (address.toLowerCase() !== this.address.toLowerCase()) {
+          this.$Modal.warning({
+            title: "Detect account has changed",
+            content:
+              "检测到您的账号发生更改，请通过钱包签名以便使用新的账号重新登录",
+            okText: "confirm",
+            onOk: () => {
+              this.setAddress(address);
+              this.goLogin(address);
+            }
+          });
+        } else {
+          // TODO: network change
+        }
+      }
     },
     _click(name) {
       switch (name) {
@@ -126,13 +152,27 @@ export default {
           break;
       }
     },
-    async loginByMetamask() {
+    login(type) {
+      switch (type) {
+        case "metamask":
+          this.loginByMetamask();
+          break;
+        default:
+          break;
+      }
+    },
+    async getAccounts() {
       const eth = this.$web3.eth;
-      const { login } = this.$api.user;
-
       const accounts = await eth.getAccounts();
 
-      if (!accounts[0]) {
+      this.setAddress(accounts[0]);
+
+      return accounts[0];
+    },
+    async goLogin(account) {
+      const { login } = this.$api.user;
+
+      if (!account) {
         return this.notice({
           type: "warning",
           title: "Attempt to login AI Market by MetaMask",
@@ -141,31 +181,31 @@ export default {
         });
       }
 
-      this.setAddress(accounts[0]);
+      const params = await atn.getRegisterLoginParams(account);
+      const sig = await atn.getLoginSign(account);
+      const response = await login(params, sig);
+      const { data, status } = response;
 
-      const params = await atn.getRegisterLoginParams(accounts[0]);
-      const sig = await atn.getLoginSign(accounts[0]);
+      if (status === 200) {
+        this.modal1 = false;
+        this.loginShow = false;
+        this.isLogin = true;
+      }
+    },
+    async loginByMetamask() {
+      const { login } = this.$api.user;
+      const account = await this.getAccounts();
 
-      this.loginShow = !this.loginShow;
-
-      login(params, sig).then(res => {
-        const { data, status } = res;
-
-        if (status === 200) {
-          this.modal1 = false;
-          this.loginShow = false;
-        }
-      });
+      this.goLogin(account);
     },
     async logout() {
       const { logout } = this.$api.user;
-
       const response = await logout({ usraddr: this.address });
-
       const { status, data } = response;
 
       if (status === 200) {
         this.loginShow = true;
+        this.isLogin = false;
         this.setAddress();
         Cookies.remove("token", { path: "/" });
         Cookies.remove("token.sig", { path: "/" });

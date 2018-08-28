@@ -1,5 +1,5 @@
 <template>
-  <li class="card" :data-address="item.addr">
+  <li class="card" @click="_click">
     <div class="logo" :style="logo"></div>
     <div class="content">
       <h2>{{ item.name }}</h2>
@@ -8,7 +8,7 @@
       </p>
       <div class="auther">
         <div class="avatar"></div>
-        <a href="#" target="_blank">{{ item.owner }}</a>
+        <a href="#" target="_blank" @click.stop>{{ item.owner }}</a>
       </div>
       <div class="footer">
         <div class="left">
@@ -45,6 +45,18 @@ export default {
         backgroundImage: `url(${this.item.logo})`
       };
     }
+  },
+  methods: {
+    _click() {
+      const { addr } = this.item;
+
+      this.$router.push({
+        name: "detail",
+        params: {
+          address: addr
+        }
+      });
+    }
   }
 };
 </script>
@@ -75,7 +87,6 @@ export default {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 50% 50%;
-    pointer-events: none;
   }
 
   .content {
@@ -84,7 +95,6 @@ export default {
     h2 {
       font-size: 18px;
       margin: 0 0 4px;
-      pointer-events: none;
     }
 
     .description {
@@ -97,7 +107,6 @@ export default {
       font-size: 14px;
       color: #788091;
       line-height: 1.2;
-      pointer-events: none;
     }
 
     .auther {
