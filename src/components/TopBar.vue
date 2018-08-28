@@ -15,7 +15,8 @@
       <span class="prefsession" v-show="loginShow">
         <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
         <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/>
-        <router-link to="/my-account"><img src="" alt="">头像</router-link><Icon type="ios-arrow-down" color="#ffffff" class="via"/>
+        <!-- <router-link to="/my-account"><img src="" alt="">头像</router-link><Icon type="ios-arrow-down" color="#ffffff" class="via"/> -->
+        <button @click="logout">log out</button>
       </span>
      <div v-show="!loginShow">
       <Button @click="modal1 = true">login</Button>
@@ -77,23 +78,52 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import Atn from "atn-js";
+
+const atn = new Atn(window.web3);
 
 export default {
   name: "TopBar",
   data() {
     return {
       modal1: false,
-      loginShow: false
+      loginShow: false,
+      account: ""
     };
   },
   methods: {
     ...mapActions(["setAddress"]),
     loginByMetamask() {
       const eth = this.$web3.eth;
+
       eth.getAccounts().then(accounts => {
-        console.log(accounts);
-        this.setAddress(accounts[0]);
+        this.test();
+        // this.setAddress(accounts[0]);
+        // atn.getRegisterLoginParams(accounts[0]);
         this.loginShow = !this.loginShow;
+      });
+    },
+    async test() {
+      const eth = this.$web3.eth;
+      const { login } = this.$api.user;
+
+      const accounts = await eth.getAccounts();
+      this.account = accounts[0];
+      console.log(accounts);
+      const params = await atn.getRegisterLoginParams(accounts[0]);
+      const sig = await atn.getLoginSign(accounts[0]);
+
+      login(params, sig).then(res => {
+        console.log(res);
+      });
+
+      console.log(sig);
+    },
+    logout() {
+      const { logout } = this.$api.user;
+
+      logout({ usraddr: this.account }).then(res => {
+        console.log(res);
       });
     }
   }

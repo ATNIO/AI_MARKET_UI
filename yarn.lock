@@ -1218,13 +1218,14 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-atn-js@0.0.33:
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/atn-js/-/atn-js-0.0.33.tgz#9499fee2160e2628081babce6d12047f4011f88d"
+atn-js@^0.0.37:
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/atn-js/-/atn-js-0.0.37.tgz#a8afa221bfc5ee6624a4fa3d32e04831f5752a4e"
   dependencies:
     axios "^0.18.0"
     es6-promise "^4.2.4"
     eth-sig-util "^2.0.1"
+    ethereumjs-util "^5.2.0"
     web3 "^1.0.0-beta.34"
     whatwg-encoding "^1.0.3"
 
@@ -3031,7 +3032,7 @@ ethereumjs-util@^4.3.0:
     rlp "^2.0.0"
     secp256k1 "^3.0.1"
 
-ethereumjs-util@^5.1.1:
+ethereumjs-util@^5.1.1, ethereumjs-util@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/ethereumjs-util/-/ethereumjs-util-5.2.0.tgz#3e0c0d1741471acf1036052d048623dee54ad642"
   dependencies:
@@ -4522,6 +4523,10 @@ joi@^13.0.0:
 js-calendar@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/js-calendar/-/js-calendar-1.2.3.tgz#a583b0644b4e695ba394f344d103dbcc7a7a7d3e"
+
+js-cookie@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.0.tgz#1b2c279a6eece380a12168b92485265b35b1effb"
 
 js-message@1.0.5:
   version "1.0.5"
