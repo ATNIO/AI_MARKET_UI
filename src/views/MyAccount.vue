@@ -32,21 +32,33 @@
         <Icon type="ios-list-box-outline" size="41" color="#ffffff" class="list-icon"/>
         <span> Channel list</span>
       </div>
-    </div>
-    
+    </div>  
   </div>
+
+
+  <!-- <account-profile></account-profile> -->
+  <channel-list></channel-list>
+
+
+
 </div>
   
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import AccountProfile from "./AccountProfile";
+import ChannelList from "./ChannelList";
 export default {
   name: "my-account",
   data() {
     return {
       visible: true
     };
+  },
+  components: {
+    AccountProfile,
+    ChannelList
   },
   computed: {
     ...mapGetters(["address"])
@@ -58,6 +70,8 @@ export default {
 .myaccount {
   width: 1200px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: row;
 }
 .nav {
   width: 290px;

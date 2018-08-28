@@ -22,7 +22,8 @@ export default [
     chanel: 0,
     reviewer: "Max Sullivan",
     time: "1 minute ago",
-    details: "Cook Eggs Don T Boil"
+    details: "Cook Eggs Don T Boil",
+    publicAddress: "0x13235378768Ba19b3Bff29CF098ceB12aBF8A62Ee"
   },
   {
     logoUrl: logo,
