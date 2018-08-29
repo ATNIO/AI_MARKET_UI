@@ -3,9 +3,9 @@
     <span class="title">Chanel list</span>
 
     
-    <channel-record></channel-record>
     <ul>
-      <!-- <channel-record v-for="(item, index) in dbots" :key="index" :item="item"></channel-record> -->
+      <channel-record v-for="(item, index) in dbots" :key="index" :item="item"></channel-record>
+
     </ul>
 
 
@@ -28,6 +28,9 @@ export default {
     return {
       // data: data[0]
     };
+  },
+  computed: {
+    ...mapGetters(["dbots"])
   }
 };
 </script>

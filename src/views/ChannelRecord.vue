@@ -86,7 +86,7 @@ export default {
   .img {
     width: 330px;
     height: 140px;
-    background-image: url(../assets/Group2Copy2png);
+    background-image: url(../assets/hello.png);
     position: absolute;
     top: 0;
     left: 250px;
