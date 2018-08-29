@@ -2,22 +2,31 @@
   <div class="channel-list">
     <span class="title">Chanel list</span>
 
-    <div class="card">
+    
+    <channel-record></channel-record>
+    <ul>
+      <!-- <channel-record v-for="(item, index) in dbots" :key="index" :item="item"></channel-record> -->
+    </ul>
 
-    </div>
+
+
 
 
   </div>
 </template>
 
 <script>
-import data from "../mock/channelList.js";
+import ChannelRecord from "./ChannelRecord";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ChannelList",
+  components: {
+    ChannelRecord
+  },
   data() {
     return {
-      data: data[0]
+      // data: data[0]
     };
   }
 };
@@ -32,14 +41,6 @@ export default {
   .title {
     font-size: 24px;
     color: #11124c;
-  }
-  .card {
-    margin-top: 42px;
-    width: 890px;
-    height: 140px;
-    background: #ffffff;
-    box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
-    border-radius: 4px;
   }
 }
 </style>
