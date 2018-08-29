@@ -62,9 +62,9 @@ export default {
     content() {
       if (!this.paths) return {};
 
-      const { uri, method } = this.endpoint;
+      const { method, path } = this.endpoint;
 
-      return this.paths[uri][method];
+      return this.paths[path][method];
     },
     isDeprecated() {
       return this.content.deprecated;

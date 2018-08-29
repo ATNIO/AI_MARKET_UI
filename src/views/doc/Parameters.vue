@@ -36,28 +36,6 @@
                 ></Schema>
 
                 <parameter-field v-else :parameter="parameter"></parameter-field>
-
-                <!-- <template v-if="parameter.type === 'array' && parameter.items.enum">
-                  <Select v-model="param" style="width:100%">
-                    <Option v-for="item in parameter.items.enum" :value="item" :key="item">{{ item }}</Option>
-                  </Select>
-                </template>
-                <template v-if="parameter.type === 'string' || parameter.type === 'integer'">
-                </template>
-                <template v-if="parameter.type === 'file'">
-                  <Upload
-                    multiple
-                    :before-upload="handleUpload"
-                    action="//jsonplaceholder.typicode.com/posts/">
-                    <Button icon="ios-cloud-upload-outline">Select the file to upload</Button>
-                  </Upload>
-                  <ul class="uploaded-list">
-                    <li v-for="file in uploadList" :key="file.name">
-                      <span>{{ file.name }}</span>
-                      <Icon type="ios-close" size="24" @click.native="handleRemove(file)" />
-                    </li>
-                  </ul>
-                </template> -->
               </div>
             </li>
           </ul>

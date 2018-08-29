@@ -6,7 +6,7 @@
         <div class="breadcrumb">
           <Breadcrumb separator=">">
             <BreadcrumbItem to="/">{{data.name}}</BreadcrumbItem>
-            <BreadcrumbItem to="/detail">{{data.name}}</BreadcrumbItem>
+            <BreadcrumbItem to="/detail">{{dbot.name}}</BreadcrumbItem>
           </Breadcrumb>
         </div>
 
@@ -17,7 +17,7 @@
               <div class="logo" :style="logo"></div>
               <span class="tagtitle"><Icon type="md-bookmark" color="#87C5FE"/> Tag:</span>
               <ul class="tag">
-                <li v-for="item in data.tag" v-bind:key="item">
+                <li v-for="item in dbot.tags" v-bind:key="item">
                 <span>{{item}}</span>
                 </li>
               </ul>
@@ -26,23 +26,47 @@
 
           <!-- 右边详细 -->
           <div class="content">
-            <p class="name">{{data.name}}</p>
-            <p class="address">Address：{{data.address}} <Icon type="ios-copy-outline" size="18"/></p>
-            <p class="domain">Domain：{{data.domain}} <Icon type="ios-copy-outline" size="18"/></p>
-            <Icon type="ios-contact" size="32"/><span class="auther"> {{data.auther}} <Icon type="ios-copy-outline" size="17"/></span>
-            <p class="description">{{data.description}}</p>
+            <p class="name">{{dbot.name}}</p>
+            <p class="address">
+              <span>Address：{{dbot.addr}}</span> 
+              <Icon 
+                type="ios-copy-outline" 
+                size="20"
+                v-clipboard:copyhttplist="dbot.addr" 
+                v-clipboard:success="onCopy"
+              />
+            </p>
+            <p class="domain">
+              <span>Domain：{{dbot.domain}}</span>
+              <Icon 
+                type="ios-copy-outline" 
+                size="20"
+                v-clipboard:copyhttplist="dbot.domain" 
+                v-clipboard:success="onCopy"
+              />
+            </p>
+            <p class="auther"> 
+              <span>{{dbot.owner}}</span>
+              <Icon 
+                type="ios-copy-outline" 
+                size="20"
+                v-clipboard:copyhttplist="dbot.owner" 
+                v-clipboard:success="onCopy"
+              />
+            </p>
+            <p class="description">{{dbot.description}}</p>
             <div class="like">
               <p class="stars">
                 <Icon type="ios-star-outline" size="20"/>
-                <span>{{data.stars}}</span>
+                <span>{{dbot.collect_count}}</span>
               </p>
-              <p class="update">update: {{data.updataTime}}</p>
+              <p class="update">update: {{dbot.update_at | timeFormat}}</p>
             </div>
           </div>  
         </div>
 
 
-        <channel></channel>
+        <channel :dbot="dbot"></channel>
 
 
         <detail-container></detail-container>
@@ -52,6 +76,7 @@
 
 <script>
 import Swagger from "swagger-client";
+import dayjs from "dayjs";
 import { mapActions, mapGetters } from "vuex";
 
 import data from "../mock/listData.js";
@@ -72,14 +97,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["addressInDetail"]),
+    ...mapGetters(["addressInDetail", "dbots"]),
     address() {
       return this.$route.params.address;
     },
     logo() {
       return {
-        backgroundImage: `url(${data[0].logoUrl})`
+        backgroundImage: `url(${this.dbot.logo})`
       };
+    },
+    dbot() {
+      return this.dbots.filter(dbot => this.address === dbot.addr)[0];
     }
   },
   mounted() {
@@ -123,6 +151,14 @@ export default {
           this.$Spin.hide();
           console.log(e);
         });
+    },
+    onCopy() {
+      this.$Message.success("Copy success.");
+    }
+  },
+  filters: {
+    timeFormat(time) {
+      return dayjs(time).format("YYYY/MM/DD");
     }
   }
 };
@@ -174,7 +210,7 @@ export default {
           background-repeat: no-repeat;
           background-position: center center;
           background-color: #f7f6fe;
-          background-size: 50% 40%;
+          background-size: cover;
           margin-bottom: 20px;
         }
         .tagtitle {
@@ -213,6 +249,19 @@ export default {
           margin-bottom: 10px;
           align-items: center;
         }
+
+        .address,
+        .domain,
+        .auther {
+          display: flex;
+          align-items: center;
+
+          & /deep/ .ivu-icon {
+            margin-left: 10px;
+            cursor: pointer;
+          }
+        }
+
         .address {
           font-size: 18px;
           color: #11124c;

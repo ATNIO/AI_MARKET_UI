@@ -1,18 +1,25 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 import * as types from "./types";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  plugins: [createPersistedState({ storage: window.sessionStorage })],
   state: {
     detailData: {},
     specification: {},
     dbots: [],
+    categories: {},
     count: 0,
     current: 1,
-    address: ""
+    address: "",
+    stateChannel: {
+      status: "close", // syncing | open | close
+      banlance: 0
+    }
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
@@ -32,6 +39,15 @@ export default new Vuex.Store({
     },
     [types.SET_DETAIL_DATA](state, payload = {}) {
       state.detailData = payload;
+    },
+    [types.SET_STATE_CHANNEL_BANLANCE](state, banlance) {
+      state.stateChannel.banlance = banlance;
+    },
+    [types.SET_STATE_CHANNEL_STATUS](state, status) {
+      state.stateChannel.status = status;
+    },
+    [types.SET_CATEGORIES](state, categories = {}) {
+      state.categories = Object.freeze(categories);
     }
   },
   actions: {
@@ -50,6 +66,15 @@ export default new Vuex.Store({
     },
     setDetailData({ commit }, payload) {
       commit(types.SET_DETAIL_DATA, payload);
+    },
+    setStateChannel({ commit }, payload) {
+      const { status, banlance } = payload;
+
+      status && commit(types.SET_STATE_CHANNEL_STATUS, status);
+      banlance && commit(types.SET_STATE_CHANNEL_BANLANCE, banlance);
+    },
+    setCategories({ commit }, categories) {
+      commit(types.SET_CATEGORIES, categories);
     }
   },
   getters: {
@@ -73,6 +98,15 @@ export default new Vuex.Store({
     },
     endpoints(state) {
       return state.detailData.endpoints || [];
+    },
+    stateChannelStatus(state) {
+      return state.stateChannel.status;
+    },
+    stateChannelBanlance(state) {
+      return state.stateChannel.banlance;
+    },
+    categories(state) {
+      return state.categories;
     }
   }
 });
