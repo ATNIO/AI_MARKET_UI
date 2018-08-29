@@ -2,7 +2,7 @@
   <section class="home">
     <Spin fix v-show="spinShow"></Spin>
     <div class="category">
-      <categories></categories>
+      <categories v-on:changeCategory="changeCategory"></categories>
     </div>
     <div class="container" v-if="!noDBots">
       <action-bar></action-bar>
@@ -20,8 +20,9 @@ import HomeActionBar from "./HomeActionBar";
 import ListView from "./List/ListView";
 
 import Swagger from "swagger-client";
-
 import { mapActions, mapGetters } from "vuex";
+
+import { pageCount } from "@/common/constants";
 
 export default {
   name: "Home",
@@ -43,37 +44,51 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions(["setDbots"]),
-    init() {
-      const { getDbots } = this.$api.home;
-
-      if (this.dbots.length > 0) return;
-
+    ...mapActions(["setDbots", "setCategories"]),
+    changeCategory(category) {
+      // TODO: re query
+      console.log(category);
+    },
+    // 初始化
+    async init() {
       this.spinShow = true;
 
-      getDbots({
-        limit: 3,
+      await this.getDbots();
+      await this.getCategories();
+
+      this.spinShow = false;
+    },
+    // 获取 dbots 列表
+    async getDbots() {
+      const { getDbots } = this.$api.home;
+      const dbots = await getDbots({
+        limit: pageCount,
         page: 1
-      })
-        .then(res => {
-          this.spinShow = false;
+      });
+      const { status, data } = dbots;
 
-          const { status, data } = res;
-
-          if (status === 200 && data.count > 0) {
-            this.setDbots({
-              ...data,
-              current: 1
-            });
-          } else {
-            this.noDBots = true;
-          }
-        })
-        .catch(e => {
-          this.spinShow = false;
-          this.noDBots = true;
-          console.log(e);
+      if (status === 200 && data.count > 0) {
+        this.setDbots({
+          ...data,
+          current: 1
         });
+      } else {
+        this.noDBots = true;
+        console.log("dbots !200:", data);
+      }
+    },
+    // 获取分类列表
+    async getCategories() {
+      const { getCategories } = this.$api.home;
+
+      const categories = await getCategories();
+      const { data, status } = categories;
+
+      if (status === 200) {
+        this.setCategories(data);
+      } else {
+        console.log("categories !200:", data);
+      }
     }
   }
 };

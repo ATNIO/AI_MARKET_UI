@@ -3,7 +3,7 @@
     <ul class="list-view">
       <card v-for="(item, index) in dbots" :key="index" :item="item"></card>
     </ul>
-    <Page v-if="count > 10" class-name="page" :total="count" :current="current" />
+    <Page v-if="count > 9" class-name="page" :total="count" :current="current" :page-size="pageCount" />
   </div>
 </template>
 
@@ -12,6 +12,8 @@ import Card from "./Card";
 
 import { mapGetters } from "vuex";
 
+import { pageCount } from "@/common/constants";
+
 export default {
   name: "ListView",
   components: {
@@ -19,7 +21,8 @@ export default {
   },
   data() {
     return {
-      listView: null
+      listView: null,
+      pageCount
     };
   },
   computed: {

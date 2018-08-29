@@ -12,6 +12,7 @@ export default new Vuex.Store({
     detailData: {},
     specification: {},
     dbots: [],
+    categories: {},
     count: 0,
     current: 1,
     address: "",
@@ -44,6 +45,9 @@ export default new Vuex.Store({
     },
     [types.SET_STATE_CHANNEL_STATUS](state, status) {
       state.stateChannel.status = status;
+    },
+    [types.SET_CATEGORIES](state, categories = {}) {
+      state.categories = Object.freeze(categories);
     }
   },
   actions: {
@@ -68,6 +72,9 @@ export default new Vuex.Store({
 
       status && commit(types.SET_STATE_CHANNEL_STATUS, status);
       banlance && commit(types.SET_STATE_CHANNEL_BANLANCE, banlance);
+    },
+    setCategories({ commit }, categories) {
+      commit(types.SET_CATEGORIES, categories);
     }
   },
   getters: {
@@ -97,6 +104,9 @@ export default new Vuex.Store({
     },
     stateChannelBanlance(state) {
       return state.stateChannel.banlance;
+    },
+    categories(state) {
+      return state.categories;
     }
   }
 });
