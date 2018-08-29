@@ -1,9 +1,23 @@
 <template>
   <div class="list">
-    <ul class="list-view">
-      <card v-for="(item, index) in dbots" :key="index" :item="item"></card>
-    </ul>
-    <Page v-if="count > 9" class-name="page" :total="count" :current="current" :page-size="pageCount" />
+    <!-- <Spin fix size="large" v-if="querying"></Spin> -->
+    <template v-if="count > 0">
+      <ul class="list-view">
+        <card v-for="(item, index) in dbots" :key="index" :item="item"></card>
+      </ul>
+      <Page 
+        v-if="count > 9" 
+        class-name="page" 
+        :total="count" 
+        show-total
+        :current="currentPage" 
+        :page-size="pageCount"
+        v-on:on-change="changePage"
+      />
+    </template>
+    <template v-else>
+      <p class="no-dbots">Sorry, no DBots searched, please search other categories.</p>
+    </template>
   </div>
 </template>
 
@@ -26,12 +40,21 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["dbots", "count", "current"])
+    ...mapGetters(["dbots", "count", "currentPage", "querying"])
+  },
+  methods: {
+    changePage(page) {
+      this.$emit("pageChange", page);
+    }
   }
 };
 </script>
 
 <style lang="less" scoped>
+.list {
+  position: relative;
+}
+
 .list-view {
   display: flex;
   flex-wrap: wrap;
@@ -43,5 +66,13 @@ export default {
   display: flex;
   justify-content: center;
   margin-bottom: 40px;
+}
+
+.no-dbots {
+  margin-top: 200px;
+  font-size: 24px;
+  text-align: center;
+  color: #999;
+  background: transparent;
 }
 </style>

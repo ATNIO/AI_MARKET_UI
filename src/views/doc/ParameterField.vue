@@ -1,8 +1,9 @@
 <template>
   <div class="field">
-    <parameter-input v-if="isInput || isArrayInput" :options="parameter"></parameter-input>
-    <parameter-select v-else-if="isSelect" :options="parameter"></parameter-select>
+    
+    <parameter-select v-if="isSelect" :options="parameter"></parameter-select>
     <parameter-file v-else-if="isFile" :options="parameter"></parameter-file>
+    <parameter-input v-else :options="parameter"></parameter-input>
   </div>
 </template>
 
@@ -24,14 +25,8 @@ export default {
     type() {
       return this.parameter.type;
     },
-    isInput() {
-      return this.type === "string" || this.type === "integer";
-    },
-    isArrayInput() {
-      return this.type === "array" && !this.parameter.items.enum;
-    },
     isSelect() {
-      return this.type === "array" && this.parameter.items.enum;
+      return this.parameter.enum;
     },
     isFile() {
       return this.type === "file";

@@ -10,7 +10,6 @@
   "dependencies": {
     "@dicebear/avatars": "^2.0.4",
     "@dicebear/avatars-identicon-sprites": "^1.0.3",
-    "@formschema/native": "^2.0.0-alpha.2",
     "@kyleshockey/js-yaml": "^1.0.1",
     "@kyleshockey/object-assign-deep": "^0.4.0",
     "atn-js": "^0.0.58",
