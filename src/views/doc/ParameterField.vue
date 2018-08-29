@@ -1,10 +1,9 @@
 <template>
-  <div class="field">
-    
+  <FormItem :prop="parameter.name">
     <parameter-select v-if="isSelect" :options="parameter"></parameter-select>
     <parameter-file v-else-if="isFile" :options="parameter"></parameter-file>
     <parameter-input v-else :options="parameter"></parameter-input>
-  </div>
+  </FormItem>
 </template>
 
 <script>
@@ -36,6 +35,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.field {
-}
 </style>

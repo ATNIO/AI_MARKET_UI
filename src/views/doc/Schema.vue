@@ -13,6 +13,7 @@
       placeholder="Enter something..."
       :disabled="!isEditable"
       :class="{ dark: theme === 'dark' }"
+      v-on:on-change="valueChange"
     />
     <schema-model v-else :schema="schema" :theme="theme"></schema-model>
   </section>
@@ -31,7 +32,7 @@ function schema2json(schema) {
       if (item.type === "object") {
         obj[key] = schema2json(item.properties);
       } else if (item.type === "array") {
-        obj[key] = item.example || [item.items.type];
+        obj[key] = item.example || [schema2json(item.items.properties)];
       } else if (item.type === "integer") {
         obj[key] = 0;
       } else if (item.type === "string") {
@@ -76,6 +77,11 @@ export default {
       );
 
       return JSON.stringify(type === "array" ? [jsonData] : jsonData, null, 2);
+    }
+  },
+  methods: {
+    valueChange(e) {
+      this.$emit("input", e.target.value);
     }
   }
 };
