@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <top-bar></top-bar>
-    <router-view />
+    <main>
+      <router-view />
+    </main>
     <bottom-bar></bottom-bar>
   </div>
 </template>
@@ -13,5 +15,8 @@ export default {
 </script>
 
 
-<style lang="less">
+<style lang="less" scoped>
+main {
+  min-height: calc(100vh - 270px);
+}
 </style>

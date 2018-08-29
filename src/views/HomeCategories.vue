@@ -1,5 +1,5 @@
 <template>
-  <div class="home-categories">
+  <div class="home-categories" v-if="categoryIsShow">
     <Menu 
       :active-name="activeName" 
       accordion
@@ -32,7 +32,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["categories"])
+    ...mapGetters(["categories"]),
+    categoryIsShow() {
+      return Object.keys(this.categories).length > 0;
+    }
   },
   methods: {
     _click(name) {
