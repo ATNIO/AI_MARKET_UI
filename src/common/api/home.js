@@ -1,12 +1,14 @@
-import base from "./base";
+import prefix from "./base";
 import fetch from "./fetch";
-import qs from "qs";
 
-const { dev } = base;
-const dbots = (l, p) => `${dev}dbots?limit=${l}&page=${p}`;
+const dbots = (l, p) => `${prefix}dbots?limit=${l}&page=${p}`;
+const dbotCategories = `${prefix}setting/dbotCategories`;
 
 export default {
   getDbots({ limit, page }) {
     return fetch.get(dbots(limit, page));
+  },
+  getCategories() {
+    return fetch.get(dbotCategories);
   }
 };

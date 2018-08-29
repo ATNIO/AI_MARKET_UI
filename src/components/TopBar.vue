@@ -19,10 +19,10 @@
         <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
         <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/>
         <Dropdown placement="bottom-end" v-on:on-click="_click">
-          <p>
-            个人
+          <div class="avatar-wrapper">
+            <avatar :text="address"></avatar>
             <Icon type="ios-arrow-down" color="#fff"></Icon>
-          </p>
+          </div>
           <DropdownMenu slot="list">
             <DropdownItem name="personal">
               <router-link to="/my-account" class="personal">
@@ -246,6 +246,11 @@ export default {
       height: 30px;
     }
     .personal-center {
+      .prefsession {
+        display: flex;
+        align-items: center;
+      }
+
       .icon {
         margin-right: 40px;
       }
@@ -258,6 +263,22 @@ export default {
         align-items: center;
         width: 100%;
         height: 100%;
+      }
+
+      .avatar-wrapper {
+        display: flex;
+        align-items: center;
+
+        & /deep/ .ivu-icon-ios-arrow-down {
+          margin-left: 10px;
+        }
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 100%;
+        overflow: hidden;
       }
     }
   }

@@ -1,16 +1,12 @@
-import base from "./base";
+import prefix from "./base";
 import fetch from "./fetch";
 import Cookies from "js-cookie";
 
-const { dev } = base;
-const login = `${dev}login`;
-const logout = `${dev}logout`;
+const login = `${prefix}login`;
+const logout = `${prefix}logout`;
 
 export default {
   login(params, sig) {
-    // Cookies.set("params", params);
-    // Cookies.set("sig", sig);
-
     return fetch.post(login, {
       params,
       sig

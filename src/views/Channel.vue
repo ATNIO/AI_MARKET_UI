@@ -1,7 +1,7 @@
 <template>
   <section> 
     <!-- 通道未开通 -->
-    <template v-if="data.chanel=='0'">
+    <template v-if="stateChannelStatus === 'close'">
       <div class="inaccessible">
         <div class="wrapper">
             <p class="title">No channel was found registered for you on this Dbot</p>
@@ -9,107 +9,72 @@
               <p class="method">In order to call API...</p>
               <p class="step-one"><Icon type="ios-add-circle" color="#87C5FE" size="20"/> deposit some ATN to open a channel with this Dbot</p>
               <p class="step-two"><Icon type="ios-create" color="#87C5FE" size="20"/> For each transfer , sign a message confirming the balance with the new transferred amount.</p>
-              <Input search enter-button="Deposit" placeholder=" 0 ATN" size="large" class="search" v-on:on-search="nextStep" />
+              <Input 
+                search 
+                enter-button="Deposit" 
+                placeholder=" 0 ATN" 
+                size="large" 
+                class="search" 
+                v-on:on-search="nextStep" 
+                v-model="depositValue"
+              />
             </div>
         </div>
       </div>
     </template>
 
     <!-- 通道loading -->
-    <template v-if="data.chanel=='1'">
+    <template v-else>
       <div class="accessible">
         <div class="wrapper">       
             <div class="yourself">
-              <i>头像</i>
-              <span>your address</span>
+              <avatar :width="86" :height="86" :borderWidth="3" :text="address"></avatar>
+              <span>{{ address }}</span>
             </div>
 
             <div class="center">
               <div class="bg"></div>
-              <div class="content">               
-                  <span class="wait">
+              <div class="content">
+                <div v-if="stateChannelStatus==='open'">
+                  <p class="title">Remaining  Balance </p>
+                  <p class="balance">{{stateChannelBanlance | priceFormat}} ATN</p>
+                </div>  
+                <div v-else>
+                  <div class="wait">
                     <div class="circle1"></div>
                     <div class="circle2"></div>
                     <div class="circle3"></div>
                     <div class="circle4"></div>
                     <div class="circle5"></div>
                     <div class="circle6"></div>
-                  </span>
+                  </div>
                   <p class="syncing">syncing</p>
+                </div>             
                 <P class="description">A channel was found for this address.</P>
                 <Input search enter-button="TOP UP" placeholder=" 0 ATN" size="large" class="top-up" v-on:on-search="nextStep" />
+                <button @click="closeChannel">close channel</button>
               </div>
-            </div>              
-            
+            </div>  
+
             <div class="dbot">
-              <i>头像</i>
-              <span>address</span>
+              <div class="dbot-avatar">
+                <img :src="dbot.logo" alt="" />
+              </div> 
+              <span>{{ dbot.addr }}</span>
             </div>
         </div>
       </div>
     </template>
-    <!-- 通道open -->
-     <template v-if="data.chanel=='2'">
-      <div class="accessible">
-        <div class="wrapper">          
-            <div class="yourself">
-              <i>头像</i>
-              <span>your address</span>
-            </div>
-
-            <div class="center">
-              <div class="bg"></div>
-              <div class="content">
-                  <p class="title">Remaining  Balance </p>
-                  <p class="balance">{{balance}} ATN</p>
-                <P class="description">A channel was found for this address.</P>
-                <Input search enter-button="TOP UP" placeholder=" 0 ATN" size="large" class="top-up" v-on:on-search="nextStep" />
-              </div>
-            </div>
-                         
-            <div class="dbot">
-              <i>头像</i>
-              <span>address</span>
-            </div>
-        </div>
-      </div>
-    </template>
-    <!-- 通道返回结果 -->
-    <template v-if="data.chanel>='3'">
-      <div class="accessible">
-        <div class="wrapper">
-          
-            <div class="yourself">
-              <i>头像</i>
-              <span>your address</span>
-            </div>
-
-            <div class="center">
-              <div class="bg"></div>
-              <div class="content">
-                  <p class="title">Remaining  Balance </p>
-                  <p class="balance">{{balance-2}} ATN</p>
-                <P class="description">A channel was found for this address.</P>
-                <Input search enter-button="TOP UP" placeholder=" 0 ATN" size="large" class="top-up" v-on:on-search="nextStep" />
-              </div>
-            </div>
-                          
-            <div class="dbot">
-              <i>头像</i>
-              <span>address</span>
-            </div>
-        </div>
-      </div>
-    </template>
-    
-
-     
   </section>
   
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 import data from "../mock/listData.js";
+import Atn from "atn-js";
+
+const atn = new Atn(window.web3);
 
 export default {
   name: "Channel",
@@ -117,21 +82,59 @@ export default {
     return {
       balance: 80,
       data: data[0],
-      status: 0
+      status: 0,
+      depositValue: ""
     };
   },
+  props: {
+    dbot: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  computed: {
+    ...mapGetters(["address", "stateChannelStatus", "stateChannelBanlance"])
+  },
   methods: {
+    ...mapActions(["setStateChannel"]),
     nextStep(value) {
-      console.log(value);
-      // console.log(data[0].chanel);
-      data[0].chanel++;
+      this.openChannel();
     },
-    openChannel() {
+    async openChannel() {
       // TODO: createChannel 创建channel
       // getChannelDeposit 获取存款
       // getChannelDetail 获取channel
       // topUpChannel 增加channel的deposit
       // closeChannel 关闭Channel
+      const DBotAddr =
+        "0x961f1c5e79c6ea36ddbc0b66dd60aaab00210bbd" ||
+        this.$route.params.address;
+      const res = await atn.createChannel(
+        DBotAddr,
+        this.depositValue,
+        this.address
+      );
+      console.log("createChannel:", res);
+
+      this.setStateChannel({ status: "syncing" });
+
+      const deposit = await atn.getChannelDeposit(DBotAddr, this.address);
+      console.log(deposit);
+
+      this.setStateChannel({ status: "open", banlance: deposit });
+    },
+    async getDeposit() {},
+    async closeChannel() {
+      const DBotAddr =
+        "0x961f1c5e79c6ea36ddbc0b66dd60aaab00210bbd" ||
+        this.$route.params.address;
+      const channelDetail = await atn.getChannelDetail(DBotAddr, this.address);
+      console.log("channelDetail:", channelDetail);
+      const closeResult = await atn.closeChannel(
+        DBotAddr,
+        channelDetail.balance,
+        this.address
+      );
     }
   }
 };
@@ -199,20 +202,32 @@ export default {
     background: #ffffff;
     display: flex;
 
-    .yourself {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+    .yourself,
     .dbot {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+
+      span {
+        margin-top: 14px;
+      }
+
+      .dbot-avatar {
+        width: 86px;
+        height: 86px;
+        border: 3px solid #7a83f8;
+        border-radius: 100%;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
+
     .center {
       position: relative;
 

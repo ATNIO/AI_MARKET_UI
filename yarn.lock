@@ -634,6 +634,17 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
+"@dicebear/avatars-identicon-sprites@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@dicebear/avatars-identicon-sprites/-/avatars-identicon-sprites-1.0.3.tgz#f903a56b594a8dd484eebc409c6c3204ff8121c9"
+
+"@dicebear/avatars@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@dicebear/avatars/-/avatars-2.0.4.tgz#d9e6e2555808d6921a34891ce39a0230004081d2"
+  dependencies:
+    pure-color "^1.3.0"
+    seedrandom "^2.4.3"
+
 "@formschema/native@^2.0.0-alpha.2":
   version "2.0.0-alpha.2"
   resolved "https://registry.yarnpkg.com/@formschema/native/-/native-2.0.0-alpha.2.tgz#793dabb7bfe5c2359124a3f44aeaa0ab9f309e5d"
@@ -1218,11 +1229,12 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-atn-js@^0.0.37:
-  version "0.0.37"
-  resolved "https://registry.yarnpkg.com/atn-js/-/atn-js-0.0.37.tgz#a8afa221bfc5ee6624a4fa3d32e04831f5752a4e"
+atn-js@0.0.51:
+  version "0.0.51"
+  resolved "https://registry.yarnpkg.com/atn-js/-/atn-js-0.0.51.tgz#3e47a269a8441f81d7f4619ec83702e49583a65d"
   dependencies:
     axios "^0.18.0"
+    bn.js "^4.11.8"
     es6-promise "^4.2.4"
     eth-sig-util "^2.0.1"
     ethereumjs-util "^5.2.0"
@@ -1416,7 +1428,7 @@ bn.js@4.11.6:
   version "4.11.6"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.6.tgz#53344adb14617a13f6e8dd2ce28905d1c0ba3215"
 
-bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.10.0, bn.js@^4.11.0, bn.js@^4.11.3, bn.js@^4.11.6, bn.js@^4.4.0, bn.js@^4.8.0:
+bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.10.0, bn.js@^4.11.0, bn.js@^4.11.3, bn.js@^4.11.6, bn.js@^4.11.8, bn.js@^4.4.0, bn.js@^4.8.0:
   version "4.11.8"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.8.tgz#2cde09eb5ee341f484746bb0309b3253b1b1442f"
 
@@ -2386,6 +2398,10 @@ date-fns@^1.27.2:
 date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
+
+dayjs@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.7.5.tgz#14715cb565d1f8cb556a8531cb14bf1fc33067cc"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -6295,6 +6311,10 @@ punycode@^1.2.4, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
+pure-color@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/pure-color/-/pure-color-1.3.0.tgz#1fe064fb0ac851f0de61320a8bf796836422f33e"
+
 q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
@@ -6785,6 +6805,10 @@ secp256k1@^3.0.1:
     elliptic "^6.2.3"
     nan "^2.2.1"
     safe-buffer "^5.1.0"
+
+seedrandom@^2.4.3:
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/seedrandom/-/seedrandom-2.4.4.tgz#b25ea98632c73e45f58b77cfaa931678df01f9ba"
 
 seek-bzip@^1.0.5:
   version "1.0.5"

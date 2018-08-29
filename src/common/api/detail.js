@@ -1,8 +1,7 @@
-import base from "./base";
+import prefix from "./base";
 import fetch from "./fetch";
 
-const { dev } = base;
-const detail = address => `${dev}dbots/${address}/detail`;
+const detail = address => `${prefix}dbots/${address}/detail`;
 
 export default {
   getDetail(address) {

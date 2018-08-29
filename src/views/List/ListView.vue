@@ -3,7 +3,7 @@
     <ul class="list-view">
       <card v-for="(item, index) in dbots" :key="index" :item="item"></card>
     </ul>
-    <Page class-name="page" :total="count" :current="current" />
+    <Page v-if="count > 10" class-name="page" :total="count" :current="current" />
   </div>
 </template>
 

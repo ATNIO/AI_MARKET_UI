@@ -98,6 +98,10 @@ export default {
     flex: 1;
   }
 
+  .container {
+    height: 100%;
+  }
+
   .no-dbots {
     p {
       margin-top: 200px;

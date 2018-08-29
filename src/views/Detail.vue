@@ -45,7 +45,6 @@
                 v-clipboard:success="onCopy"
               />
             </p>
-            <Icon type="ios-contact" size="32"/>
             <p class="auther"> 
               <span>{{dbot.owner}}</span>
               <Icon 
@@ -61,13 +60,13 @@
                 <Icon type="ios-star-outline" size="20"/>
                 <span>{{dbot.collect_count}}</span>
               </p>
-              <p class="update">update: {{dbot.update_at}}</p>
+              <p class="update">update: {{dbot.update_at | timeFormat}}</p>
             </div>
           </div>  
         </div>
 
 
-        <channel></channel>
+        <channel :dbot="dbot"></channel>
 
 
         <detail-container></detail-container>
@@ -77,6 +76,7 @@
 
 <script>
 import Swagger from "swagger-client";
+import dayjs from "dayjs";
 import { mapActions, mapGetters } from "vuex";
 
 import data from "../mock/listData.js";
@@ -154,6 +154,11 @@ export default {
     },
     onCopy() {
       this.$Message.success("Copy success.");
+    }
+  },
+  filters: {
+    timeFormat(time) {
+      return dayjs(time).format("YYYY/MM/DD");
     }
   }
 };

@@ -1,6 +1,6 @@
 /**
  * 接口域名的管理
  */
-export default {
-  dev: "/api/"
-};
+const env = process.NODE_ENV;
+
+export default (env === "development" ? "/api/" : "/");
