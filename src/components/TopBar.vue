@@ -25,7 +25,7 @@
           </div>
           <DropdownMenu slot="list">
             <DropdownItem name="personal">
-              <router-link to="/my-account" class="personal">
+              <router-link to="/my-account/AccountProfile" class="personal">
                 个人中心
               </router-link>
             </DropdownItem>

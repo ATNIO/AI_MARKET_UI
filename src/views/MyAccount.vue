@@ -3,44 +3,56 @@
   <div class="nav">
     <div class="photo"></div>
     <div class="address">{{address}}</div>
-    <div class="balance">
-      <span class="visible" v-show="visible">
+    <!-- <div class="balance">
+      <span class="visible">
         <span class="number">
-          <span class="number-visible">0000.00</span>
+          <span class="number-visible">{{ balanceRender }}</span>
           <span class="unit"> ATN</span>
         </span>
-        <Icon type="ios-eye-outline" @click="visible = !visible" size="28" color="#B7B9CE" class="icon"/>
+        <Icon 
+          :type="visibleType" 
+          @click="visible = !visible" 
+          size="28" 
+          color="#B7B9CE" 
+          class="icon"
+        />
       </span>
-      <span class="unvisible" v-show="!visible">
-        <span class="number">
-          <span class="number-unvisible">****</span>
-          <span class="unit"> ATN</span>
-        </span>
-         
-        <Icon type="ios-eye-off-outline" @click="visible = !visible" size="28" color="#B7B9CE" class="icon"/>
-      </span>
-        
+    </div> -->
+
+    <div class="balance-box">
+      <span class="number">{{ balanceRender }}</span>
+      <div class="right">
+        <span>ATN</span>
+        <Icon 
+          :type="visibleType" 
+          @click="visible = !visible" 
+          size="28" 
+          color="#B7B9CE" 
+          class="icon"
+        />
+      </div>
     </div>
 
 
     <div class="list">
-      <div class="profile">
-        <Icon type="ios-person-outline" size="41" color="#ffffff" class="list-icon"/>
+      <router-link :to="{name: 'AccountProfile'}">
+        <div class="profile" @click="_click(index)" :class="{ active: index === current }">
+        <Icon type="ios-person-outline" size="41" class="list-icon"/>
         <span> Profile</span>
       </div>
-      <div class="channel-list">
-        <Icon type="ios-list-box-outline" size="41" color="#ffffff" class="list-icon"/>
-        <span> Channel list</span>
-      </div>
+      </router-link>
+      
+      <router-link :to="{name: 'ChannelList'}">
+        <div class="channel-list">
+          <Icon type="ios-list-box-outline" size="41" class="list-icon"/>
+          <span>  Channel list</span>
+        </div>
+      </router-link>
+      
     </div>  
   </div>
-
-
-  <!-- <account-profile></account-profile> -->
-  <channel-list></channel-list>
-
-
-
+  
+  <router-view></router-view>
 </div>
   
 </template>
@@ -53,7 +65,11 @@ export default {
   name: "my-account",
   data() {
     return {
-      visible: true
+      visible: true,
+      current: 1,
+      index: -1,
+      balance: "0000.00",
+      balanceHolder: "****"
     };
   },
   components: {
@@ -61,7 +77,19 @@ export default {
     ChannelList
   },
   computed: {
-    ...mapGetters(["address"])
+    ...mapGetters(["address"]),
+    visibleType() {
+      return this.visible ? "ios-eye-outline" : "ios-eye-off-outline";
+    },
+    balanceRender() {
+      return this.visible ? this.balance : this.balanceHolder;
+    }
+  },
+  methods: {
+    _click(index) {
+      this.current = index;
+      // TODOS
+    }
   }
 };
 </script>
@@ -98,45 +126,34 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .balance {
+
+  .balance-box {
     width: 230px;
     height: 54px;
+    padding: 0 8px;
     border: 1px solid #dfdfdf;
-    text-align: center;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    .unit {
-      font-size: 16px;
-      color: #000000;
-      position: absolute;
-      top: 8px;
-      left: 92px;
-    }
     .number {
-      position: absolute;
+      flex: 1;
+      margin-right: 8px;
+      font-size: 26px;
+      color: #87c5ff;
+      text-align: center;
+    }
+
+    .right {
       display: flex;
-      flex-direction: row;
-      top: 8px;
-      margin-left: 40px;
-    }
-    .number-visible {
-      font-size: 24px;
-      color: #87c5ff;
-    }
-    .number-unvisible {
-      font-size: 46px;
-      color: #87c5ff;
-      position: absolute;
-      top: -6px;
-      left: 15px;
-    }
-    .icon {
-      position: absolute;
-      right: 14px;
-      top: 14px;
+      align-items: center;
+
+      span {
+        margin-right: 8px;
+        font-size: 16px;
+      }
     }
   }
-
   .list {
     display: flex;
     flex-direction: column;
@@ -149,18 +166,26 @@ export default {
     .profile {
       width: 290px;
       height: 60px;
-      background: #797bf8;
-      color: #ffffff;
       font-size: 24px;
       padding-top: 8px;
+      color: #3f485c;
+
+      &:hover {
+        background: #797bf8;
+        color: #ffffff;
+      }
     }
     .channel-list {
       width: 290px;
       height: 60px;
-      background: #797bf8;
-      color: #ffffff;
       font-size: 24px;
       padding-top: 8px;
+      color: #3f485c;
+
+      &:hover {
+        background: #797bf8;
+        color: #ffffff;
+      }
     }
   }
 }

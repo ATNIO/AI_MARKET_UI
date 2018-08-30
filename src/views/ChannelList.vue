@@ -1,6 +1,6 @@
 <template>
   <div class="channel-list">
-    <span class="title">Chanel list</span>
+    <span class="title">Channel list</span>
 
     
     <ul>
