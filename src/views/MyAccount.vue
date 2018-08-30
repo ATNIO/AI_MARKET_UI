@@ -1,7 +1,15 @@
 <template>
 <div class="myaccount">
   <div class="nav">
-    <div class="photo"></div>
+    <div class="avatar-wrapper">
+      <avatar 
+        :text="address" 
+        :width="100" 
+        :height="100" 
+        :borderWidth="0" 
+      ></avatar>
+      <Icon type="ios-arrow-down" color="#fff"></Icon>
+    </div>
     <div class="address">{{address}}</div>
     <!-- <div class="balance">
       <span class="visible">
@@ -110,11 +118,8 @@ export default {
   flex-direction: column;
   align-items: center;
 
-  .photo {
-    width: 100px;
-    height: 100px;
+  .avatar-wrapper {
     border-radius: 50%;
-    background: #797bf8;
     margin-top: 75px;
     margin-bottom: 15px;
   }
