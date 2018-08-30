@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import ParameterField from "./ParameterField";
 import ParameterForm from "./ParameterForm";
 
 export default {
