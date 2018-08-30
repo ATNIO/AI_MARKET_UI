@@ -96,7 +96,7 @@ import { mapActions, mapGetters } from "vuex";
 import Atn from "atn-js";
 import Cookies from "js-cookie";
 
-const atn = new Atn(window.web3);
+const atn = new Atn(window.atn3);
 
 export default {
   name: "TopBar",
@@ -111,7 +111,9 @@ export default {
     ...mapGetters(["address"])
   },
   mounted() {
-    this.$web3.currentProvider.publicConfigStore.on(
+    this.check();
+
+    this.$atn.web3.currentProvider.publicConfigStore.on(
       "update",
       ({ selectedAddress, networkVersion }) =>
         this.accountChange(selectedAddress, networkVersion)
@@ -119,6 +121,13 @@ export default {
   },
   methods: {
     ...mapActions(["setAddress"]),
+    async check() {
+      const { check } = this.$api.user;
+      const checkResult = check(this.address);
+      const { data, status } = checkResult;
+
+      console.log(checkResult);
+    },
     notice({ type, title, desc }) {
       this.$Notice[type]({
         title: title ? title : "",
@@ -162,7 +171,7 @@ export default {
       }
     },
     async getAccounts() {
-      const eth = this.$web3.eth;
+      const eth = this.$atn.web3.eth;
       const accounts = await eth.getAccounts();
 
       this.setAddress(accounts[0]);

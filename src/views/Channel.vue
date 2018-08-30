@@ -74,7 +74,7 @@ import { mapGetters, mapActions } from "vuex";
 import data from "../mock/listData.js";
 import Atn from "atn-js";
 
-const atn = new Atn(window.web3);
+const atn = new Atn(window.atn3);
 
 export default {
   name: "Channel",

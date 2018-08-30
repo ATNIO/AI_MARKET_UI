@@ -3,4 +3,4 @@
  */
 const env = process.env.NODE_ENV;
 
-export default (env === "development" ? "/api/" : "/");
+export default (env === "development" ? "/api/" : "/api/v1/");
