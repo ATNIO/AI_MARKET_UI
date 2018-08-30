@@ -1,7 +1,15 @@
 <template>
 <div class="myaccount">
   <div class="nav">
-    <div class="photo"></div>
+    <div class="avatar-wrapper">
+      <avatar 
+        :text="address" 
+        :width="100" 
+        :height="100" 
+        :borderWidth="0" 
+      ></avatar>
+      <Icon type="ios-arrow-down" color="#fff"></Icon>
+    </div>
     <div class="address">{{address}}</div>
     <!-- <div class="balance">
       <span class="visible">
@@ -38,21 +46,21 @@
       <router-link :to="{name: 'AccountProfile'}">
         <div class="profile" @click="_click(index)" :class="{ active: index === current }">
         <Icon type="ios-person-outline" size="41" class="list-icon"/>
-        <span> Profile</span>
+        <span class="trash"> Profile</span>
       </div>
       </router-link>
       
       <router-link :to="{name: 'ChannelList'}">
         <div class="channel-list">
           <Icon type="ios-list-box-outline" size="41" class="list-icon"/>
-          <span>  Channel list</span>
+          <span class="trash">  Channel list</span>
         </div>
       </router-link>
       
     </div>  
   </div>
   
-  <router-view></router-view>
+  <router-view class="needabottom"></router-view>
 </div>
   
 </template>
@@ -110,11 +118,8 @@ export default {
   flex-direction: column;
   align-items: center;
 
-  .photo {
-    width: 100px;
-    height: 100px;
+  .avatar-wrapper {
     border-radius: 50%;
-    background: #797bf8;
     margin-top: 75px;
     margin-bottom: 15px;
   }
@@ -188,5 +193,8 @@ export default {
       }
     }
   }
+}
+.needabottom {
+  margin-bottom: 20px;
 }
 </style>

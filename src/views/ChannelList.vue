@@ -40,6 +40,7 @@ export default {
   margin-left: 20px;
   margin-top: 42px;
   position: relative;
+  // height: 810px;
 
   .title {
     font-size: 24px;
