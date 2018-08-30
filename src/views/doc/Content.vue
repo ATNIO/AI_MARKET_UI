@@ -13,7 +13,7 @@
         <p class="summary" v-if="content.summary">{{ content.summary }}</p>
       </div>
       <div class="price">
-        <span>8 ATN</span>
+        <span>{{ endpoint.price | priceFormat }} ATN</span>
       </div>
     </div>
 
@@ -24,7 +24,7 @@
     <div class="content-body">
 
       <!-- 我来组成 parameters -->
-      <Parameters :param="parameters" :isDeprecated="isDeprecated"></Parameters>
+      <Parameters :param="parameters" :isDeprecated="isDeprecated" :price="endpoint.price"></Parameters>
 
       <!-- 我来组成 response -->
       <Response :responses="responses"></Response>

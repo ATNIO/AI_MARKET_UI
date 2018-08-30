@@ -17,14 +17,13 @@
       <parameter-form :param="param"></parameter-form>
     </div>
     <div class="action-bar">
-      <span>8 ATN</span>
+      <span>{{ price | priceFormat }} ATN</span>
       <Button type="primary" :disabled="isDeprecated">Sign Balance to Execute API</Button>
     </div>
   </section>
 </template>
 
 <script>
-import ParameterField from "./ParameterField";
 import ParameterForm from "./ParameterForm";
 
 export default {
@@ -43,6 +42,10 @@ export default {
     isDeprecated: {
       type: Boolean,
       default: false
+    },
+    price: {
+      type: String,
+      default: "0"
     }
   },
   computed: {
