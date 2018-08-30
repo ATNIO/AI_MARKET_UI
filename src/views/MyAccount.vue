@@ -38,21 +38,21 @@
       <router-link :to="{name: 'AccountProfile'}">
         <div class="profile" @click="_click(index)" :class="{ active: index === current }">
         <Icon type="ios-person-outline" size="41" class="list-icon"/>
-        <span> Profile</span>
+        <span class="trash"> Profile</span>
       </div>
       </router-link>
       
       <router-link :to="{name: 'ChannelList'}">
         <div class="channel-list">
           <Icon type="ios-list-box-outline" size="41" class="list-icon"/>
-          <span>  Channel list</span>
+          <span class="trash">  Channel list</span>
         </div>
       </router-link>
       
     </div>  
   </div>
   
-  <router-view></router-view>
+  <router-view class="needabottom"></router-view>
 </div>
   
 </template>
@@ -188,5 +188,8 @@ export default {
       }
     }
   }
+}
+.needabottom {
+  margin-bottom: 20px;
 }
 </style>
