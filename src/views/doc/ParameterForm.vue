@@ -73,7 +73,6 @@
                       <Icon type="ios-close" size="24" @click.native="handleRemove(p.name, file)" />
                     </li>
                   </ul>
-
                 </template>
 
               </FormItem>

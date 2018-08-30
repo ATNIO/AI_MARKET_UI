@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 
 const login = `${prefix}login`;
 const logout = `${prefix}logout`;
+const check = address => `${prefix}check?usraddr=${address}`;
 
 export default {
   login(params, sig) {
@@ -13,7 +14,9 @@ export default {
     });
   },
   logout(params) {
-    console.log(params);
     return fetch.post(logout, params);
+  },
+  check(address) {
+    return fetch.get(check(address));
   }
 };
