@@ -18,7 +18,7 @@ export default {
   },
   mounted() {
     this.$el.appendChild(
-      new JSONSchemaView(this.schema, Infinity, { theme: this.theme }).render()
+      new JSONSchemaView(this.schema, 2, { theme: this.theme }).render()
     );
   }
 };

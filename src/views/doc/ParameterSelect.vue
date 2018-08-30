@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     enumArray() {
-      return this.options.items.enum;
+      return this.options.enum;
     },
     isMulti() {
       return this.options.collectionFormat === "multi";

@@ -1,15 +1,14 @@
 <template>
   <section class="home">
-    <Spin fix v-show="spinShow"></Spin>
     <div class="category">
       <categories v-on:changeCategory="changeCategory"></categories>
     </div>
-    <div class="container" v-if="!noDBots">
-      <action-bar></action-bar>
-      <list-view></list-view>
-    </div>
-    <div v-else class="no-dbots">
-      <p>Sorry, no DBots searched.</p>
+    <div class="container">
+      <action-bar v-on:sortChange="sortChange"></action-bar>
+      <template v-if="!querying">
+        <list-view v-on:pageChange="pageChange"></list-view>
+      </template>
+      <Spin fix size="large" v-else></Spin>
     </div>
   </section>
 </template>
@@ -22,7 +21,7 @@ import ListView from "./List/ListView";
 import Swagger from "swagger-client";
 import { mapActions, mapGetters } from "vuex";
 
-import { pageCount } from "@/common/constants";
+import { pageCount, typeMap } from "@/common/constants";
 
 export default {
   name: "Home",
@@ -33,47 +32,66 @@ export default {
   },
   data() {
     return {
-      spinShow: false,
-      noDBots: false
+      spinShow: false
     };
   },
   computed: {
-    ...mapGetters(["dbots"])
+    ...mapGetters([
+      "dbots",
+      "count",
+      "currentItem",
+      "querying",
+      "sortType",
+      "sortDir"
+    ])
   },
   mounted() {
     this.init();
   },
   methods: {
-    ...mapActions(["setDbots", "setCategories"]),
+    ...mapActions(["setDbots", "setCategories", "setQuerying"]),
     changeCategory(category) {
-      // TODO: re query
-      console.log(category);
+      this.getDbots({ category });
+    },
+    pageChange(page) {
+      this.getDbots({ page });
+    },
+    sortChange({ sortType, sortDir }) {
+      console.log(sortType);
+      this.getDbots({ sortType, sortDir });
     },
     // 初始化
     async init() {
       this.spinShow = true;
 
-      await this.getDbots();
+      await this.getDbots({});
       await this.getCategories();
 
       this.spinShow = false;
     },
     // 获取 dbots 列表
-    async getDbots() {
+    async getDbots({ category, page, sortType, sortDir }) {
       const { getDbots } = this.$api.home;
+
+      this.setQuerying();
+
       const dbots = await getDbots({
         limit: pageCount,
-        page: 1
+        page,
+        category: category || this.currentItem,
+        sortType: sortType
+          ? typeMap[sortType.toLowerCase()]
+          : typeMap[this.sortType.toLowerCase()],
+        sortDir: sortDir || this.sortDir
       });
       const { status, data } = dbots;
 
-      if (status === 200 && data.count > 0) {
+      if (status === 200) {
         this.setDbots({
           ...data,
-          current: 1
+          currentPage: page
         });
       } else {
-        this.noDBots = true;
         console.log("dbots !200:", data);
       }
     },
@@ -97,32 +115,22 @@ export default {
 <style lang="less" scoped>
 .home {
   width: 1200px;
-  min-height: calc(100vh - 270px);
   margin: 0 auto;
   display: flex;
-  position: relative;
 
   .category {
     flex: 0 0 auto;
     width: 290px;
   }
 
-  .container,
-  .no-dbots {
+  .container {
+    min-height: 500px;
     margin-left: 20px;
     flex: 1;
-  }
+    position: relative;
 
-  .container {
-    height: 100%;
-  }
-
-  .no-dbots {
-    p {
-      margin-top: 200px;
-      font-size: 24px;
-      text-align: center;
-      color: #999;
+    & /deep/ .ivu-spin-fix {
+      background: transparent;
     }
   }
 }

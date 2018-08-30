@@ -12,14 +12,19 @@ export default new Vuex.Store({
     detailData: {},
     specification: {},
     dbots: [],
-    categories: {},
     count: 0,
-    current: 1,
+    currentPage: 1,
+    querying: false,
     address: "",
     stateChannel: {
       status: "close", // syncing | open | close
       banlance: 0
-    }
+    },
+    categories: {},
+    currentSubmenu: [],
+    currentItem: "all",
+    sortType: "Price",
+    sortDir: 1
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
@@ -31,8 +36,11 @@ export default new Vuex.Store({
     [types.SET_COUNT](state, count = 0) {
       state.count = count;
     },
-    [types.SET_CURRENT](state, current = 1) {
-      state.current = current;
+    [types.SET_CURRENT](state, currentPage = 1) {
+      state.currentPage = currentPage;
+    },
+    [types.SET_QUERYING](state, querying = false) {
+      state.querying = querying;
     },
     [types.SET_ADDRESS](state, address = "") {
       state.address = address;
@@ -48,18 +56,34 @@ export default new Vuex.Store({
     },
     [types.SET_CATEGORIES](state, categories = {}) {
       state.categories = Object.freeze(categories);
+    },
+    [types.SET_CURRENT_SUB_MENU](state, val) {
+      state.currentSubmenu = val;
+    },
+    [types.SET_CURRENT_ITEM_NAME](state, val) {
+      state.currentItem = val;
+    },
+    [types.SET_SORT_TYPE](state, sortType) {
+      state.sortType = sortType;
+    },
+    [types.SET_SORT_DIR](state, sortDir) {
+      state.sortDir = sortDir;
     }
   },
   actions: {
     setDocData({ commit }, payload) {
       commit(types.SET_DOC_DATA, payload.data);
     },
-    setDbots({ commit }, dbots) {
-      const { data, count, current } = dbots;
+    setQuerying({ commit }, querying = true) {
+      commit(types.SET_QUERYING, querying);
+    },
+    setDbots({ commit }, payload) {
+      const { data, count, currentPage, querying } = payload;
 
       commit(types.SET_DBOTS, data);
       commit(types.SET_COUNT, count);
-      commit(types.SET_CURRENT, current);
+      commit(types.SET_CURRENT, currentPage);
+      commit(types.SET_QUERYING, querying);
     },
     setAddress({ commit }, address) {
       commit(types.SET_ADDRESS, address);
@@ -75,6 +99,18 @@ export default new Vuex.Store({
     },
     setCategories({ commit }, categories) {
       commit(types.SET_CATEGORIES, categories);
+    },
+    setCategory({ commit }, payload) {
+      const { subMenu, itemName } = payload;
+
+      subMenu && commit(types.SET_CURRENT_SUB_MENU, subMenu);
+      itemName && commit(types.SET_CURRENT_ITEM_NAME, itemName);
+    },
+    setSortType({ commit }, sortType) {
+      commit(types.SET_SORT_TYPE, sortType);
+    },
+    setSortDir({ commit }, sortDir) {
+      commit(types.SET_SORT_DIR, sortDir);
     }
   },
   getters: {
@@ -84,8 +120,8 @@ export default new Vuex.Store({
     count(state) {
       return state.count;
     },
-    current(state) {
-      return state.current;
+    currentPage(state) {
+      return state.currentPage;
     },
     dbots(state) {
       return state.dbots;
@@ -107,6 +143,21 @@ export default new Vuex.Store({
     },
     categories(state) {
       return state.categories;
+    },
+    currentSubmenu(state) {
+      return state.currentSubmenu;
+    },
+    currentItem(state) {
+      return state.currentItem;
+    },
+    querying(state) {
+      return state.querying;
+    },
+    sortType(state) {
+      return state.sortType;
+    },
+    sortDir(state) {
+      return state.sortDir;
     }
   }
 });

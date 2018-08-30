@@ -1,10 +1,12 @@
 <template>
   <div class="home-categories" v-if="categoryIsShow">
     <Menu 
-      :active-name="activeName" 
+      :active-name="currentItem" 
+      :open-names="currentSubmenu"
       accordion
       width="100%"
       v-on:on-select="_click"
+      v-on:on-open-change="openChange"
     >
       <MenuItem name="all">All</MenuItem>
       <template v-for="(child, key) in categories">
@@ -22,25 +24,27 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "HomeCategories",
   data() {
-    return {
-      activeName: "all"
-    };
+    return {};
   },
   computed: {
-    ...mapGetters(["categories"]),
+    ...mapGetters(["categories", "currentSubmenu", "currentItem"]),
     categoryIsShow() {
       return Object.keys(this.categories).length > 0;
     }
   },
   methods: {
+    ...mapActions(["setCategory"]),
     _click(name) {
-      this.activeName = name;
+      this.setCategory({ itemName: name });
       this.$emit("changeCategory", name);
+    },
+    openChange(subMenu) {
+      this.setCategory({ subMenu });
     }
   }
 };
@@ -49,7 +53,7 @@ export default {
 <style lang="less" scoped>
 .home-categories {
   width: 290px;
-  padding-top: 76px;
+  padding: 76px 0 32px;
   background: #ffffff;
   box-shadow: 1px 0 10px 0 rgba(200, 199, 232, 0.2);
 

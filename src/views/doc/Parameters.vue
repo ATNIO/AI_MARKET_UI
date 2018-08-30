@@ -14,33 +14,7 @@
       <p>Description</p>
     </div>
     <div class="parameters-content">
-      <template v-for="type in parametersType">
-        <div class="wrapper" :key="type">
-          <h4 class="title">{{ type | upperFirst }}</h4>
-          <ul class="parameters-list">
-            <li 
-              class="parameters-item"
-              v-for="parameter in parametersRender[type]"
-              :key="parameter.name"
-            >
-              <div class="key">
-                <p :class="{ required: parameter.required }">{{ parameter.name }}</p>
-                <p>{{ parameter.type }}</p>
-              </div>
-              <div class="value">
-                <p class="description">{{ parameter.description }}</p>
-
-                <Schema
-                  v-if="parameter.in === 'body'" 
-                  :schema="parameter.schema"
-                ></Schema>
-
-                <parameter-field v-else :parameter="parameter"></parameter-field>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </template>
+      <parameter-form :param="param"></parameter-form>
     </div>
     <div class="action-bar">
       <span>8 ATN</span>
@@ -50,17 +24,16 @@
 </template>
 
 <script>
-import { upperFirst } from "lodash";
-import FormSchema, { Components } from "@formschema/native";
-
-import Schema from "./Schema";
 import ParameterField from "./ParameterField";
+import ParameterForm from "./ParameterForm";
 
 export default {
   name: "Parameters",
-  components: { Schema, ParameterField },
+  components: { ParameterForm },
   data() {
-    return {};
+    return {
+      parameterModel: {}
+    };
   },
   props: {
     param: {
@@ -88,12 +61,19 @@ export default {
       }, {});
     }
   },
-  methods: {},
-  filters: {
-    upperFirst(value) {
-      return value ? upperFirst(value) : "";
+  watch: {
+    param: {
+      immediate: true,
+      handler(val) {
+        this.parameterModel = this.param.reduce((pre, cur) => {
+          pre[cur.name] = "";
+
+          return pre;
+        }, {});
+      }
     }
-  }
+  },
+  methods: {}
 };
 </script>
 
