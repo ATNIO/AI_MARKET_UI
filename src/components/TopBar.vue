@@ -9,7 +9,7 @@
     </router-link>
     
 
-    <Input prefix="ios-search" placeholder="Search APIs" class="search" />
+    <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="search" v-on:on-enter="search" />
 
     <div class="personal-center">
       <div v-if="loginShow">
@@ -104,7 +104,8 @@ export default {
     return {
       modal1: false,
       loginShow: true,
-      isLogin: false
+      isLogin: false,
+      search1: ""
     };
   },
   computed: {
@@ -219,6 +220,11 @@ export default {
         Cookies.remove("token", { path: "/" });
         Cookies.remove("token.sig", { path: "/" });
       }
+    },
+    async search(event) {
+      const { search } = this.$api.home;
+      const response = await search({ from: 0, size: 10, word: this.search1 });
+      alert(response);
     }
   }
 };
