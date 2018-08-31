@@ -9,9 +9,12 @@
     </router-link>
 
 
-    <Input prefix="ios-search" placeholder="Search APIs" class="search" />
+    <!--<Input prefix="ios-search" placeholder="Search APIs" class="search"  on-click="searchInput ="/>-->
 
-    <div class="personal-center">
+    <search-panel></search-panel>
+
+
+      <div class="personal-center">
       <div v-if="loginShow">
         <Button @click="modal1 = true">login</Button>
       </div>
@@ -95,6 +98,7 @@
 import { mapActions, mapGetters } from "vuex";
 import Atn from "atn-js";
 import Cookies from "js-cookie";
+import SearchPanel from "./SearchPanel";
 
 const atn = new Atn(window.atn3);
 
@@ -104,8 +108,12 @@ export default {
     return {
       modal1: false,
       loginShow: true,
-      isLogin: false
+      isLogin: false,
+      searchInput: false
     };
+  },
+  components: {
+    SearchPanel
   },
   computed: {
     ...mapGetters(["address"])
