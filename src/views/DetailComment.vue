@@ -19,7 +19,7 @@
             <ul>
                 <div v-for="(item, index) in currentComments" :key="index" :item="item">
                     <template>
-                            <Card >
+                        <Card>
                             <div class="content">
                                 <div class="photo">
                                     <avatar :width="60" :height="60" :margin-right="20" :text="item.useraddr"></avatar>
@@ -193,6 +193,7 @@ export default {
         color: #9c9c9c;
       }
       .details {
+        word-wrap: break-word;
         font-size: 16px;
         color: #727272;
         width: 690px;
