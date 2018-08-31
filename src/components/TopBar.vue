@@ -7,7 +7,7 @@
         <span class="title">AI Market</span>
       </div>
     </router-link>
-    
+
 
     <Input prefix="ios-search" placeholder="Search APIs" class="search" />
 
@@ -35,9 +35,9 @@
       </div>
     </div>
 
-    <Modal 
-      v-model="modal1" 
-      :footer-hide="true" 
+    <Modal
+      v-model="modal1"
+      :footer-hide="true"
       width="890px"
       :closable="false"
       :styles="{top: '160px'}"
@@ -89,7 +89,7 @@
         </Card> -->
     </Modal>
   </div>
- </div>  
+ </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -121,12 +121,24 @@ export default {
   },
   methods: {
     ...mapActions(["setAddress"]),
+    // async check() {
+    //   const { check } = this.$api.user;
+    //   const checkResult = check(this.address);
+    //   const { data, status } = checkResult;
+    //
+    //   console.log(checkResult);
+    // },
     async check() {
       const { check } = this.$api.user;
-      const checkResult = check(this.address);
-      const { data, status } = checkResult;
-
-      console.log(checkResult);
+      const eth = this.$atn.web3.eth;
+      const accounts = await eth.getAccounts();
+      const response = await check(accounts[0]);
+      const { status, data } = response;
+      if (status === 200) {
+        this.loginShow = false;
+        this.isLogin = data.err;
+        this.setAddress(accounts[0]);
+      }
     },
     notice({ type, title, desc }) {
       this.$Notice[type]({
@@ -211,7 +223,6 @@ export default {
       const { logout } = this.$api.user;
       const response = await logout({ usraddr: this.address });
       const { status, data } = response;
-
       if (status === 200) {
         this.loginShow = true;
         this.isLogin = false;
