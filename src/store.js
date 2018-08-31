@@ -24,7 +24,11 @@ export default new Vuex.Store({
     currentSubmenu: [],
     currentItem: "all",
     sortType: "Price",
-    sortDir: 1
+    sortDir: 1,
+
+    currentComments: [],
+    currentCommentsPage: 1,
+    currentCommentsCount: 0
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
@@ -68,6 +72,15 @@ export default new Vuex.Store({
     },
     [types.SET_SORT_DIR](state, sortDir) {
       state.sortDir = sortDir;
+    },
+    [types.SET_CURRENT_COMMENTS](state, comments = []) {
+      state.currentComments = Object.freeze(comments);
+    },
+    [types.SET_CURRENT_COMMENTS_PAGE](state, page) {
+      state.currentCommentsPage = page;
+    },
+    [types.SET_CURRENT_COMMENTS_COUNT](state, count) {
+      state.currentCommentsCount = count;
     }
   },
   actions: {
@@ -111,6 +124,14 @@ export default new Vuex.Store({
     },
     setSortDir({ commit }, sortDir) {
       commit(types.SET_SORT_DIR, sortDir);
+    },
+    setCurrentComments({ commit }, payload) {
+      const { count, comments } = payload;
+      commit(types.SET_CURRENT_COMMENTS_COUNT, count);
+      commit(types.SET_CURRENT_COMMENTS, comments);
+    },
+    setCurrentCommentsPage({ commit }, page) {
+      commit(types.SET_CURRENT_COMMENTS_PAGE, page);
     }
   },
   getters: {
@@ -158,6 +179,15 @@ export default new Vuex.Store({
     },
     sortDir(state) {
       return state.sortDir;
+    },
+    currentComments(state) {
+      return state.currentComments;
+    },
+    currentCommentsPage(state) {
+      return state.currentCommentsPage;
+    },
+    currentCommentsCount(state) {
+      return state.currentCommentsCount;
     }
   }
 });

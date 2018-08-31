@@ -1,39 +1,121 @@
 <template>
-  <section class="comment">
-    <div class="publish">
-      <div class="content">
-          <!-- 头像和input -->
-          <div class="photo"></div>
-          <Input class="input" type="textarea" :autosize="{minRows: 9,maxRows: 9}" placeholder="What do you think of this API?" />
-      </div>
-      <button class="button">发表评论</button>
-    </div>
+    <section class="comment">
+        <div class="publish">
+            <div class="content">
+                <!-- 头像和input -->
+                <div class="photo">
+                    <avatar :width="60" :height="60" :margin-right="20" :text="userAddress"></avatar>
+                    <!--
+                    <span>{{ userAddress }}</span>
+                    -->
+                </div>
+                <Input class="input" type="textarea" :autosize="{minRows: 9,maxRows: 9}"
+                       placeholder="What do you think of this API?" v-model="message"/>
+            </div>
+            <button class="button" v-on:click="addComment">发表评论</button>
+        </div>
 
-    <div class="history">
-      <ul>
-        <div v-for="(item, index) in data" :key="index" :item="item">
-          <div class="content">
-            <div class="photo"></div>
-            <div class="wrapper">
-              <span class="name">{{item.reviewer}}</span><span class="time">{{item.time}}</span>
-              <p class="details">{{item.details}}</p>
-            </div>            
-          </div>
-        </div>  
-      </ul>
-    </div>
-    <Page class-name="page" :total="100" />
+        <div class="history">
+            <ul>
+                <div v-for="(item, index) in currentComments" :key="index" :item="item">
+                    <template>
+                            <Card >
+                            <div class="content">
+                                <div class="photo">
+                                    <avatar :width="60" :height="60" :margin-right="20" :text="item.useraddr"></avatar>
+                                </div>
+                                <div class="wrapper">
+                                    <span class="name">{{item.useraddr}}</span><span class="time"> {{item.create_at | timeFormat}}</span>
+                                    <p class="details">{{item.content}}</p>
+                                </div>
+                            </div>
+                        </Card>
+                    </template>
+                </div>
+            </ul>
+        </div>
+        <Page
+                class-name="page"
+                :total="currentCommentsCount"
+                show-total
+                :current="currentCommentsPage"
+                :page-size="LIMIT"
+                v-on:on-change="changePage"/>
 
-  </section>
+    </section>
 </template>
 
+)
 <script>
-import data from "../mock/listData.js";
+import { mapActions, mapGetters } from "vuex";
+import dayjs from "dayjs";
+
+const LIMIT = 5;
+
 export default {
+  name: "DetailComment",
+  computed: {
+    ...mapGetters([
+      "currentComments",
+      "currentCommentsPage",
+      "currentCommentsCount"
+    ]),
+    userAddress() {
+      return atn3.eth.accounts[0];
+    }
+  },
+
+  mounted() {
+    this.comments(1, LIMIT);
+  },
+  methods: {
+    ...mapActions(["setCurrentComments", "setCurrentCommentsPage"]),
+    comments(page, limit) {
+      const { getComments } = this.$api.detail;
+
+      var dbotAddr = this.$route.params.address;
+      //var page = this.currentCommentsPage
+      getComments(dbotAddr, page, limit).then(res => {
+        const { data, status } = res;
+        if (status === 200) {
+          const { count, comments } = data;
+          this.setCurrentComments({ count, comments });
+        }
+      });
+    },
+    addComment() {
+      const { addComments } = this.$api.detail;
+      var dbotAddr = this.$route.params.address;
+      var user = atn3.eth.accounts[0];
+      addComments(dbotAddr, user, this.message).then(res => {
+        const { data, status } = res;
+        if (status === 200) {
+          this.comments(1, LIMIT);
+          this.messag = "";
+          this.addCommentSucc(false);
+        }
+      });
+    },
+    addCommentSucc(nodesc) {
+      this.$Notice.success({
+        title: "评论成功",
+        desc: nodesc ? "" : "您发表了一条评论! "
+      });
+    },
+    changePage(page) {
+      this.setCurrentCommentsPage(page);
+      this.comments(page, LIMIT);
+    }
+  },
   data() {
     return {
-      data
+      LIMIT: LIMIT
     };
+  },
+  filters: {
+    timeFormat(time) {
+      return dayjs(time).format("YYYY/MM/DD HH:mm:ss");
+    }
   }
 };
 </script>
@@ -99,7 +181,7 @@ export default {
     .content {
       display: flex;
       flex-direction: row;
-      margin-bottom: 40px;
+      margin-bottom: 10px;
 
       .name {
         font-size: 14px;
@@ -113,6 +195,7 @@ export default {
       .details {
         font-size: 16px;
         color: #727272;
+        width: 690px;
       }
     }
   }
