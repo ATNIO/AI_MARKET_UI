@@ -12,10 +12,10 @@
     <Input prefix="ios-search" placeholder="Search APIs" class="search" />
 
     <div class="personal-center">
-      <div v-if="loginShow">
+      <div v-show="loginShow">
         <Button @click="modal1 = true">login</Button>
       </div>
-      <div class="prefsession" v-else>
+      <div class="prefsession" v-show="!loginShow">
         <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
         <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/>
         <Dropdown placement="bottom-end" v-on:on-click="_click">
