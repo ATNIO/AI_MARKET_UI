@@ -301,9 +301,7 @@ export default {
       };
       const response = await search(body);
       const { status, data } = response;
-      if (data.length > 0 || this.searchFrom == 0) {
-        this.searchResult = [];
-      }
+      var result = [];
       for (var i = 0; i < data.length; i++) {
         var title = data[i].title;
         if (title.constructor == Array) {
@@ -333,9 +331,14 @@ export default {
           logo: data[i].logo,
           tags: tagstr
         };
-        this.searchResult.push(it);
+        result.push(it);
       }
-      this.searchShow = data.length > 0;
+      if (result.length > 0 || this.searchFrom == 0) {
+        if (this.searchResult.toString() != result.toString()) {
+          this.searchResult = result;
+        }
+      }
+      this.searchShow = this.searchResult.length > 0;
     },
     async selectClick(value) {
       this.$router.push({
