@@ -8,8 +8,32 @@
       </div>
     </router-link>
 
+    <div class="search">
+    <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" />
 
-    <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="search" v-on:on-enter="search" />
+    <div class="search-select" v-if="searchShow">
+       <div class="search-top">
+         <span class="search-dbots">Dbots</span>
+         <a href="#" class="search-more" @click="more();">More</a>
+       </div>
+       <hr class="search-hr"></hr>
+       <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
+         <li v-for="(value,index) in searchResult" :class="{selectback:index==now}" class="search-select-option" @mouseover="selectHover(index)" @click="selectClick(value)" :key="value">
+           <div class="logo-tag">
+             <div class="item-image-padding">
+               <img class="item-image" :src="value.logo" alt="">
+             </div>
+             <div class="item-right">
+               <div class="item-title-style" v-html="value.title"></div>
+               <div class="item-ignore-style" v-html="value.dbot_address"></div>
+               <div class="item-ignore-style" v-html="value.content"></div>
+               <div class="item-ignore-style" v-html="value.tags"></div>
+             </div>
+           </div>
+         </li>
+       </transition-group>
+       </div>
+     </div>
 
     <div class="personal-center">
       <div v-show="loginShow">
@@ -104,8 +128,14 @@ export default {
     return {
       modal1: false,
       loginShow: true,
+      searchShow: false,
       isLogin: false,
-      search1: ""
+      search1: "",
+      searchResult: [],
+      now: -1,
+      lastMouse: -1,
+      searchFrom: 0,
+      searchSize: 5
     };
   },
   computed: {
@@ -232,10 +262,101 @@ export default {
         Cookies.remove("token.sig", { path: "/" });
       }
     },
-    async search(event) {
+    async searchEvent(event) {
+      const keyDownArray = 40;
+      const keyUpArray = 38;
+      const keyEnter = 13;
+      if (this.now >= this.searchResult.length) {
+        this.now = this.searchResult.length - 1;
+      }
+      if (event.keyCode == keyDownArray) {
+        this.now++;
+        if (this.searchResult.length == this.now) {
+          this.now = 0;
+        }
+        return;
+      }
+      if (event.keyCode == keyUpArray) {
+        this.now--;
+        if (this.now == -1) {
+          this.now = this.searchResult.length - 1;
+        }
+        return;
+      }
+      if (event.keyCode == keyEnter) {
+        if (this.now >= 0 && this.now < this.searchResult.length) {
+          this.selectClick(this.searchResult[this.now]);
+          return;
+        }
+      }
+      this.searchFrom = 0;
+      await this.search();
+    },
+    async search() {
       const { search } = this.$api.home;
-      const response = await search({ from: 0, size: 10, word: this.search1 });
-      alert(response);
+      const body = {
+        from: this.searchFrom,
+        size: this.searchSize,
+        word: this.search1
+      };
+      const response = await search(body);
+      const { status, data } = response;
+      if (data.length > 0 || this.searchFrom == 0) {
+        this.searchResult = [];
+      }
+      for (var i = 0; i < data.length; i++) {
+        var title = data[i].title;
+        if (title.constructor == Array) {
+          title = title[0];
+        }
+        var dbot_address = data[i].dbot_addr;
+        if (dbot_address.constructor == Array) {
+          dbot_address = dbot_address[0];
+        }
+        var des = data[i].description + data[i].specification;
+        var index = des.indexOf("font", 0);
+        if (index >= 10) {
+          des = "..." + des.substring(index - 20, des.length);
+        }
+        var tagstr = "";
+        var tags = data[i].tags;
+        for (var idx = 0; idx < tags.length; idx++) {
+          tagstr +=
+            '<span style="border:1px solid #d4d4d4; padding: 1px; margin: 5px;">' +
+            tags[idx] +
+            "</span>";
+        }
+        var it = {
+          title: title,
+          dbot_address: dbot_address,
+          content: des,
+          logo: data[i].logo,
+          tags: tagstr
+        };
+        this.searchResult.push(it);
+      }
+      this.searchShow = data.length > 0;
+    },
+    async selectClick(value) {
+      this.$router.push({
+        name: "detail",
+        params: { address: value.dbot_address }
+      });
+      this.searchShow = false;
+      this.search1 = "";
+    },
+    selectHover(index) {
+      if (index != this.lastMouse) {
+        this.now = index;
+        this.lastMouse = index;
+      }
+    },
+    more() {
+      if (this.searchResult.length < this.searchSize) {
+        return;
+      }
+      this.searchFrom += this.searchSize;
+      this.search();
     }
   }
 };
@@ -270,6 +391,87 @@ export default {
     .search {
       width: 590px;
       height: 30px;
+      z-index: 9999;
+      .search-select {
+        top: 45px;
+        width: 590px;
+        border: 1px solid #d4d4d4;
+        background-color: #fff;
+        padding-bottom: 27px;
+        .search-top {
+          height: 18px;
+          background-color: #fff;
+          margin-top: 30px;
+          margin-bottom: 1px;
+          margin-left: 30px;
+          margin-right: 30px;
+          padding: 0px;
+          .search-dbots {
+            float: left;
+          }
+          .search-more {
+            float: right;
+          }
+        }
+        .search-hr {
+          margin-top: 2px;
+          margin-bottom: 23px;
+          padding: 0px;
+          margin-left: 30px;
+          margin-right: 30px;
+          height: 0px;
+        }
+      }
+
+      .search-select li {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 24px;
+        margin-left: 30px;
+        margin-right: 30px;
+        border: 0px solid #d4d4d4;
+        border-top: none;
+        background-color: #fff;
+        width: 407;
+      }
+      .search-select-option {
+        box-sizing: border-box;
+        height: 88px;
+        padding: 7px 10px;
+        .logo-tag {
+          display: flex;
+          flex-direction: row;
+          .item-image-padding {
+            width: 88px;
+            height: 88px;
+            .item-image {
+              width: 100%;
+            }
+          }
+          .item-right {
+            display: flex;
+            flex-direction: column;
+            margin-left: 16px;
+            .item-title-style {
+              width: 407px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+            .item-ignore-style {
+              color: #b1b2bd;
+              width: 407px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+      .selectback {
+        background-color: #eee !important;
+        cursor: pointer;
+      }
     }
     .personal-center {
       .prefsession {
