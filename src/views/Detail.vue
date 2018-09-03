@@ -57,7 +57,11 @@
             <p class="description">{{dbot.description}}</p>
             <div class="like">
               <p class="stars">
-                <Icon type="ios-star-outline" size="20"/>
+                <Icon 
+                :type="visibleType" 
+                @click="visible = !visible,_click()"
+                size="20"
+                />
                 <span>{{dbot.collect_count}}</span>
               </p>
               <p class="update">update: {{dbot.update_at | timeFormat}}</p>
@@ -93,7 +97,8 @@ export default {
   data() {
     return {
       detail: {},
-      data: data[0]
+      data: data[0],
+      visible: true
     };
   },
   computed: {
@@ -108,6 +113,9 @@ export default {
     },
     dbot() {
       return this.dbots.filter(dbot => this.address === dbot.addr)[0];
+    },
+    visibleType() {
+      return this.visible ? "ios-star-outline" : "ios-star";
     }
   },
   mounted() {
@@ -119,6 +127,14 @@ export default {
   },
   methods: {
     ...mapActions(["setDocData", "setDetailData"]),
+    _click() {
+      // console.log(this.visibleType);
+      if (this.visibleType == "ios-star") {
+        this.dbot.collect_count++;
+      } else {
+        this.dbot.collect_count--;
+      }
+    },
     fetch() {
       const { getDetail } = this.$api.detail;
 
