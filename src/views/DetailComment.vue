@@ -10,7 +10,8 @@
                     -->
                 </div>
                 <Input class="input" type="textarea" :autosize="{minRows: 9,maxRows: 9}"
-                       placeholder="What do you think of this API?" v-model="message"/>
+                       placeholder="What do you think of this API?" v-model="message"
+                       maxlength="200"/>
             </div>
             <button class="button" v-on:click="addComment">发表评论</button>
         </div>
@@ -61,7 +62,7 @@ export default {
       "currentCommentsCount"
     ]),
     userAddress() {
-      return atn3.eth.accounts[0];
+      return this.$atn.web3.eth.accounts[0];
     }
   },
 
@@ -86,7 +87,7 @@ export default {
     addComment() {
       const { addComments } = this.$api.detail;
       var dbotAddr = this.$route.params.address;
-      var user = atn3.eth.accounts[0];
+      var user = this.$atn.web3.eth.accounts[0];
       addComments(dbotAddr, user, this.message).then(res => {
         const { data, status } = res;
         if (status === 200) {
@@ -122,7 +123,7 @@ export default {
 <style lang="less" scoped>
 .comment {
   width: 1200px;
-  height: 1400px;
+  // height: 1400px;
   background: #ffffff;
   box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
   border-radius: 4px;
@@ -205,7 +206,7 @@ export default {
     margin-top: 33px;
     display: flex;
     justify-content: center;
-    margin-bottom: 40px;
+    margin-bottom: 4y0px;
   }
 }
 </style>
