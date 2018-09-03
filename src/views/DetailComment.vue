@@ -11,7 +11,7 @@
                 </div>
                 <Input class="input" type="textarea" :autosize="{minRows: 9,maxRows: 9}"
                        placeholder="What do you think of this API?" v-model="message"
-                       maxlength="200"/>
+                       v-bind:maxlength="200"/>
             </div>
             <button class="button" v-on:click="addComment">发表评论</button>
         </div>
@@ -215,8 +215,8 @@ export default {
   .page {
     margin-top: 33px;
     display: flex;
-    justify-content: center;
-    margin-bottom: 4 y0px;
+    justify-content: center; 
+    padding-bottom: 40px;
   }
 }
 </style>

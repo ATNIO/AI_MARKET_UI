@@ -135,7 +135,8 @@ export default {
       now: -1,
       lastMouse: -1,
       searchFrom: 0,
-      searchSize: 5
+      searchSize: 5,
+      searchingFlag: false
     };
   },
   computed: {
@@ -257,6 +258,9 @@ export default {
       }
     },
     async searchEvent(event) {
+      if (this.searchingFlag) {
+        return;
+      }
       const keyDownArray = 40;
       const keyUpArray = 38;
       const keyEnter = 13;
@@ -284,7 +288,10 @@ export default {
         }
       }
       this.searchFrom = 0;
-      await this.search();
+      this.searchingFlag = true;
+      setTimeout(async () => {
+        await this.search();
+      }, 500);
     },
     async search() {
       const { search } = this.$api.home;
@@ -335,13 +342,20 @@ export default {
           this.searchResult = result;
         }
       }
+      if (this.search1.length > 0 && result.length == 0) {
+        this.searchResult = [{ content: "Sorry, search result is empty." }];
+      }
       this.searchShow = this.searchResult.length > 0;
+      this.searchingFlag = false;
     },
     async selectClick(value) {
       this.$router.push({
         name: "detail",
         params: { address: value.dbot_address }
       });
+      this.clearSearch();
+    },
+    async clearSearch() {
       this.searchShow = false;
       this.search1 = "";
     },
@@ -627,5 +641,18 @@ export default {
       color: #ffffff;
     }
   }
+}
+.black_overlay {
+  display: block;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 9001;
+  -moz-opacity: 0.8;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
 }
 </style>
