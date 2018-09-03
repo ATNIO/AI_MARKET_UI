@@ -41,7 +41,7 @@
       </div>
       <div class="prefsession" v-show="!loginShow">
         <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
-        <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/>
+        <!-- <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/> -->
         <Dropdown placement="bottom-end" v-on:on-click="_click">
           <div class="avatar-wrapper">
             <avatar :text="address"></avatar>
@@ -74,9 +74,9 @@
           <!-- <img src="../assets/metamask-logo.c51e1a45.svg" alt="" class="fox-img"> -->
           <div class="word">
             <span class="login">Connect to the </span>
-            <span class="wallet">MetaMask browser wallet.</span>
+            <span class="wallet">ATN browser wallet.</span>
           </div>
-          <button class="metamask-button" @click="login('metamask')">Connect to MetaMask.</button>
+          <button class="metamask-button" @click="login('metamask')">Connect to ATN Wallet.</button>
         </Card>
 
         <!-- <Card class="ledger">
@@ -546,13 +546,13 @@ export default {
     margin-bottom: 15px;
 
     .fox-img {
-      width: 203px;
-      height: 120px;
-      border-radius: 4px;
-      background: url("../assets/metamask.svg");
+      width: 106px;
+      height: 106px;
+      margin-left: 34px;
+      background: url("../assets/wallet-login.png");
+      background-repeat: no-repeat;
+      background-position: center center;
       float: left;
-      margin-top: -1px;
-      margin-left: -1px;
     }
     .word {
       padding-top: 50px;

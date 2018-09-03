@@ -92,7 +92,7 @@ export default {
         const { data, status } = res;
         if (status === 200) {
           this.comments(1, LIMIT);
-          this.messag = "";
+          this.message = " ";
           this.addCommentSucc(false);
         }
       });
