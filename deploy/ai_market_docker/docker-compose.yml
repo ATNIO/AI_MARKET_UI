@@ -1,0 +1,12 @@
+version: '2.0'
+
+services:
+  nginx:
+    restart: always
+    image: nginx:latest
+    ports:
+    - 8082:80
+    volumes:
+    - ./logs:/var/log/nginx:rw
+    - ./conf:/etc/nginx/conf.d:ro
+    - ./www:/usr/share/nginx/html:ro
