@@ -15,7 +15,7 @@ PRO_DIR=${BIN_DIR}/..
 
 clear(){
         cd ${BIN_DIR}/ai_market_docker
-        rm -rf ./www/*&& rm -rf ./logs/*
+        rm -rf ./www && rm -rf ./logs
         if [ $? -eq 0 ]; then
             echo "clear succ!"
         fi
@@ -32,6 +32,7 @@ build(){
         yarn build
         if [ $? -eq 0 ]; then
             echo "build succ!"
+            mkdir ${BIN_DIR}/ai_market_docker/www && ${BIN_DIR}/ai_market_docker/logs
             cp -r ./dist/* ${BIN_DIR}/ai_market_docker/www
         fi
 }
