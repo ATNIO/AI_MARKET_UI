@@ -8,16 +8,20 @@
       </div>
     </router-link>
 
-    <div id="fade" class="black_overlay" v-if="searchShow" @click="clearSearch"></div>
+    <div id="fade" class="black_overlay" v-if="searchShow || searchEmpty" @click="clearSearch"></div>
     <div class="search">
     <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" />
 
+    <div class="search-empty" v-if="searchEmpty">Sorry, the result is empty.</div>
+
     <div class="search-select" v-if="searchShow">
+       <!--
        <div class="search-top">
          <span class="search-dbots">Dbots</span>
          <a href="#" class="search-more" @click="more();">More</a>
        </div>
        <hr class="search-hr"></hr>
+       -->
        <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
          <li v-for="(value,index) in searchResult" :class="{selectback:index==now}" class="search-select-option" @mouseover="selectHover(index)" @click="selectClick(value)" :key="value">
            <div class="logo-tag">
@@ -137,7 +141,8 @@ export default {
       lastMouse: -1,
       searchFrom: 0,
       searchSize: 5,
-      searchingFlag: false
+      searchingFlag: false,
+      searchEmpty: false
     };
   },
   computed: {
@@ -349,9 +354,8 @@ export default {
           this.searchResult = result;
         }
       }
-      if (this.search1.length > 0 && result.length == 0) {
-        this.searchResult = [{ content: "Sorry, search result is empty." }];
-      }
+
+      this.searchEmpty = this.search1.length > 0 && result.length == 0;
       this.searchShow = this.searchResult.length > 0;
       this.searchingFlag = false;
     },
@@ -413,7 +417,21 @@ export default {
       width: 590px;
       height: 30px;
       z-index: 9999;
+      .search-empty {
+        width: 590px;
+        height: 45px;
+        line-height: 45px;
+        font-size: 18px;
+        box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
+        background-color: #fff;
+        padding-bottom: 27px;
+        border-radius: 4px;
+        margin-top: 6px;
+        padding-left: 30px;
+      }
       .search-select {
+        border-radius: 4px;
+        margin-top: 6px;
         top: 45px;
         width: 590px;
         border: 1px solid #d4d4d4;
@@ -465,6 +483,8 @@ export default {
           .item-image-padding {
             width: 88px;
             height: 88px;
+            display: flex;
+            align-items: center;
             .item-image {
               width: 100%;
             }
@@ -659,7 +679,7 @@ export default {
   background-color: black;
   z-index: 9001;
   -moz-opacity: 0.8;
-  opacity: 0.8;
+  opacity: 0.5;
   filter: alpha(opacity=80);
 }
 </style>
