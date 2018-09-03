@@ -361,6 +361,7 @@ export default {
     },
     async clearSearch() {
       this.searchShow = false;
+      this.searchEmpty = false;
       this.search1 = "";
     },
     selectHover(index) {
