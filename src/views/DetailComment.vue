@@ -215,7 +215,7 @@ export default {
   .page {
     margin-top: 33px;
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     padding-bottom: 40px;
   }
 }
