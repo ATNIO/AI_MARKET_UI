@@ -8,6 +8,7 @@
       </div>
     </router-link>
 
+    <div id="fade" class="black_overlay" v-if="searchShow" @click="clearSearch"></div>
     <div class="search">
     <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" />
 
@@ -341,6 +342,9 @@ export default {
           this.searchResult = result;
         }
       }
+      if (this.search1.length > 0 && result.length == 0) {
+        this.searchResult = [{ content: "Sorry, search result is empty." }];
+      }
       this.searchShow = this.searchResult.length > 0;
     },
     async selectClick(value) {
@@ -348,6 +352,9 @@ export default {
         name: "detail",
         params: { address: value.dbot_address }
       });
+      this.clearSearch();
+    },
+    async clearSearch() {
       this.searchShow = false;
       this.search1 = "";
     },
@@ -633,5 +640,18 @@ export default {
       color: #ffffff;
     }
   }
+}
+.black_overlay {
+  display: block;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 9001;
+  -moz-opacity: 0.8;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
 }
 </style>
