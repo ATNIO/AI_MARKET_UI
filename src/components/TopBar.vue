@@ -136,7 +136,8 @@ export default {
       now: -1,
       lastMouse: -1,
       searchFrom: 0,
-      searchSize: 5
+      searchSize: 5,
+      searchingFlag: false
     };
   },
   computed: {
@@ -264,6 +265,9 @@ export default {
       }
     },
     async searchEvent(event) {
+      if (this.searchingFlag) {
+        return;
+      }
       const keyDownArray = 40;
       const keyUpArray = 38;
       const keyEnter = 13;
@@ -291,7 +295,10 @@ export default {
         }
       }
       this.searchFrom = 0;
-      await this.search();
+      this.searchingFlag = true;
+      setTimeout(async () => {
+        await this.search();
+      }, 500);
     },
     async search() {
       const { search } = this.$api.home;
@@ -346,6 +353,7 @@ export default {
         this.searchResult = [{ content: "Sorry, search result is empty." }];
       }
       this.searchShow = this.searchResult.length > 0;
+      this.searchingFlag = false;
     },
     async selectClick(value) {
       this.$router.push({
