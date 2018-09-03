@@ -10,7 +10,7 @@
       ></avatar>
       <Icon type="ios-arrow-down" color="#fff"></Icon>
     </div>
-    <div class="address">{{address}}</div>
+  
     <!-- <div class="balance">
       <span class="visible">
         <span class="number">
