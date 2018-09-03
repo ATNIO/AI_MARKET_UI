@@ -11,7 +11,8 @@
           <p class="address-name">PUBLIC ACCOUNT ADDRESS:</p>
           <p class="address-value">{{address}}</p>
         </div>
-        <img src="../assets/二维码.png" alt="QR code" class="QRcode">
+        <!-- <img src="../assets/二维码.png" alt="QR code" class="QRcode"> -->
+        <div id="qrcode" class="QRcode"></div>
             
     </div>
 
@@ -42,6 +43,7 @@
 <script>
 import data from "../mock/listData.js";
 import { mapGetters } from "vuex";
+import QRCode from "qrcodejs2";
 
 export default {
   name: "AccountProfile",
@@ -55,6 +57,22 @@ export default {
   },
   computed: {
     ...mapGetters(["address"])
+  },
+  methods: {
+    qrcode() {
+      let qrcode = new QRCode("qrcode", {
+        width: 120,
+        height: 120, // 高度
+        text: this.address // 二维码内容
+        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+        // background: '#f0f'
+        // foreground: '#ff0'
+      });
+      console.log(qrcode);
+    }
+  },
+  mounted() {
+    this.qrcode();
   }
 };
 </script>
