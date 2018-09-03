@@ -59,10 +59,11 @@ export default {
     ...mapGetters([
       "currentComments",
       "currentCommentsPage",
-      "currentCommentsCount"
+      "currentCommentsCount",
+      "address"
     ]),
     userAddress() {
-      return this.$atn.web3.eth.accounts[0];
+      return this.address;
     }
   },
 
@@ -85,9 +86,17 @@ export default {
       });
     },
     addComment() {
+      const account = this.address;
+      if (account.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
+        this.$Notice.error({
+          title: "评论失败",
+          desc: "请登录账号后操作! "
+        });
+        return;
+      }
       const { addComments } = this.$api.detail;
       var dbotAddr = this.$route.params.address;
-      var user = this.$atn.web3.eth.accounts[0];
+      var user = this.address;
       addComments(dbotAddr, user, this.message).then(res => {
         const { data, status } = res;
         if (status === 200) {
@@ -110,7 +119,8 @@ export default {
   },
   data() {
     return {
-      LIMIT: LIMIT
+      LIMIT: LIMIT,
+      message: ""
     };
   },
   filters: {
@@ -206,7 +216,7 @@ export default {
     margin-top: 33px;
     display: flex;
     justify-content: center;
-    margin-bottom: 4y0px;
+    margin-bottom: 4 y0px;
   }
 }
 </style>
