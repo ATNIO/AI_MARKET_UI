@@ -206,7 +206,7 @@ export default {
     margin-top: 33px;
     display: flex;
     justify-content: center;
-    margin-bottom: 4y0px;
+    padding-bottom: 40px;
   }
 }
 </style>
