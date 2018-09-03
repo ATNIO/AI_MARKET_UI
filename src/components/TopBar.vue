@@ -334,7 +334,10 @@ export default {
         result.push(it);
       }
       if (result.length > 0 || this.searchFrom == 0) {
-        if (this.searchResult.toString() != result.toString()) {
+        if (
+          result.length != this.searchResult.length ||
+          JSON.stringify(result) != JSON.stringify(this.searchResult)
+        ) {
           this.searchResult = result;
         }
       }
