@@ -9,9 +9,10 @@
         
         <div class="address">
           <p class="address-name">PUBLIC ACCOUNT ADDRESS:</p>
-          <p class="address-value">{{data.publicAddress}}</p>
+          <p class="address-value">{{address}}</p>
         </div>
-        <img src="../assets/二维码.png" alt="QR code" class="QRcode">
+        <!-- <img src="../assets/二维码.png" alt="QR code" class="QRcode"> -->
+        <div id="qrcode" class="QRcode"></div>
             
     </div>
 
@@ -23,6 +24,9 @@
           
       <div class="topic lasttopic">RECIPIENT ACCOUNT ADDRESS</div>
       <Input v-model="value2" size="large" placeholder=" " class="address-input" />
+
+      <div class="topic lasttopic">TRANSACTION DATA (OPTIONAL)</div>
+      <Input v-model="value3" size="large" placeholder=" " class="data-input" />
       <button class="withdraw-button">WITHDRAW</button>
         
 
@@ -38,6 +42,8 @@
 
 <script>
 import data from "../mock/listData.js";
+import { mapGetters } from "vuex";
+import QRCode from "qrcodejs2";
 
 export default {
   name: "AccountProfile",
@@ -45,8 +51,28 @@ export default {
     return {
       data: data[0],
       value1: "",
-      value2: ""
+      value2: "",
+      value3: ""
     };
+  },
+  computed: {
+    ...mapGetters(["address"])
+  },
+  methods: {
+    qrcode() {
+      let qrcode = new QRCode("qrcode", {
+        width: 120,
+        height: 120, // 高度
+        text: this.address // 二维码内容
+        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+        // background: '#f0f'
+        // foreground: '#ff0'
+      });
+      console.log(qrcode);
+    }
+  },
+  mounted() {
+    this.qrcode();
   }
 };
 </script>
@@ -64,7 +90,7 @@ export default {
   .content {
     margin-top: 42px;
     width: 890px;
-    height: 510px;
+    height: 600px;
     background: #ffffff;
     box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
     border-radius: 4px;
@@ -135,6 +161,10 @@ export default {
     }
     .quantity-input {
       width: 260px;
+      height: 40px;
+    }
+    .data-input {
+      width: 542px;
       height: 40px;
     }
     & /deep/ .ivu-input {

@@ -1,124 +1,123 @@
 <template>
- <div class="top-bar">
-  <div class="wrapper">
-    <router-link to="/">
-      <div class="i-title">
-        <img src="../assets/logo.png" alt="" class="image">
-        <span class="title">AI Market</span>
-      </div>
-    </router-link>
+    <div class="top-bar">
+        <div class="wrapper">
+            <router-link to="/">
+                <div class="i-title">
+                    <img src="../assets/logo.png" alt="" class="image">
+                    <span class="title">AI Market</span>
+                </div>
+            </router-link>
 
-    <div id="fade" class="black_overlay" v-if="searchShow || searchEmpty" @click="clearSearch"></div>
-    <div class="search">
-    <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" />
+            <div id="fade" class="black_overlay" v-if="searchShow || searchEmpty" @click="clearSearch"></div>
+            <div class="search">
+                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" />
 
-    <div class="search-empty" v-if="searchEmpty">Sorry, the result is empty.</div>
+                <div class="search-empty" v-if="searchEmpty">Sorry, the result is empty.</div>
+                <div class="search-select" v-if="searchShow">
+                    <!--
+                    <div class="search-top">
+                        <span class="search-dbots">Dbots</span>
+                        <a href="#" class="search-more" @click="more();">More</a>
+                    </div>
+                    <hr class="search-hr"></hr>
+                    -->
+                    <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
+                        <li v-for="(value,index) in searchResult" :class="{selectback:index==now}" class="search-select-option" @mouseover="selectHover(index)" @click="selectClick(value)" :key="value">
+                            <div class="logo-tag">
+                                <div class="item-image-padding">
+                                    <img class="item-image" :src="value.logo" alt="">
+                                </div>
+                                <div class="item-right">
+                                    <div class="item-title-style" v-html="value.title"></div>
+                                    <div class="item-ignore-style" v-html="value.dbot_address"></div>
+                                    <div class="item-ignore-style" v-html="value.content"></div>
+                                    <div class="item-ignore-style" v-html="value.tags"></div>
+                                </div>
+                            </div>
+                        </li>
+                    </transition-group>
+                </div>
+            </div>
 
-    <div class="search-select" v-if="searchShow">
-       <!--
-       <div class="search-top">
-         <span class="search-dbots">Dbots</span>
-         <a href="#" class="search-more" @click="more();">More</a>
-       </div>
-       <hr class="search-hr"></hr>
-       -->
-       <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
-         <li v-for="(value,index) in searchResult" :class="{selectback:index==now}" class="search-select-option" @mouseover="selectHover(index)" @click="selectClick(value)" :key="value">
-           <div class="logo-tag">
-             <div class="item-image-padding">
-               <img class="item-image" :src="value.logo" alt="">
-             </div>
-             <div class="item-right">
-               <div class="item-title-style" v-html="value.title"></div>
-               <div class="item-ignore-style" v-html="value.dbot_address"></div>
-               <div class="item-ignore-style" v-html="value.content"></div>
-               <div class="item-ignore-style" v-html="value.tags"></div>
-             </div>
-           </div>
-         </li>
-       </transition-group>
-       </div>
-     </div>
+            <div class="personal-center">
+                <div v-show="loginShow">
+                    <Button @click="modal1 = true">login</Button>
+                </div>
+                <div class="prefsession" v-show="!loginShow">
+                    <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
+                    <!-- <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/> -->
+                    <Dropdown placement="bottom-end" v-on:on-click="_click">
+                        <div class="avatar-wrapper">
+                            <avatar :text="address"></avatar>
+                            <Icon type="ios-arrow-down" color="#fff"></Icon>
+                        </div>
+                        <DropdownMenu slot="list">
+                            <DropdownItem name="personal">
+                                <router-link to="/my-account/AccountProfile" class="personal">
+                                    个人中心
+                                </router-link>
+                            </DropdownItem>
+                            <DropdownItem name="logout">logout</DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
+                </div>
+            </div>
 
-    <div class="personal-center">
-      <div v-show="loginShow">
-        <Button @click="modal1 = true">login</Button>
-      </div>
-      <div class="prefsession" v-show="!loginShow">
-        <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
-        <!-- <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/> -->
-        <Dropdown placement="bottom-end" v-on:on-click="_click">
-          <div class="avatar-wrapper">
-            <avatar :text="address"></avatar>
-            <Icon type="ios-arrow-down" color="#fff"></Icon>
-          </div>
-          <DropdownMenu slot="list">
-            <DropdownItem name="personal">
-              <router-link to="/my-account/AccountProfile" class="personal">
-                个人中心
-              </router-link>
-            </DropdownItem>
-            <DropdownItem name="logout">logout</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </div>
+            <Modal
+                    v-model="modal1"
+                    :footer-hide="true"
+                    width="890px"
+                    :closable="false"
+                    :styles="{top: '160px'}"
+                    class="login-modal"
+            >
+
+                <!-- login的卡片在这里添加 -->
+                <Card class="metamask">
+                    <div class="fox-img"></div>
+                    <!-- <img src="../assets/metamask-logo.c51e1a45.svg" alt="" class="fox-img"> -->
+                    <div class="word">
+                        <span class="login">Connect to the </span>
+                        <span class="wallet">ATN browser wallet.</span>
+                    </div>
+                    <button class="metamask-button" @click="login('metamask')">Connect to ATN Wallet.</button>
+                </Card>
+
+                <!-- <Card class="ledger">
+                  <div class="ledger-left">
+                    <img src="../assets/ledger.png" alt="">
+                    <div>
+                      <span class="login">Connect and sign with your </span>
+                      <span class="wallet">Ledger hardware wallet. </span>
+                    </div>
+                  </div>
+                  <button class="ledger-button">Connect to Ledger</button>
+                </Card>
+
+                <Card class="trezor">
+                  <div class="trezor-left">
+                    <img src="../assets/trezor.png" alt="">
+                    <div>
+                      <span class="login">Connect and sign with your </span>
+                      <span class="wallet">Trezor hardware wallet.</span>
+                    </div>
+                  </div>
+                  <button class="trezor-button">Connect to Trezor</button>
+                </Card>
+
+                <Card class="walletconnect">
+                  <div class="walletconnect-left">
+                    <img src="../assets/walletconnect.png" alt="">
+                    <div>
+                      <span class="login">Scan a QR code to link your mobile wallet </span>
+                      <span class="wallet">using WalletConnect.</span>
+                    </div>
+                  </div>
+                  <button class="walletconnect-button">Use WalletConnect</button>
+                </Card> -->
+            </Modal>
+        </div>
     </div>
-
-    <Modal
-      v-model="modal1"
-      :footer-hide="true"
-      width="890px"
-      :closable="false"
-      :styles="{top: '160px'}"
-      class="login-modal"
-    >
-
-        <!-- login的卡片在这里添加 -->
-        <Card class="metamask">
-          <div class="fox-img"></div>
-          <!-- <img src="../assets/metamask-logo.c51e1a45.svg" alt="" class="fox-img"> -->
-          <div class="word">
-            <span class="login">Connect to the </span>
-            <span class="wallet">ATN browser wallet.</span>
-          </div>
-          <button class="metamask-button" @click="login('metamask')">Connect to ATN Wallet.</button>
-        </Card>
-
-        <!-- <Card class="ledger">
-          <div class="ledger-left">
-            <img src="../assets/ledger.png" alt="">
-            <div>
-              <span class="login">Connect and sign with your </span>
-              <span class="wallet">Ledger hardware wallet. </span>
-            </div>
-          </div>
-          <button class="ledger-button">Connect to Ledger</button>
-        </Card>
-
-        <Card class="trezor">
-          <div class="trezor-left">
-            <img src="../assets/trezor.png" alt="">
-            <div>
-              <span class="login">Connect and sign with your </span>
-              <span class="wallet">Trezor hardware wallet.</span>
-            </div>
-          </div>
-          <button class="trezor-button">Connect to Trezor</button>
-        </Card>
-
-        <Card class="walletconnect">
-          <div class="walletconnect-left">
-            <img src="../assets/walletconnect.png" alt="">
-            <div>
-              <span class="login">Scan a QR code to link your mobile wallet </span>
-              <span class="wallet">using WalletConnect.</span>
-            </div>
-          </div>
-          <button class="walletconnect-button">Use WalletConnect</button>
-        </Card> -->
-    </Modal>
-  </div>
- </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -159,23 +158,21 @@ export default {
   },
   methods: {
     ...mapActions(["setAddress"]),
-    // async check() {
-    //   const { check } = this.$api.user;
-    //   const checkResult = check(this.address);
-    //   const { data, status } = checkResult;
-    //
-    //   console.log(checkResult);
-    // },
     async check() {
       const { check } = this.$api.user;
-      const eth = this.$atn.web3.eth;
-      const accounts = await eth.getAccounts();
-      const response = await check(accounts[0]);
-      const { status, data } = response;
-      if (status === 200) {
-        this.loginShow = false;
-        this.isLogin = data.err;
-        this.setAddress(accounts[0]);
+      const account = this.address;
+      if (account.replace(/(^\s*)|(\s*$)/g, "").length != 0) {
+        const response = await check(account);
+        const { status, data } = response;
+        if (status === 200) {
+          this.loginShow = false;
+          this.isLogin = data.err;
+          this.setAddress(account);
+          return true;
+        }
+      } else {
+        this.setAddress();
+        return false;
       }
     },
     notice({ type, title, desc }) {
@@ -223,9 +220,6 @@ export default {
     async getAccounts() {
       const eth = this.$atn.web3.eth;
       const accounts = await eth.getAccounts();
-
-      this.setAddress(accounts[0]);
-
       return accounts[0];
     },
     async goLogin(account) {
@@ -240,8 +234,8 @@ export default {
         });
       }
 
-      const params = await atn.getRegisterLoginParams(account);
-      const sig = await atn.getLoginSign(account);
+      const params = await atn.getRegisterLoginParams(account.toLowerCase());
+      const sig = await atn.getLoginSign(account.toLowerCase());
       const response = await login(params, sig);
       const { data, status } = response;
 
@@ -249,12 +243,11 @@ export default {
         this.modal1 = false;
         this.loginShow = false;
         this.isLogin = true;
+        this.setAddress(account.toLowerCase());
       }
     },
     async loginByMetamask() {
-      const { login } = this.$api.user;
       const account = await this.getAccounts();
-
       this.goLogin(account);
     },
     async logout() {

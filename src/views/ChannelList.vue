@@ -1,18 +1,12 @@
 <template>
   <div class="channel-list">
     <span class="title">Channel list</span>
-
-    
     <ul>
       <channel-record v-for="(item, index) in dbots" :key="index" :item="item"></channel-record>
-
     </ul>
-
-
-
-
-
+    <Page :total="20" class-name="page"/>
   </div>
+  
 </template>
 
 <script>
@@ -45,6 +39,14 @@ export default {
   .title {
     font-size: 24px;
     color: #11124c;
+  }
+  & /deep/ .card {
+    margin-top: 15px;
+  }
+  .page {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
   }
 }
 </style>
