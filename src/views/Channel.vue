@@ -51,8 +51,11 @@
                   <p class="syncing">syncing</p>
                 </div>             
                 <P class="description">A channel was found for this address.</P>
+                <div class="channel-need">
                 <Input search enter-button="TOP UP" placeholder=" 0 ATN" size="large" class="top-up" v-on:on-search="nextStep" />
-                <button @click="closeChannel">close channel</button>
+                <button @click="closeChannel" class="close-channel">CLOSE</button>
+              </div>
+
               </div>
             </div>  
 
@@ -158,6 +161,7 @@ export default {
     }
     .means {
       margin-left: 226px;
+
       .method {
         font-size: 18px;
         color: #0d0628;
@@ -308,15 +312,19 @@ export default {
           letter-spacing: 0;
           text-align: center;
         }
-        //--------------------------back
+        //----------------back
         .description {
           font-size: 18px;
           color: #11124c;
           text-align: center;
           margin-bottom: 30px;
         }
+        .channel-need {
+          display: flex;
+          flex-direction: row;
+        }
         .top-up {
-          width: 340px;
+          width: 270px;
           height: 50px;
           border-radius: 4px;
           border: 1px #787bf7 solid;
@@ -331,6 +339,17 @@ export default {
             background: #797bf8 !important;
             border-color: #797bf8 !important;
           }
+        }
+        .close-channel {
+          margin-left: 10px;
+          width: 90px;
+          height: 52px;
+          background: #dfdfdf;
+          border-radius: 6px;
+          font-size: 18px;
+          color: #ff5655;
+          text-align: center;
+          font-weight: 600;
         }
       }
     }
