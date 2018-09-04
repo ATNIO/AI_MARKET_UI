@@ -23,7 +23,8 @@
                         <Card>
                             <div class="content">
                                 <div class="photo">
-                                    <avatar :width="60" :height="60" :margin-right="20" :text="item.useraddr"></avatar>
+                                    <avatar :width="60" :height="60" :margin-right="20"
+                                            :text="item.useraddr"></avatar>
                                 </div>
                                 <div class="wrapper">
                                     <span class="name">{{item.useraddr}}</span><span class="time"> {{item.create_at | timeFormat}}</span>
@@ -63,11 +64,12 @@ export default {
       "address"
     ]),
     userAddress() {
-      return this.address;
+      return this.address.toLowerCase();
     }
   },
-
   mounted() {
+    //this.setCurrentCommentsPage(1);
+    //this.setCurrentComments(0, []);
     this.comments(1, LIMIT);
   },
   methods: {
@@ -85,12 +87,22 @@ export default {
         }
       });
     },
+    tolowcase(addr) {
+      return addr.toLowerCase();
+    },
     addComment() {
       const account = this.address;
       if (account.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
         this.$Notice.error({
           title: "评论失败",
           desc: "请登录账号后操作! "
+        });
+        return;
+      }
+      if (this.message.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
+        this.$Notice.error({
+          title: "评论失败",
+          desc: "请输入有效信息! "
         });
         return;
       }
