@@ -34,7 +34,7 @@ export default {
     avatar() {
       const avatars = new Avatars(SpriteCollection);
 
-      return avatars.create(this.text);
+      return avatars.create(this.text.toLowerCase());
     },
     styleObj() {
       const { width, height, borderWidth, borderColor } = this;

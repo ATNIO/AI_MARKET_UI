@@ -102,7 +102,6 @@ export default {
 
     .asc {
       border-color: transparent;
-      background: #797bf8;
     }
 
     .desc {

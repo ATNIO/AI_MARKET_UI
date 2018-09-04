@@ -1,6 +1,6 @@
 <template>
   <section class="detail-container">
-    <Tabs value="documention">
+    <Tabs value="comment">
       <TabPane label="DOCUMENTION" name="documention">
         <detail-doc></detail-doc>
       </TabPane>
