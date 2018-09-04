@@ -139,7 +139,7 @@ export default {
       now: -1,
       lastMouse: -1,
       searchFrom: 0,
-      searchSize: 5,
+      searchSize: 10,
       searchingFlag: false,
       searchEmpty: false
     };
@@ -361,6 +361,7 @@ export default {
     },
     async clearSearch() {
       this.searchShow = false;
+      this.searchEmpty = false;
       this.search1 = "";
     },
     selectHover(index) {
