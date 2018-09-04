@@ -10,7 +10,8 @@
 
             <div id="fade" class="black_overlay" v-if="searchShow || searchEmpty" @click="clearSearch"></div>
             <div class="search">
-                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" />
+                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput"
+                       v-on:on-keyup="searchEvent"/>
 
                 <div class="search-empty" v-if="searchEmpty">Sorry, the result is empty.</div>
                 <div class="search-select" v-if="searchShow">
@@ -22,7 +23,9 @@
                     <hr class="search-hr"></hr>
                     -->
                     <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
-                        <li v-for="(value,index) in searchResult" :class="{selectback:index==now}" class="search-select-option" @mouseover="selectHover(index)" @click="selectClick(value)" :key="value">
+                        <li v-for="(value,index) in searchResult" :class="{selectback:index==now}"
+                            class="search-select-option" @mouseover="selectHover(index)" @click="selectClick(value)"
+                            :key="value">
                             <div class="logo-tag">
                                 <div class="item-image-padding">
                                     <img class="item-image" :src="value.logo" alt="">
@@ -44,12 +47,11 @@
                     <Button @click="modal1 = true">login</Button>
                 </div>
                 <div class="prefsession" v-show="!loginShow">
-                    <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
-                    <!-- <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/> -->
+                    <Icon custom="icon-channel" size="24" color="#ffffff" class="icon"/>
                     <Dropdown placement="bottom-end" v-on:on-click="_click">
                         <div class="avatar-wrapper">
-                            <avatar :text="address"></avatar>
-                            <Icon type="ios-arrow-down" color="#fff"></Icon>
+                            <avatar :text="address.toLowerCase()"></avatar>
+                            <Icon custom="icon-allow" color="#fff"></Icon>
                         </div>
                         <DropdownMenu slot="list">
                             <DropdownItem name="personal">
@@ -152,8 +154,10 @@ export default {
 
     this.$atn.web3.currentProvider.publicConfigStore.on(
       "update",
-      ({ selectedAddress, networkVersion }) =>
-        this.accountChange(selectedAddress, networkVersion)
+      ({ selectedAddress, networkVersion }) => {
+        this.selectedAddress = selectedAddress;
+        this.accountChange();
+      }
     );
   },
   methods: {
@@ -167,7 +171,6 @@ export default {
         if (status === 200) {
           this.loginShow = false;
           this.isLogin = data.err;
-          this.setAddress(account);
           return true;
         }
       } else {
@@ -181,19 +184,21 @@ export default {
         desc: desc ? desc : ""
       });
     },
-    accountChange(address, network) {
+    accountChange() {
       if (this.isLogin) {
-        if (address.toLowerCase() !== this.address.toLowerCase()) {
-          this.$Modal.warning({
-            title: "Detect account has changed",
-            content:
-              "检测到您的账号发生更改，请通过钱包签名以便使用新的账号重新登录",
-            okText: "confirm",
-            onOk: () => {
-              this.setAddress(address);
-              this.goLogin(address);
-            }
-          });
+        if (this.selectedAddress.toLowerCase() !== this.address.toLowerCase()) {
+          if (!this.noticeLock) {
+            this.noticeLock = true;
+            this.$Modal.warning({
+              title: "Detect account has changed",
+              content:
+                "检测到您的账号发生更改，请通过钱包签名以便使用新的账号重新登录",
+              okText: "confirm",
+              onOk: () => {
+                this.goLogin(this.selectedAddress);
+              }
+            });
+          }
         } else {
           // TODO: network change
         }
@@ -243,8 +248,9 @@ export default {
         this.modal1 = false;
         this.loginShow = false;
         this.isLogin = true;
-        this.setAddress(account.toLowerCase());
+        this.setAddress(account);
       }
+      this.noticeLock = false;
     },
     async loginByMetamask() {
       const account = await this.getAccounts();
@@ -531,10 +537,6 @@ export default {
       .avatar-wrapper {
         display: flex;
         align-items: center;
-
-        & /deep/ .ivu-icon-ios-arrow-down {
-          margin-left: 10px;
-        }
       }
 
       .avatar {
@@ -542,6 +544,7 @@ export default {
         height: 36px;
         border-radius: 100%;
         overflow: hidden;
+        margin-right: 10px;
       }
     }
   }
@@ -663,6 +666,7 @@ export default {
     }
   }
 }
+
 .black_overlay {
   display: block;
   position: absolute;
