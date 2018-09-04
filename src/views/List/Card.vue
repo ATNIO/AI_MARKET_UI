@@ -8,7 +8,7 @@
       </p>
       <div class="auther">
         <div class="avatar"></div>
-        <a href="#" target="_blank" @click.stop>{{ item.addr }}</a>
+        <a href="#" target="_blank" @click.stop  >{{ item.addr }}</a>
       </div>
       <div class="footer">
         <div class="left">
@@ -56,7 +56,9 @@ export default {
         }
       });
     },
-    editComment() {}
+    editComment() {
+      console.log("nininininininininininini");
+    }
   }
 };
 </script>
@@ -131,7 +133,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      pointer-events: none;
+      // pointer-events: none;
 
       .left {
         display: flex;
