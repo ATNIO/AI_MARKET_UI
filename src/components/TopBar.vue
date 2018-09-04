@@ -282,27 +282,48 @@ export default {
       const keyDownArray = 40;
       const keyUpArray = 38;
       const keyEnter = 13;
-      if (this.now >= this.searchResult.length) {
-        this.now = this.searchResult.length - 1;
+      if (this.searchHistoryShow) {
+        if (this.now >= this.currentSearchHistory.length) {
+          this.now = this.currentSearchHistory.length - 1;
+        }
+      } else {
+        if (this.now >= this.searchResult.length) {
+          this.now = this.searchResult.length - 1;
+        }
       }
       if (event.keyCode == keyDownArray) {
         this.now++;
-        if (this.searchResult.length == this.now) {
+        if (this.searchHistoryShow) {
+          if (this.currentSearchHistory.length <= this.now) {
+            this.now = 0;
+          }
+        } else if (this.searchResult.length <= this.now) {
           this.now = 0;
         }
         return;
       }
       if (event.keyCode == keyUpArray) {
         this.now--;
-        if (this.now == -1) {
-          this.now = this.searchResult.length - 1;
+        if (this.now <= -1) {
+          if (this.searchHistoryShow) {
+            this.now = this.currentSearchHistory.length - 1;
+          } else {
+            this.now = this.searchResult.length - 1;
+          }
         }
         return;
       }
       if (event.keyCode == keyEnter) {
-        if (this.now >= 0 && this.now < this.searchResult.length) {
-          this.selectClick(this.searchResult[this.now]);
+        if (this.search1.length == 0) {
+          if (this.now >= 0 && this.now < this.currentSearchHistory.length) {
+            this.selectHistory(this.currentSearchHistory[this.now]);
+          }
+        } else {
+          if (this.now >= 0 && this.now < this.searchResult.length) {
+            this.selectClick(this.searchResult[this.now]);
+          }
         }
+        this.now = -1;
         return;
       }
       this.searchFrom = 0;
