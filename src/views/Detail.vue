@@ -62,7 +62,7 @@
                 @click="visible = !visible,_click()"
                 size="20"
                 />
-                <span>{{dbot.collect_count}}</span>
+                <span>{{dbot.collect_count.upcount }}</span>
               </p>
               <p class="update">update: {{dbot.update_at | timeFormat}}</p>
             </div>
