@@ -302,8 +302,8 @@ export default {
       if (event.keyCode == keyEnter) {
         if (this.now >= 0 && this.now < this.searchResult.length) {
           this.selectClick(this.searchResult[this.now]);
-          return;
         }
+        return;
       }
       this.searchFrom = 0;
       this.searchingFlag = true;
@@ -372,12 +372,13 @@ export default {
         params: { address: value.dbot_address }
       });
       var currentHistories = this.currentSearchHistory;
-      var index = currentHistories.indexOf(this.search1);
+      const search1 = this.search1.trim();
+      var index = currentHistories.indexOf(search1);
 
       if (index != -1) {
         currentHistories.splice(index, 1);
       }
-      currentHistories.unshift(this.search1);
+      currentHistories.unshift(search1);
       this.setCurrentSearchHistory(currentHistories);
       this.clearSearch();
     },
