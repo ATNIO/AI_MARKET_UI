@@ -33,13 +33,18 @@
             </div>
 
             <div class="center">
-              <div class="bg"></div>
               <div class="content">
                 <div v-if="stateChannelStatus==='synced'">
                   <p class="title">Remaining  Balance </p>
                   <p class="balance">{{stateChannelBanlance | priceFormat}} ATN</p>
                 </div>  
-                <div v-else-if="stateChannelStatus === 'opening' || stateChannelStatus === 'syncing' || stateChannelStatus === 'closing'">
+                <div 
+                  class="circle-wrapper" 
+                  v-else-if="
+                    stateChannelStatus === 'opening' || 
+                    stateChannelStatus === 'syncing' || 
+                    stateChannelStatus === 'closing'"
+                >
                   <div class="wait">
                     <div class="circle circle1"></div>
                     <div class="circle circle2"></div>
@@ -51,16 +56,18 @@
                   <p class="syncing">syncing</p>
                 </div>             
                 <P class="description">A channel was found for this address.</P>
-                <Input 
-                  search 
-                  enter-button="TOP UP" 
-                  placeholder=" 0 ATN" 
-                  size="large" 
-                  class="top-up" 
-                  v-model="topupValue"
-                  v-on:on-search="topup"
-                />
-                <button @click="closeChannel">close channel</button>
+                <div class="btn-wrapper" v-if="stateChannelStatus==='synced'">
+                  <Input 
+                    search 
+                    enter-button="TOP UP" 
+                    placeholder=" 0 ATN" 
+                    size="large" 
+                    class="top-up" 
+                    v-model="topupValue"
+                    v-on:on-search="topup"
+                  />
+                  <button class="close-channel" @click="closeChannel">CLOSE</button>
+                </div>
               </div>
             </div>  
 
@@ -109,7 +116,7 @@ export default {
     ...mapGetters(["address", "stateChannelStatus", "stateChannelBanlance"]),
     dbotAddr() {
       return (
-        "0x73e1fe970b29534bc993846c4902b625555cd0cc" ||
+        "0xa70cbefe78cd8bfd47ea3d480b6216e221c45954" ||
         this.$route.params.address
       );
     },
@@ -360,7 +367,7 @@ export default {
       // channelDetail 可以在 update deposit 的时候缓存。
       const channelDetail = await this.getChannelDetail();
 
-      console.log(this.dbotAddr, this.address);
+      console.log("closeChannel:", this.dbotAddr, this.address, channelDetail);
 
       try {
         const closeResult = await atn.closeChannel(
@@ -475,16 +482,15 @@ export default {
 
     .center {
       position: relative;
-
-      .bg {
-        background-image: url(../assets/channel-bg.png);
-        width: 495px;
-        height: 300px;
-      }
+      background: url(../assets/channel-bg.png) no-repeat center center /
+        contain;
 
       .content {
+        height: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: center;
+        align-items: center;
         //-----------------------open
         .title {
           font-size: 18px;
@@ -499,13 +505,15 @@ export default {
           text-align: center;
           margin-bottom: 12px;
         }
+
+        .circle-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
         //---------------------------loading
         .wait {
-          margin: 30px 0 12px 103px;
-          margin-top: 30px;
-          margin-bottom: 12px;
           display: flex;
-          flex-direction: row;
           justify-content: space-between;
           width: 134px;
 
@@ -556,6 +564,13 @@ export default {
           display: flex;
           flex-direction: row;
         }
+
+        .btn-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
         .top-up {
           width: 270px;
           height: 50px;
@@ -568,7 +583,7 @@ export default {
             color: #aaaaaa;
           }
           & /deep/ .ivu-input-search {
-            width: 138px;
+            width: 90px;
             background: #797bf8 !important;
             border-color: #797bf8 !important;
           }
@@ -577,12 +592,15 @@ export default {
           margin-left: 10px;
           width: 90px;
           height: 52px;
-          background: #dfdfdf;
-          border-radius: 6px;
-          font-size: 18px;
-          color: #ff5655;
+          background: #ff5655;
+          border-radius: 4px;
+          font-size: 14px;
+          color: #fff;
           text-align: center;
-          font-weight: 600;
+          // font-weight: 600;
+          border: none;
+          outline: none;
+          cursor: pointer;
         }
       }
     }
