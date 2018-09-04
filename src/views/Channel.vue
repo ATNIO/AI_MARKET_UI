@@ -264,9 +264,8 @@ export default {
       }
 
       .content {
-        position: absolute;
-        margin-top: -300px;
-        margin-left: 45px;
+        display: flex;
+        justify-content: center;
         //-----------------------open
         .title {
           font-size: 18px;

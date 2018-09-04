@@ -12,8 +12,8 @@
       </div>
       <div class="footer">
         <div class="left">
-          <div class="comment">
-            <Icon custom="icon-comment" />
+          <div class="comment" @click.stop="editComment">
+            <Icon custom="icon-comment"/>
             <span>{{ item.reply_count.count }}</span>
           </div>
           <div class="star">
@@ -49,14 +49,14 @@ export default {
   methods: {
     _click() {
       const { addr } = this.item;
-
       this.$router.push({
         name: "detail",
         params: {
           address: addr
         }
       });
-    }
+    },
+    editComment() {}
   }
 };
 </script>
