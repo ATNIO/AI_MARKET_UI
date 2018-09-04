@@ -8,17 +8,17 @@
       </p>
       <div class="auther">
         <div class="avatar"></div>
-        <a href="#" target="_blank" @click.stop>{{ item.owner }}</a>
+        <a href="#" target="_blank" @click.stop>{{ item.addr }}</a>
       </div>
       <div class="footer">
         <div class="left">
           <div class="comment">
             <Icon type="ios-text" />
-            <span>{{ item.comment || 1000 }}</span>
+            <span>{{ item.reply_count.count }}</span>
           </div>
           <div class="star">
             <Icon type="ios-star" />
-            <span>{{ item.star || 100 }}</span>
+            <span>{{ item.collect_count.upcount }}</span>
           </div>
         </div>
         <div class="price">

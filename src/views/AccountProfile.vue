@@ -1,60 +1,108 @@
 <template>
-<div class="Profile">
-  <span class="title">Profile</span>
-  <div class="content">
-    <div class="deposit">
-      <span class="deposit-title">ACCOUNT：DEPOSIT </span>
-      <Icon type="ios-download-outline" size="34" color="#11124C" class="title-icon"/>
-      
-        
-        <div class="address">
-          <p class="address-name">PUBLIC ACCOUNT ADDRESS:</p>
-          <p class="address-value">{{address}}</p>
+    <div class="Profile">
+        <span class="title">Profile</span>
+        <div class="content">
+            <div class="deposit">
+                <span class="deposit-title">ACCOUNT：DEPOSIT </span>
+                <Icon type="ios-download-outline" size="34" color="#11124C" class="title-icon"/>
+
+
+                <div class="address">
+                    <p class="address-name">ACCOUNT ADDRESS:</p>
+                    <p class="address-value">{{address}}</p>
+                </div>
+                <img src="../assets/二维码.png" alt="QR code" class="QRcode">
+
+            </div>
+
+            <div class="withdraw">
+                <span class="withdraw-title">ACCOUNT：WITHDRAW  </span>
+                <Icon type="ios-repeat" size="34" color="#11124C" class="repeat-icon"/>
+                <div class="topic lasttopic">Recipient Address:</div>
+                <Input v-model="toAddress" size="large" placeholder="Recipient Address" class="address-input"/>
+
+                <div class="topic">Amount</div>
+                <Input v-model="toAmount" size="large" placeholder="Amount" class="quantity-input"/>
+
+
+                <div class="topic lasttopic">Transaction Data (optional):</div>
+                <Input v-model="toData" size="large" placeholder="Transaction Data" class="data-input"/>
+                <button class="withdraw-button" v-on:click="sendTransaction1">Send</button>
+
+
+            </div>
         </div>
-        <img src="../assets/二维码.png" alt="QR code" class="QRcode">
-            
+
+
     </div>
 
-    <div class="withdraw">
-      <span class="withdraw-title">ACCOUNT：WITHDRAW  </span>
-      <Icon type="ios-repeat" size="34" color="#11124C" class="repeat-icon"/>  
-      <div class="topic">QUANTITY</div>
-      <Input v-model="value1" size="large" placeholder=" " class="quantity-input" />
-          
-      <div class="topic lasttopic">RECIPIENT ACCOUNT ADDRESS</div>
-      <Input v-model="value2" size="large" placeholder=" " class="address-input" />
-
-      <div class="topic lasttopic">TRANSACTION DATA (OPTIONAL)</div>
-      <Input v-model="value3" size="large" placeholder=" " class="data-input" />
-      <button class="withdraw-button">WITHDRAW</button>
-        
-
-      
-    </div>
-  </div>
-
-  
-  
-</div>
- 
 </template>
 
 <script>
-import data from "../mock/listData.js";
+import BN from "bignumber.js";
 import { mapGetters } from "vuex";
 
 export default {
   name: "AccountProfile",
   data() {
     return {
-      data: data[0],
-      value1: "",
-      value2: "",
-      value3: ""
+      toAddress: "",
+      toAmount: "",
+      toData: ""
     };
   },
   computed: {
     ...mapGetters(["address"])
+  },
+  methods: {
+    sendTransaction1() {
+      const fromAddr = this.address;
+      const toAddr = this.toAddress;
+      const toAmount = this.atnToWei(this.toAmount);
+      const toData = this.toData;
+      this.$atn.web3.eth.sendTransaction(
+        {
+          from: fromAddr,
+          to: toAddr,
+          value: toAmount,
+          data: toData
+        },
+        function(err, result) {
+          this.$Notice.error({
+            title: "Send SUCC!",
+            desc:
+              "FROM[" +
+              fromAddr +
+              "],TO[" +
+              toAddr +
+              "],VALUE[" +
+              toAmount +
+              "],DATA[" +
+              toData +
+              "]"
+          });
+          /*
+                    if(!result)
+                        this.$Notice.error({
+                            title: "Send SUCC!",
+                            desc: "FROM["+fromAddr+"],TO["+toAddr+"],VALUE["+toAmount+"],DATA["+toData+"]"
+                        });
+                    else
+                        this.$Notice.error({
+                            title: "Send FAIL!",
+                            desc: "ERROR["+error+"]"
+                        });
+                        */
+        }
+      );
+    },
+    atnToWei(price) {
+      const a = new BN(price, 10);
+      const b = new BN(10, 10);
+      const c = new BN(18, 10);
+
+      return a.multipliedBy(b.pow(c)).toString(10);
+    }
   }
 };
 </script>
@@ -62,6 +110,8 @@ export default {
 
 <style lang="less" scoped>
 .Profile {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   margin-left: 20px;
   margin-top: 42px;
   position: relative;
@@ -98,13 +148,13 @@ export default {
       margin-bottom: 40px;
 
       .address-name {
-        font-size: 14px;
-        color: #11124c;
+        font-size: 12px;
+        color: #464c5b;
         line-height: 24px;
         margin-bottom: 8px;
       }
       .address-value {
-        font-size: 12px;
+        font-size: 16px;
         color: #11124c;
         line-height: 24px;
       }
