@@ -410,7 +410,7 @@ export default {
     .search {
       width: 590px;
       height: 30px;
-      z-index: 9999;
+      z-index: 1000;
       .search-empty {
         width: 590px;
         height: 45px;
@@ -671,7 +671,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: black;
-  z-index: 9001;
+  z-index: 999;
   -moz-opacity: 0.8;
   opacity: 0.5;
   filter: alpha(opacity=80);
