@@ -15,7 +15,7 @@
           <div class="logo-tag">
             <div class="wrapper">
               <div class="logo" :style="logo"></div>
-              <span class="tagtitle"><Icon type="md-bookmark" color="#87C5FE"/> Tag:</span>
+              <span class="tagtitle"><Icon custom="icon-tag" color="#87C5FE"/> Tag:</span>
               <ul class="tag">
                 <li v-for="item in dbot.tags" v-bind:key="item">
                 <span>{{item}}</span>
@@ -30,16 +30,16 @@
             <p class="address">
               <span>Address：{{dbot.addr}}</span> 
               <Icon 
-                type="ios-copy-outline" 
-                size="20"
+                custom="i-icon icon-copy" 
+                size="20" 
                 v-clipboard:copyhttplist="dbot.addr" 
                 v-clipboard:success="onCopy"
-              />
+                />
             </p>
             <p class="domain">
               <span>Domain：{{dbot.domain}}</span>
               <Icon 
-                type="ios-copy-outline" 
+                custom="i-icon icon-copy"  
                 size="20"
                 v-clipboard:copyhttplist="dbot.domain" 
                 v-clipboard:success="onCopy"
@@ -48,7 +48,7 @@
             <p class="auther"> 
               <span>{{dbot.owner}}</span>
               <Icon 
-                type="ios-copy-outline" 
+                custom="i-icon icon-copy"  
                 size="20"
                 v-clipboard:copyhttplist="dbot.owner" 
                 v-clipboard:success="onCopy"
@@ -58,11 +58,11 @@
             <div class="like">
               <p class="stars">
                 <Icon 
-                :type="visibleType" 
+                :custom="visibleType"
                 @click="visible = !visible,_click()"
                 size="20"
                 />
-                <span>{{dbot.collect_count}}</span>
+                <span class="star-count">{{dbot.collect_count.upcount}}</span>
               </p>
               <p class="update">update: {{dbot.update_at | timeFormat}}</p>
             </div>
@@ -115,7 +115,7 @@ export default {
       return this.dbots.filter(dbot => this.address === dbot.addr)[0];
     },
     visibleType() {
-      return this.visible ? "ios-star-outline" : "ios-star";
+      return this.visible ? "icon-unstar" : "icon-star";
     }
   },
   mounted() {
@@ -129,10 +129,10 @@ export default {
     ...mapActions(["setDocData", "setDetailData"]),
     _click() {
       // console.log(this.visibleType);
-      if (this.visibleType == "ios-star") {
-        this.dbot.collect_count++;
+      if (this.visibleType == "icon-star") {
+        this.dbot.collect_count.upcount++;
       } else {
-        this.dbot.collect_count--;
+        this.dbot.collect_count.upcount--;
       }
     },
     fetch() {
@@ -311,6 +311,9 @@ export default {
             justify-content: flex-end;
             align-items: center;
             margin-bottom: 10px;
+            .star-count {
+              margin-left: 4px;
+            }
 
             span {
               padding-top: 2px;
