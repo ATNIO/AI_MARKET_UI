@@ -130,9 +130,9 @@ export default {
     _click() {
       // console.log(this.visibleType);
       if (this.visibleType == "ios-star") {
-        this.dbot.collect_count++;
+        this.dbot.collect_count.upcount++;
       } else {
-        this.dbot.collect_count--;
+        this.dbot.collect_count.upcount--;
       }
     },
     fetch() {

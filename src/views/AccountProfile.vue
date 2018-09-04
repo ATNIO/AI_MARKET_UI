@@ -11,7 +11,7 @@
                     <p class="address-name">ACCOUNT ADDRESS:</p>
                     <p class="address-value">{{address}}</p>
                 </div>
-                <img src="../assets/二维码.png" alt="QR code" class="QRcode">
+                <div id="qrcode" class="QRcode"></div>
 
             </div>
 
@@ -32,8 +32,7 @@
 
             </div>
         </div>
-        <!-- <img src="../assets/二维码.png" alt="QR code" class="QRcode"> -->
-        <div id="qrcode" class="QRcode"></div>
+        
             
     </div>
 
