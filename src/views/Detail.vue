@@ -5,7 +5,7 @@
     <div class="container">
         <div class="breadcrumb">
           <Breadcrumb separator=">">
-            <BreadcrumbItem to="/">{{data.name}}</BreadcrumbItem>
+            <BreadcrumbItem to="/" class="current-item">{{currentItem}}</BreadcrumbItem>
             <BreadcrumbItem to="/detail">{{dbot.name}}</BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -102,7 +102,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["addressInDetail", "dbots"]),
+    ...mapGetters(["addressInDetail", "dbots", "currentItem"]),
     address() {
       return this.$route.params.address;
     },
@@ -199,6 +199,11 @@ export default {
 
     .breadcrumb {
       margin: 40px 0 20px;
+
+      .current-item {
+        text-transform: capitalize;
+        font-weight: 600;
+      }
 
       & /deep/ .ivu-breadcrumb a {
         font-size: 18px;
