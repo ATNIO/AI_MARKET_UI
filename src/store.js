@@ -28,7 +28,9 @@ export default new Vuex.Store({
 
     currentComments: [],
     currentCommentsPage: 1,
-    currentCommentsCount: 0
+    currentCommentsCount: 0,
+
+    searchHistory: []
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
@@ -81,6 +83,9 @@ export default new Vuex.Store({
     },
     [types.SET_CURRENT_COMMENTS_COUNT](state, count) {
       state.currentCommentsCount = count;
+    },
+    [types.SET_SEARCH_HISTORY](state, histories = []) {
+      state.searchHistory = histories;
     }
   },
   actions: {
@@ -132,6 +137,9 @@ export default new Vuex.Store({
     },
     setCurrentCommentsPage({ commit }, page) {
       commit(types.SET_CURRENT_COMMENTS_PAGE, page);
+    },
+    setCurrentSearchHistory({ commit }, payload) {
+      commit(types.SET_SEARCH_HISTORY, payload);
     }
   },
   getters: {
@@ -188,6 +196,9 @@ export default new Vuex.Store({
     },
     currentCommentsCount(state) {
       return state.currentCommentsCount;
+    },
+    currentSearchHistory(state) {
+      return state.searchHistory;
     }
   }
 });
