@@ -47,12 +47,11 @@
                     <Button @click="modal1 = true">login</Button>
                 </div>
                 <div class="prefsession" v-show="!loginShow">
-                    <Icon type="ios-alert-outline" size="24" color="#ffffff" class="icon"/>
-                    <!-- <Icon type="ios-notifications-outline" size="24" color="#ffffff" class="icon"/> -->
+                    <Icon custom="icon-channel" size="24" color="#ffffff" class="icon"/>
                     <Dropdown placement="bottom-end" v-on:on-click="_click">
                         <div class="avatar-wrapper">
                             <avatar :text="address.toLowerCase()"></avatar>
-                            <Icon type="ios-arrow-down" color="#fff"></Icon>
+                            <Icon custom="icon-allow" color="#fff"></Icon>
                         </div>
                         <DropdownMenu slot="list">
                             <DropdownItem name="personal">
@@ -538,10 +537,6 @@ export default {
       .avatar-wrapper {
         display: flex;
         align-items: center;
-
-        & /deep/ .ivu-icon-ios-arrow-down {
-          margin-left: 10px;
-        }
       }
 
       .avatar {
@@ -549,6 +544,7 @@ export default {
         height: 36px;
         border-radius: 100%;
         overflow: hidden;
+        margin-right: 10px;
       }
     }
   }

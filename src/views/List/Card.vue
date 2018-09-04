@@ -13,11 +13,11 @@
       <div class="footer">
         <div class="left">
           <div class="comment">
-            <Icon type="ios-text" />
+            <Icon custom="icon-comment" />
             <span>{{ item.reply_count.count }}</span>
           </div>
           <div class="star">
-            <Icon type="ios-star" />
+            <Icon custom="icon-star" />
             <span>{{ item.collect_count.upcount }}</span>
           </div>
         </div>

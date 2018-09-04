@@ -57,7 +57,7 @@ export default {
       this.getDbots({ page });
     },
     sortChange({ sortType, sortDir }) {
-      console.log(sortType);
+      // console.log(sortType);
       this.getDbots({ sortType, sortDir });
     },
     // 初始化

@@ -7,8 +7,8 @@
             <p class="title">No channel was found registered for you on this Dbot</p>
             <div class="means">
               <p class="method">In order to call API...</p>
-              <p class="step-one"><Icon type="ios-add-circle" color="#87C5FE" size="20"/> deposit some ATN to open a channel with this Dbot</p>
-              <p class="step-two"><Icon type="ios-create" color="#87C5FE" size="20"/> For each transfer , sign a message confirming the balance with the new transferred amount.</p>
+              <p class="step-one"><Icon custom="icon-add" color="#87C5FE" size="20"/> deposit some ATN to open a channel with this Dbot</p>
+              <p class="step-two"><Icon custom="icon-sign" color="#87C5FE" size="20"/> For each transfer , sign a message confirming the balance with the new transferred amount.</p>
               <Input 
                 search 
                 enter-button="Deposit" 
