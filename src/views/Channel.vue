@@ -41,21 +41,26 @@
                 </div>  
                 <div v-else>
                   <div class="wait">
-                    <div class="circle1"></div>
-                    <div class="circle2"></div>
-                    <div class="circle3"></div>
-                    <div class="circle4"></div>
-                    <div class="circle5"></div>
-                    <div class="circle6"></div>
+                    <div class="circle circle1"></div>
+                    <div class="circle circle2"></div>
+                    <div class="circle circle3"></div>
+                    <div class="circle circle4"></div>
+                    <div class="circle circle5"></div>
+                    <div class="circle circle6"></div>
                   </div>
                   <p class="syncing">syncing</p>
                 </div>             
                 <P class="description">A channel was found for this address.</P>
-                <div class="channel-need">
-                <Input search enter-button="TOP UP" placeholder=" 0 ATN" size="large" class="top-up" v-on:on-search="nextStep" />
-                <button @click="closeChannel" class="close-channel">CLOSE</button>
-              </div>
-
+                <Input 
+                  search 
+                  enter-button="TOP UP" 
+                  placeholder=" 0 ATN" 
+                  size="large" 
+                  class="top-up" 
+                  v-model="topupValue"
+                  v-on:on-search="topup"
+                />
+                <button @click="closeChannel">close channel</button>
               </div>
             </div>  
 
@@ -76,8 +81,10 @@
 import { mapGetters, mapActions } from "vuex";
 import data from "../mock/listData.js";
 import Atn from "atn-js";
+import BN from "bignumber.js";
 
 const atn = new Atn(window.atn3);
+const CACHE_KEY = "DETAIL_STATE_CHANNEL";
 
 export default {
   name: "Channel",
@@ -86,7 +93,9 @@ export default {
       balance: 80,
       data: data[0],
       status: 0,
-      depositValue: ""
+      depositValue: "",
+      topupValue: "",
+      storageCache: {}
     };
   },
   props: {
@@ -96,48 +105,61 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["address", "stateChannelStatus", "stateChannelBanlance"])
+    ...mapGetters(["address", "stateChannelStatus", "stateChannelBanlance"]),
+    dbotAddr() {
+      return this.$route.params.address;
+    },
+    cacheKey() {
+      return this.account + this.dbotAddr;
+    }
+  },
+  mounted() {
+    this.init();
   },
   methods: {
     ...mapActions(["setStateChannel"]),
     nextStep(value) {
       this.openChannel();
     },
-    async openChannel() {
-      // TODO: createChannel 创建channel
-      // getChannelDeposit 获取存款
-      // getChannelDetail 获取channel
-      // topUpChannel 增加channel的deposit
-      // closeChannel 关闭Channel
-      const DBotAddr =
-        "0x961f1c5e79c6ea36ddbc0b66dd60aaab00210bbd" ||
-        this.$route.params.address;
-      const res = await atn.createChannel(
-        DBotAddr,
-        this.depositValue,
-        this.address
-      );
-      console.log("createChannel:", res);
+    numberHandler(num) {
+      const _num = new BN(num, 10);
+      const multi = new BN("10e18");
 
-      this.setStateChannel({ status: "syncing" });
-
-      const deposit = await atn.getChannelDeposit(DBotAddr, this.address);
-      console.log(deposit);
-
-      this.setStateChannel({ status: "open", banlance: deposit });
+      return _num.times(multi).toString(10);
     },
-    async getDeposit() {},
-    async closeChannel() {
-      const DBotAddr =
-        "0x961f1c5e79c6ea36ddbc0b66dd60aaab00210bbd" ||
-        this.$route.params.address;
-      const channelDetail = await atn.getChannelDetail(DBotAddr, this.address);
-      console.log("channelDetail:", channelDetail);
-      const closeResult = await atn.closeChannel(
-        DBotAddr,
-        channelDetail.balance,
-        this.address
-      );
+    init() {
+      // TODO: 检查状态管理器里是否已有 state channel 的状态，如果有，return
+
+      const cache = localStorage.get(CACHE_KEY);
+      let res = null;
+      let currentStatus = "";
+
+      if (!cache) return;
+
+      this.storageCache = Object.freeze(JSON.parse(cache));
+      const currentDbotCache = this.storageCache[this.cacheKey];
+
+      if (!currentDbotCache) return;
+
+      const { status, hash } = currentDbotCache;
+
+      // opening, closing, close, syncing, synced
+
+      switch (status) {
+        case "opening":
+        case "closing":
+          this.setStateChannel({ status });
+          res = this.waitTx(hash, status);
+          break;
+        case "close":
+          return;
+        default:
+          break;
+      }
+
+      if (res === -1) return;
+
+      // get balance
     }
   }
 };
@@ -269,41 +291,33 @@ export default {
           justify-content: space-between;
           width: 134px;
 
-          .circle1 {
+          .circle {
             width: 9px;
             height: 9px;
             border-radius: 50%;
-            background: rgba(149, 149, 149, 0.5);
+            animation-name: fadeIn;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            background: tranparent;
+          }
+
+          .circle1 {
+            animation-delay: 0;
           }
           .circle2 {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: rgba(149, 149, 149, 0.6);
+            animation-delay: 0.4s;
           }
           .circle3 {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: rgba(149, 149, 149, 0.7);
+            animation-delay: 0.8s;
           }
           .circle4 {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: rgba(149, 149, 149, 0.8);
+            animation-delay: 1.2s;
           }
           .circle5 {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: rgba(149, 149, 149, 0.9);
+            animation-delay: 1.6s;
           }
           .circle6 {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: #959595;
+            animation-delay: 2s;
           }
         }
         .syncing {
@@ -353,6 +367,31 @@ export default {
         }
       }
     }
+  }
+}
+@keyframes fadeIn {
+  0% {
+    background: rgba(149, 149, 149, 1);
+  }
+
+  100% {
+    background: rgba(149, 149, 149, 0);
+  }
+
+  80% {
+    background: rgba(149, 149, 149, 0.2);
+  }
+
+  60% {
+    background: rgba(149, 149, 149, 0.4);
+  }
+
+  40% {
+    background: rgba(149, 149, 149, 0.6);
+  }
+
+  20% {
+    background: rgba(149, 149, 149, 0.8);
   }
 }
 </style>
