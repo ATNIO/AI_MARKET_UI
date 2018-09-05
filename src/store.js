@@ -28,7 +28,8 @@ export default new Vuex.Store({
 
     currentComments: [],
     currentCommentsPage: 1,
-    currentCommentsCount: 0
+    currentCommentsCount: 0,
+    tabsValue: "1"
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
@@ -81,6 +82,9 @@ export default new Vuex.Store({
     },
     [types.SET_CURRENT_COMMENTS_COUNT](state, count) {
       state.currentCommentsCount = count;
+    },
+    [types.SET_TABS_VALUE](state, tab) {
+      state.tabsValue = tab;
     }
   },
   actions: {
@@ -132,6 +136,9 @@ export default new Vuex.Store({
     },
     setCurrentCommentsPage({ commit }, page) {
       commit(types.SET_CURRENT_COMMENTS_PAGE, page);
+    },
+    setTabsValue({ commit }, value) {
+      commit(types.SET_TABS_VALUE, value);
     }
   },
   getters: {
@@ -188,6 +195,9 @@ export default new Vuex.Store({
     },
     currentCommentsCount(state) {
       return state.currentCommentsCount;
+    },
+    tabsValue(state) {
+      return state.tabsValue;
     }
   }
 });

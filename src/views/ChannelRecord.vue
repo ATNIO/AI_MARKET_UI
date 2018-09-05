@@ -1,40 +1,52 @@
 <template>
-  <div class="card">
-    <div class="title">
-      <span class="remaining">Remaining Balance: </span><span class="balance">{{data.balance}}</span>
+    <div class="card">
+        <div class="title">
+            <span class="remaining">Deposit: </span><span class="balance">{{item.deposit}}</span>
+        </div>
+        <span class="channel">Channel Status: </span><span class="status">{{item.status}}</span>
+        <span class="block">Block: </span><span class="value">{{item.open_block_number}}</span>
+        <div class="img"></div>
+        <div class="goods">
+            <div class="logo" :style="logo"></div>
+            <div class="content">
+                <p class="name">{{dbot.name}}</p>
+                <span class="address">Address: </span><span class="price">{{dbot.addr}}</span>
+            </div>
+
+
+        </div>
     </div>
-    <span class="channel">Channel Status: </span><span class="status">{{data.channelStatus}}</span>    
-    <span class="block">Block: </span><span class="value">{{data.block}}</span>
-    <div class="img"></div>
-    <div class="goods">
-    <div class="logo" :style="logo"></div>
-    <div class="content">
-      <p class="name">{{data.name}}</p>
-      <span class="address">Address: </span><span class="price">{{data.address}}</span>
-    </div>
-    
-      
-    </div>
-  </div>
 </template>
 
 <script>
-import data from "../mock/channelList.js";
-
+import { mapGetters } from "vuex";
 export default {
   name: "ChannelRecord",
+  created() {},
+  props: {
+    item: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
-    return {
-      data: data[0]
-    };
+    return {};
   },
   computed: {
+    ...mapGetters(["dbots"]),
     logo() {
       return {
-        backgroundImage: `url(${data[0].logoUrl})`
+        backgroundImage: `url(${this.dbot.logo})`
       };
+    },
+    dbot() {
+      const dbot = this.dbots.filter(
+        dbot => this.item.receiver === dbot.addr
+      )[0];
+      return dbot;
     }
-  }
+  },
+  methods: {}
 };
 </script>
 
@@ -102,13 +114,13 @@ export default {
     display: flex;
     flex-direction: row;
     .logo {
-      width: 80px;
-      height: 80px;
+      width: 120px;
+      height: 90px;
       background-repeat: no-repeat;
       background-position: center center;
-      background-size: 50% 50%;
+      background-size: 70% 70%;
       border: 2px solid #87c5ff;
-      border-radius: 50%;
+      border-radius: 80%;
     }
     .content {
       margin-left: 25px;

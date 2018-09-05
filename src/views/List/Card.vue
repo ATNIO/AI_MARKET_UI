@@ -1,36 +1,37 @@
 <template>
-  <li class="card" @click="_click">
-    <div class="logo" :style="logo"></div>
-    <div class="content">
-      <h2>{{ item.name }}</h2>
-      <p class="description">
-        {{ item.description }}
-      </p>
-      <div class="auther">
-        <div class="avatar"></div>
-        <a href="#" target="_blank" @click.stop>{{ item.addr }}</a>
-      </div>
-      <div class="footer">
-        <div class="left">
-          <div class="comment">
-            <Icon type="ios-text" />
-            <span>{{ item.reply_count.count }}</span>
-          </div>
-          <div class="star">
-            <Icon type="ios-star" />
-            <span>{{ item.collect_count.upcount }}</span>
-          </div>
+    <li class="card" @click="_click">
+        <div class="logo" :style="logo"></div>
+        <div class="content">
+            <h2>{{ item.name }}</h2>
+            <p class="description">
+                {{ item.description }}
+            </p>
+            <div class="auther">
+                <div class="avatar"></div>
+                <a href="#" target="_blank" @click.stop>{{ item.addr }}</a>
+            </div>
+            <div class="footer">
+                <div class="left">
+                    <div class="comment" @click.stop="editComment">
+                        <Icon type="ios-text"/>
+                        <span>{{ item.reply_count.count }}</span>
+                    </div>
+                    <div class="star">
+                        <Icon type="ios-star"/>
+                        <span>{{ item.collect_count.upcount }}</span>
+                    </div>
+                </div>
+                <div class="price">
+                    <span>ATN</span>
+                    <span>{{ item.floor_price | priceFormat }}</span>
+                </div>
+            </div>
         </div>
-        <div class="price">
-          <span>ATN</span>
-          <span>{{ item.floor_price | priceFormat }}</span>
-        </div>
-      </div>
-    </div>
-  </li>
+    </li>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Card",
   props: {
@@ -47,7 +48,19 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["setTabsValue"]),
     _click() {
+      this.setTabsValue("1");
+      const { addr } = this.item;
+      this.$router.push({
+        name: "detail",
+        params: {
+          address: addr
+        }
+      });
+    },
+    editComment() {
+      this.setTabsValue("0");
       const { addr } = this.item;
 
       this.$router.push({
@@ -131,7 +144,6 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      pointer-events: none;
 
       .left {
         display: flex;
