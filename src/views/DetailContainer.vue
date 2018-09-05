@@ -1,25 +1,28 @@
 <template>
-  <section class="detail-container">
-    <Tabs value="comment">
-      <TabPane label="DOCUMENTION" name="documention">
-        <detail-doc></detail-doc>
-      </TabPane>
-      <TabPane label="COMMENT" name="comment">
-        <detail-comment></detail-comment>
-      </TabPane>
-    </Tabs>
-  </section>
+    <section class="detail-container">
+        <Tabs :value="tabsValue">
+            <TabPane label="DOCUMENTION" name="1">
+                <detail-doc></detail-doc>
+            </TabPane>
+            <TabPane label="COMMENT" name="0">
+                <detail-comment></detail-comment>
+            </TabPane>
+        </Tabs>
+    </section>
 </template>
 
 <script>
 import DetailDoc from "./DetailDoc";
 import DetailComment from "./DetailComment";
-
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "DetailContainer",
   components: {
     "detail-doc": DetailDoc,
     "detail-comment": DetailComment
+  },
+  computed: {
+    ...mapGetters(["tabsValue"])
   },
   data() {
     return {};
