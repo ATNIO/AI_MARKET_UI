@@ -65,9 +65,8 @@ Vue.mixin({
     priceFormat(price) {
       const a = new BN(price, 10);
       const b = new BN(10, 10);
-      const c = new BN(18, 10);
 
-      return a.div(b.pow(c)).toString(10);
+      return a.div(1e18).toString(10);
     }
   }
 });

@@ -61,7 +61,8 @@
                 <!-- file -->
                 <template v-else-if="p.type === 'file'">
                   <vue-upload-component
-                    v-model="paramModel[p.name].value"
+                    :value="paramModel[p.name].value" 
+                    @input="val => updateFiles(val, p.name)"
                     class="upload"
                   >
                     <Icon type="ios-cloud-upload-outline"/>
@@ -89,12 +90,30 @@ import { upperFirst } from "lodash";
 import Schema from "./Schema";
 import VueUploadComponent from "vue-upload-component/src";
 
+// function getFile(file) {
+//   var reader = new FileReader();
+//   return new Promise((resolve, reject) => {
+//     reader.onerror = () => { reader.abort(); reject(new Error("Error parsing file"));}
+//     reader.onload = function() {
+
+//       //This will result in an array that will be recognized by C#.NET WebApi as a byte[]
+//       let bytes = Array.from(new Uint8Array(this.result));
+
+//       //if you want the base64encoded file you would use the below line:
+//       let base64StringFile = btoa(bytes.map((item) => String.fromCharCode(item)).join(""));
+
+//       //Resolve the promise with your custom file structure
+//       resolve(base64StringFile);
+//     }
+//     reader.readAsArrayBuffer(file);
+//   });
+// }
+
 export default {
   name: "ParameterForm",
   components: { Schema, VueUploadComponent },
   data() {
     return {
-      uploadList: [],
       paramModel: {}
     };
   },
@@ -118,7 +137,7 @@ export default {
       immediate: true,
       handler(val) {
         this.paramModel = val.reduce((pre, cur) => {
-          const item = (pre[cur.name] = { type: cur.in });
+          const item = (pre[cur.name] = { pt: cur.in, nt: cur.type });
 
           if (cur.enum) {
             pre[cur.name].value = cur.default || cur.enum[0];
@@ -134,15 +153,27 @@ export default {
     }
   },
   methods: {
+    updateFiles(val, field) {
+      const files = this.paramModel[field].value;
+
+      this.paramModel[field].value = [...files, ...val];
+    },
     handleRemove(field, file) {
+      // const files = this.paramModel[field].value;
+      // const reader = new FileReader();
+
+      // reader.onload = e => {
+      //   const binaryData = e.target.result;
+      //   const base64Srt = btoa(binaryData);
+
+      //   this.paramModel[field].value.splice(files.indexOf(file), 1);
+      // };
+
+      // reader(files.file);
+
       const files = this.paramModel[field].value;
 
       this.paramModel[field].value.splice(files.indexOf(file), 1);
-    },
-    handleUpload(file) {
-      this.uploadList.push(file);
-
-      return false;
     }
   },
   filters: {

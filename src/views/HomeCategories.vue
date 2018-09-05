@@ -8,14 +8,14 @@
       v-on:on-select="_click"
       v-on:on-open-change="openChange"
     >
-      <MenuItem name="all">All</MenuItem>
+      <MenuItem name="all" class="father-father">All</MenuItem>
       <template v-for="(child, key) in categories">
-        <Submenu :name="key" :key="key">
+        <Submenu :name="key" :key="key" class="father">
           <template slot="title">
               {{ key }}
           </template>
           <template v-for="item in child">
-            <MenuItem :name="item" :key="item">{{ item }}</MenuItem>
+            <MenuItem :name="item" :key="item" class="son">{{ item }}</MenuItem>
           </template>
         </Submenu>
       </template>
@@ -53,6 +53,19 @@ export default {
   padding: 76px 0 32px;
   background: #ffffff;
   box-shadow: 1px 0 10px 0 rgba(200, 199, 232, 0.2);
+
+  .father-father {
+    font-size: 18px;
+    color: #11124c;
+  }
+  .father {
+    font-size: 16px;
+    color: #11124c;
+  }
+  .son {
+    font-size: 14px;
+    color: #707070;
+  }
 
   & /deep/ .ivu-menu-item-active:not(.ivu-menu-submenu) {
     color: #fff !important;
