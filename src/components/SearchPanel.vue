@@ -12,11 +12,21 @@
             -->
             <input type="text" v-model="keyword" @keyup="get($event)" @keydown.enter="search()" @keydown.down="selectDown()" @keydown.up.prevent="selectUp()" class="search">
             <!-- 这是一个小叉叉，点击它可清除输入框内容 -->
+            <span class="search-reset" @click="clearInput()">&times;</span>
             <div class="search-select">
                 <!-- transition-group也是vue2.0中的新特性,tag='ul'表示用ul包裹v-for出来的li -->
                 <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
                     <li v-for="(value,index) in myData" :class="{selectback:index==now}" class="search-select-option search-select-list" @mouseover="selectHover(index)" @click="selectClick(index)" :key="value">
-                        {{value}}
+                        <div class="value-style">
+                            <div class="icon-style"></div>
+                            <div class="value-param-style">
+                                <span > {{value.dbot_addr}}</span>
+                                <span > {{value.tags}}</span>
+                                <span class="text-style"> 通报显示，截至目前，广州市交通部门联合相关部门先后41次对滴滴、易到、神州、AA租车、曹操等网约车平台进行调查，对平台向无证车辆、无证司机违规派单等违章行为共立案查处240宗，其中立案查处滴滴平台违章208宗。
+另外，目前滴滴平台已有29宗违章案件将到强制执行期。通报显示，若滴滴平台仍拒不执行处罚决定，待法定期限届满后，广州市交通部门将依法申请法院强制执行。“对于网约车平台这种不配合调查的行为，将以‘不配合出租汽车行政主管部门调取查阅相关数据信息’为由立案查处。”在广州市交通委方面看来，认可网约车服务市民出行选择的同时，也应以依法依规经营，严守安全底线，落实承运人安全管理主体责任为经营、发展的前提。“互联网不是法外之地，共享经济也不是违规经营的灰色地带。”广州市交通部门一再重申，对于网约车市场存在的违规行为，将继续保持高压整治</span>
+                            </div>
+
+                        </div>
                     </li>
                 </transition-group>
             </div>
@@ -28,6 +38,7 @@
 // import xxx from someSrc     es6中得到模块的方法。
 
 export default {
+  name: "SearchPanel",
   //注册组件
   data: function() {
     return {
@@ -47,7 +58,7 @@ export default {
       console.log("------------", this.keyword);
 
       const { search } = this.$api.home;
-      const response = await search(this.keyword);
+      const response = await search(0, 10, this.keyword);
       const { status, data } = response;
       if (status === 200) {
         this.myData = data;
@@ -141,6 +152,7 @@ export default {
 
 .search-select-option {
   box-sizing: border-box;
+  list-style: none;
   padding: 7px 10px;
 }
 
@@ -178,5 +190,27 @@ input::-ms-clear {
 .search-select ul {
   margin: 0;
   text-align: left;
+}
+.icon-style {
+  background: url("https://avatars2.githubusercontent.com/u/37093600?s=40&v=4");
+  width: 40px;
+  height: 40px;
+}
+.value-style {
+  display: flex;
+  flex-direction: row;
+}
+
+.value-param-style {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.text-style {
+  width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

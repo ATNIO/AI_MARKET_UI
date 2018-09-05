@@ -5,7 +5,7 @@ const dbots = (l, p, c, st, sd) =>
   `${prefix}dbots?limit=${l}&page=${p}&category=${c}&sortType=${st}&sortDir=${sd}`;
 const dbotCategories = `${prefix}setting/dbotCategories`;
 
-const search = keyword => `${prefix}query?&word=${keyword}`;
+const search = (f, s, k) => `${prefix}query?&word=${k}`;
 
 export default {
   getDbots({
@@ -20,7 +20,8 @@ export default {
   getCategories() {
     return fetch.get(dbotCategories);
   },
-  search({ from = 0, size = 10, word }) {
-    return fetch.get(search(from, size, word));
+  search({ from = 0, size = 10, keyword = 1 }) {
+    console.log("search-------", keyword);
+    return fetch.get(search(from, size, keyword));
   }
 };

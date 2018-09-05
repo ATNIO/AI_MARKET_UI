@@ -84,16 +84,16 @@ export default {
           : typeMap[this.sortType.toLowerCase()],
         sortDir: sortDir || this.sortDir
       });
-      const { status, data } = dbots;
-
-      if (status === 200) {
-        this.setDbots({
-          ...data,
-          currentPage: page
-        });
-      } else {
-        console.log("dbots !200:", data);
-      }
+      // const { status, data } = dbots;
+      //
+      // if (status === 200) {
+      //   this.setDbots({
+      //     ...data,
+      //     currentPage: page
+      //   });
+      // } else {
+      //   console.log("dbots !200:", data);
+      // }
     },
     // 获取分类列表
     async getCategories() {

@@ -137,16 +137,16 @@ export default {
     //   console.log(checkResult);
     // },
     async check() {
-      const { check } = this.$api.user;
-      const eth = this.$atn.web3.eth;
-      const accounts = await eth.getAccounts();
-      const response = await check(accounts[0]);
-      const { status, data } = response;
-      if (status === 200) {
-        this.loginShow = false;
-        this.isLogin = data.err;
-        this.setAddress(accounts[0]);
-      }
+      // const { check } = this.$api.user;
+      // const eth = this.$atn.web3.eth;
+      // const accounts = await eth.getAccounts();
+      // const response = await check(accounts[0]);
+      // const { status, data } = response;
+      // if (status === 200) {
+      //   this.loginShow = false;
+      //   this.isLogin = data.err;
+      //   this.setAddress(accounts[0]);
+      // }
     },
     notice({ type, title, desc }) {
       this.$Notice[type]({
