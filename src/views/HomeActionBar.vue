@@ -11,14 +11,14 @@
       >
         <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
-      <div 
-        class="btn-sort" 
-        :class="sortDir === 1 ? 'asc' : 'desc' "
-        @click="sortDirChange"
-      >
-        <Icon custom="i-icon icon-sort" size="20" />
+        <Icon 
+          class="btn-sort" 
+          :custom="visibleType" 
+          size="26" 
+          color="#797bf8" 
+          @click="sortDirChange"/>
       </div>
-    </div>
+
   </section>
 </template>
 
@@ -29,6 +29,7 @@ export default {
   name: "ActionBar",
   data() {
     return {
+      visible: true,
       sortValue: "Price",
       selectList: [
         {
@@ -43,7 +44,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["currentItem", "sortType", "sortDir"])
+    ...mapGetters(["currentItem", "sortType", "sortDir"]),
+    visibleType() {
+      return this.visible ? "icon-up" : "icon-down";
+    }
   },
   watch: {
     sortType: {
@@ -61,7 +65,7 @@ export default {
     },
     sortDirChange() {
       const dir = this.sortDir === 1 ? -1 : 1;
-
+      this.visible = !this.visible;
       this.$emit("sortChange", { sortDir: dir });
       this.setSortDir(dir);
     }
@@ -89,28 +93,9 @@ export default {
       font-size: 12px;
       color: #b7b9ce;
     }
-
     .btn-sort {
       margin-left: 6px;
-      padding: 1px;
-      box-sizing: border-box;
-      border-width: 1px;
-      border-style: solid;
-      border-radius: 2px;
       cursor: pointer;
-    }
-
-    .asc {
-      border-color: transparent;
-    }
-
-    .desc {
-      border-color: #797bf8;
-      background: #ffffff;
-
-      & /deep/ i::before {
-        color: #797bf8;
-      }
     }
   }
 }

@@ -61,6 +61,7 @@
                 :custom="visibleType"
                 @click="_click()"
                 size="20"
+                color="#797bf8"
                 />
                 <span class="star-count">{{this.likeCount}}</span>
               </p>
@@ -84,7 +85,7 @@ import dayjs from "dayjs";
 import { mapActions, mapGetters } from "vuex";
 
 import data from "../mock/listData.js";
-import Channel from "./Channel";
+import Channel from "./Channel.vue";
 
 import DetailContainer from "./DetailContainer";
 
