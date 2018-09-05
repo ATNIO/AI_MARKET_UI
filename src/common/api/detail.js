@@ -1,7 +1,7 @@
 import prefix from "./base";
 import fetch from "./fetch";
 
-const detail = address => `${prefix}dbots/${address}/detail`;
+const detail = address => `${prefix}dbots/${address}`;
 const queryCommentsUrl = (address, page, limit) =>
   `${prefix}comment/query?dbotaddr=${address}&page=${page}&limit=${limit}`;
 const addCommentUrl = `${prefix}comment/add`;

@@ -84,7 +84,7 @@ import dayjs from "dayjs";
 import { mapActions, mapGetters } from "vuex";
 
 import data from "../mock/listData.js";
-import Channel from "./Channel";
+import Channel from "./Channel.vue";
 
 import DetailContainer from "./DetailContainer";
 
