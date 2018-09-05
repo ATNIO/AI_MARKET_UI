@@ -28,10 +28,7 @@ export default {
   computed: {
     ...mapGetters(["address", "stateChannel"]),
     dbotAddr() {
-      return (
-        "0x8ad1c2e20ee00baeac2c8c496d0039a36932aea8" ||
-        this.$route.params.address
-      );
+      return this.$route.params.address;
     },
     cacheKey() {
       return this.address + "_" + this.dbotAddr;
