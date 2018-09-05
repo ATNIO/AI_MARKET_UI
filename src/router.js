@@ -60,34 +60,30 @@ var atn = new Atn(window.atn3);
 
 // Test CallApi Start  Face Detect
 
-const data = {
-  image_url:
-    "https://www.faceplusplus.com.cn/scripts/demoScript/images/demo-pic1.jpg",
-  return_landmark: 1,
-  return_attributes: "gender,age"
-};
-
-const option = {
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-    "Access-Control-Allow-Origin": "*"
-  },
-  method: "post",
-  params: data
-};
+// const data = {
+//   image_url:
+//     "https://www.faceplusplus.com.cn/scripts/demoScript/images/demo-pic1.jpg",
+//   return_landmark: 1,
+//   return_attributes: "gender,age"
+// };
 //
-const dbotAddressFacee = "0xA15b60c85555CEdaeDf968590b00A227f6dD56E6";
-const uri = "/facepp/detect";
-
-const fromFacee = "0x6c7986a0c46815495e592b1afca62b157027ee65";
-const method = "post";
-console.log("option option option ", option);
-
-option.validateStatus = function(status) {
-  return true;
-};
-const result = atn.callAPI(dbotAddressFacee, method, uri, option, fromFacee);
-result.then(console.log);
+// const option = {
+//   headers: {
+//     "Content-Type": "application/x-www-form-urlencoded",
+//     "Access-Control-Allow-Origin": "*"
+//   },
+//   method: "post",
+//   params: data
+// };
+// //
+// const dbotAddressFacee = "0xA15b60c85555CEdaeDf968590b00A227f6dD56E6";
+// const uri = "/facepp/detect";
+//
+// const fromFacee = "0x6c7986a0c46815495e592b1afca62b157027ee65";
+// const method = "post";
+// console.log("option option option ", option);
+// const result = atn.callAPI(dbotAddressFacee, method, uri, option, fromFacee);
+// result.then(console.log);
 
 // Test CallApi End
 
