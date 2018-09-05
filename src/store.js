@@ -16,10 +16,7 @@ export default new Vuex.Store({
     currentPage: 1,
     querying: false,
     address: "",
-    stateChannel: {
-      status: "close", // syncing | open | close
-      banlance: 0
-    },
+    stateChannel: {},
     categories: {},
     currentSubmenu: [],
     currentItem: "all",
@@ -29,8 +26,8 @@ export default new Vuex.Store({
     currentComments: [],
     currentCommentsPage: 1,
     currentCommentsCount: 0,
-
-    searchHistory: []
+    searchHistory: [],
+    tabsValue: "1"
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
@@ -54,11 +51,31 @@ export default new Vuex.Store({
     [types.SET_DETAIL_DATA](state, payload = {}) {
       state.detailData = payload;
     },
-    [types.SET_STATE_CHANNEL_BANLANCE](state, banlance) {
-      state.stateChannel.banlance = banlance;
+    [types.SET_STATE_CHANNEL_BANLANCE](state, { storeKey, banlance }) {
+      let stateChannel = state.stateChannel[storeKey];
+
+      if (stateChannel) {
+        stateChannel.banlance = banlance;
+      } else {
+        stateChannel = { banlance };
+      }
+
+      // TODO:  待优化 SET_STATE_CHANNEL_BANLANCE 与 SET_STATE_CHANNEL_STATUS 应该合并
+      state.stateChannel[storeKey] = { ...stateChannel };
+      state.stateChannel = { ...state.stateChannel };
     },
-    [types.SET_STATE_CHANNEL_STATUS](state, status) {
-      state.stateChannel.status = status;
+    [types.SET_STATE_CHANNEL_STATUS](state, { storeKey, status }) {
+      let stateChannel = state.stateChannel[storeKey];
+
+      if (stateChannel) {
+        stateChannel.status = status;
+      } else {
+        stateChannel = { status };
+      }
+
+      // TODO:  待优化 SET_STATE_CHANNEL_BANLANCE 与 SET_STATE_CHANNEL_STATUS 应该合并
+      state.stateChannel[storeKey] = { ...stateChannel };
+      state.stateChannel = { ...state.stateChannel };
     },
     [types.SET_CATEGORIES](state, categories = {}) {
       state.categories = Object.freeze(categories);
@@ -86,6 +103,9 @@ export default new Vuex.Store({
     },
     [types.SET_SEARCH_HISTORY](state, histories = []) {
       state.searchHistory = histories;
+    },
+    [types.SET_TABS_VALUE](state, tab) {
+      state.tabsValue = tab;
     }
   },
   actions: {
@@ -112,8 +132,8 @@ export default new Vuex.Store({
     setStateChannel({ commit }, payload) {
       const { status, banlance } = payload;
 
-      status && commit(types.SET_STATE_CHANNEL_STATUS, status);
-      banlance && commit(types.SET_STATE_CHANNEL_BANLANCE, banlance);
+      status && commit(types.SET_STATE_CHANNEL_STATUS, payload);
+      banlance && commit(types.SET_STATE_CHANNEL_BANLANCE, payload);
     },
     setCategories({ commit }, categories) {
       commit(types.SET_CATEGORIES, categories);
@@ -140,6 +160,9 @@ export default new Vuex.Store({
     },
     setCurrentSearchHistory({ commit }, payload) {
       commit(types.SET_SEARCH_HISTORY, payload);
+    },
+    setTabsValue({ commit }, value) {
+      commit(types.SET_TABS_VALUE, value);
     }
   },
   getters: {
@@ -164,11 +187,8 @@ export default new Vuex.Store({
     endpoints(state) {
       return state.detailData.endpoints || [];
     },
-    stateChannelStatus(state) {
-      return state.stateChannel.status;
-    },
-    stateChannelBanlance(state) {
-      return state.stateChannel.banlance;
+    stateChannel(state) {
+      return state.stateChannel;
     },
     categories(state) {
       return state.categories;
@@ -199,6 +219,9 @@ export default new Vuex.Store({
     },
     currentSearchHistory(state) {
       return state.searchHistory;
+    },
+    tabsValue(state) {
+      return state.tabsValue;
     }
   }
 });

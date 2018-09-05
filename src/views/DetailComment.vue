@@ -24,10 +24,10 @@
                             <div class="content">
                                 <div class="photo">
                                     <avatar :width="60" :height="60" :margin-right="20"
-                                            :text="item.useraddr"></avatar>
+                                            :text="item.usraddr"></avatar>
                                 </div>
                                 <div class="wrapper">
-                                    <span class="name">{{item.useraddr}}</span><span class="time"> {{item.create_at | timeFormat}}</span>
+                                    <span class="name">{{item.usraddr}}</span><span class="time"> {{item.create_at | timeFormat}}</span>
                                     <p class="details">{{item.content}}</p>
                                 </div>
                             </div>
@@ -107,14 +107,20 @@ export default {
         return;
       }
       const { addComments } = this.$api.detail;
-      var dbotAddr = this.$route.params.address;
-      var user = this.address;
-      addComments(dbotAddr, user, this.message).then(res => {
-        const { data, status } = res;
-        if (status === 200) {
+      const dbotAddr = this.$route.params.address;
+      const user = this.address;
+      addComments(dbotAddr.toLowerCase(), user, this.message).then(res => {
+        const { status, data } = res;
+        console.log(data);
+        if (status === 200 && data.err != false) {
           this.comments(1, LIMIT);
           this.message = " ";
           this.addCommentSucc(false);
+        } else {
+          this.$Notice.error({
+            title: "评论失败",
+            desc: "请登录账号后操作! "
+          });
         }
       });
     },
