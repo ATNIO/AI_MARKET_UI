@@ -169,6 +169,10 @@ export default {
       font-size: 26px;
       color: #87c5ff;
       text-align: center;
+      width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .right {
@@ -192,7 +196,7 @@ export default {
     }
     .active {
       background: #797bf8;
-      color: #ffffff;
+      color: #ffffff !important;
     }
     .profile {
       width: 290px;
@@ -200,6 +204,7 @@ export default {
       font-size: 24px;
       padding-top: 8px;
       color: #3f485c;
+      transition: all 0.2s ease;
     }
     .channel-list {
       width: 290px;
@@ -207,6 +212,7 @@ export default {
       font-size: 24px;
       padding-top: 8px;
       color: #3f485c;
+      transition: all 0.2s ease;
     }
   }
 }
