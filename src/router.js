@@ -1,13 +1,12 @@
 import Vue from "vue";
 import Router from "vue-router";
-import { Base64 } from "js-base64";
 import Atn from "atn-js";
 const Home = () => import("./views/Home.vue");
 const Detail = () => import("./views/Detail.vue");
 const MyAccount = () => import("./views/MyAccount.vue");
 const ChannelList = () => import("./views/ChannelList.vue");
 const AccountProfile = () => import("./views/AccountProfile.vue");
-
+const iconv = require("iconv-lite");
 Vue.use(Router);
 
 var atn = new Atn(window.atn3);
@@ -34,29 +33,35 @@ var atn = new Atn(window.atn3);
 
 // Test CallApi Start  Baidu
 
-// const gbkBytes = iconv.encode(JSON.stringify({'text': '百度是一家高科技公司'}), 'gbk')
-// const option = {
-//     headers: {
-//         'Content-Type': 'application/json'
-//     },
-//     responseEncoding: 'GBK',
-//     method: 'post',
-//     data: gbkBytes
-// };
-//
-// const dbotAddress = '0xb53b139dd9750760077744788042fd13d292df9e';
-// const uri = '/lexer';
-//
-// const from = '0x6c7986a0c46815495e592b1afca62b157027ee65';
-// const method = 'post';
-// console.log('option option option ', option);
-// const result = atn.callAPI(dbotAddress, method, uri, option, from).then(function (response) {
-//     console.log('Test result ----------------------', response.data)
-// }).catch(function (error) {
-//     console.log(error)
-// })
-//
-// console.log('callAPI result',result)
+const gbkBytes = iconv.encode(
+  JSON.stringify({ text: "百度是一家高科技公司" }),
+  "gbk"
+);
+const option = {
+  headers: {
+    "Content-Type": "application/json;charset=UTF-8"
+  },
+  responseEncoding: "GBK",
+  method: "post",
+  data: gbkBytes
+};
+
+const dbotAddress = "0x824bdb5b417f4900a5464b2a93b55e7e57e5c947";
+const uri = "/lexer";
+
+const from = "0x6c7986a0c46815495e592b1afca62b157027ee65";
+const method = "post";
+console.log("option option option ", option);
+const result = atn
+  .callAPI(dbotAddress, method, uri, option, from)
+  .then(function(response) {
+    console.log("Test result ----------------------", response);
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
+
+console.log("callAPI result", result);
 
 // Test CallApi Start  Face Detect
 
