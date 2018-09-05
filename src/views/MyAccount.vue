@@ -8,7 +8,6 @@
                         :height="100"
                         :borderWidth="0"
                 ></avatar>
-                <Icon type="ios-arrow-down" color="#fff"></Icon>
             </div>
 
             <!-- <div class="balance">
@@ -32,7 +31,7 @@
                 <div class="right">
                     <span>ATN</span>
                     <Icon
-                            :type="visibleType"
+                            :custom="visibleType"
                             @click="visible = !visible"
                             size="28"
                             color="#B7B9CE"
@@ -44,15 +43,22 @@
 
             <div class="list">
                 <router-link :to="{name: 'AccountProfile'}">
-                    <div class="profile" @click="_click(index)" :class="{ active: index === current }">
-                        <Icon type="ios-person-outline" size="41" class="list-icon"/>
+                    <div 
+                      class="profile" 
+                      @click="_click(index)" 
+                      :class="{ active: index === profile }"
+                      >
+                        <Icon custom="icon-profile" size="41" class="list-icon"/>
                         <span class="trash"> Profile</span>
                     </div>
                 </router-link>
 
                 <router-link :to="{name: 'ChannelList'}">
-                    <div class="channel-list">
-                        <Icon type="ios-list-box-outline" size="41" class="list-icon"/>
+                    <div 
+                      class="channel-list" 
+                      @click="_click1(index)" 
+                      :class="{ active: index === channel }">
+                        <Icon custom="icon-channel-list" size="41" class="list-icon"/>
                         <span class="trash">  Channel list</span>
                     </div>
                 </router-link>
@@ -75,8 +81,9 @@ export default {
   data() {
     return {
       visible: true,
-      current: 1,
-      index: -1,
+      profile: 1,
+      channel: 2,
+      index: 1,
       balance: "0000.00",
       balanceHolder: "****"
     };
@@ -88,7 +95,7 @@ export default {
   computed: {
     ...mapGetters(["address"]),
     visibleType() {
-      return this.visible ? "ios-eye-outline" : "ios-eye-off-outline";
+      return this.visible ? "icon-eye" : "icon-no-eye";
     },
     balanceRender() {
       this.getBalance();
@@ -97,9 +104,16 @@ export default {
   },
   methods: {
     _click(index) {
-      this.current = index;
+      this.profile = index;
+      this.channel = 0;
       // TODOS
     },
+    _click1(index) {
+      this.channel = index;
+      this.profile = 0;
+      // TODOS
+    },
+
     async getBalance() {
       this.$atn.web3.eth.getBalance(this.address).then(balance => {
         this.balance = this.$atn.web3.utils.fromWei(balance);
@@ -176,17 +190,16 @@ export default {
       margin-left: 25px;
       margin-right: 20px;
     }
+    .active {
+      background: #797bf8;
+      color: #ffffff;
+    }
     .profile {
       width: 290px;
       height: 60px;
       font-size: 24px;
       padding-top: 8px;
       color: #3f485c;
-
-      &:hover {
-        background: #797bf8;
-        color: #ffffff;
-      }
     }
     .channel-list {
       width: 290px;
@@ -194,11 +207,6 @@ export default {
       font-size: 24px;
       padding-top: 8px;
       color: #3f485c;
-
-      &:hover {
-        background: #797bf8;
-        color: #ffffff;
-      }
     }
   }
 }

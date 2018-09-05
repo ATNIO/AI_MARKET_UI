@@ -7,8 +7,8 @@
             <p class="title">No channel was found registered for you on this Dbot</p>
             <div class="means">
               <p class="method">In order to call API...</p>
-              <p class="step-one"><Icon type="ios-add-circle" color="#87C5FE" size="20"/> deposit some ATN to open a channel with this Dbot</p>
-              <p class="step-two"><Icon type="ios-create" color="#87C5FE" size="20"/> For each transfer , sign a message confirming the balance with the new transferred amount.</p>
+              <p class="step-one"><Icon custom="icon-add" color="#87C5FE" size="20"/> deposit some ATN to open a channel with this Dbot</p>
+              <p class="step-two"><Icon custom="icon-sign" color="#87C5FE" size="20"/> For each transfer , sign a message confirming the balance with the new transferred amount.</p>
               <Input 
                 search 
                 enter-button="Deposit" 
@@ -33,13 +33,18 @@
             </div>
 
             <div class="center">
-              <div class="bg"></div>
               <div class="content">
-                <div v-if="stateChannelStatus==='open'">
+                <div v-if="stateChannelStatus==='synced'">
                   <p class="title">Remaining  Balance </p>
                   <p class="balance">{{stateChannelBanlance | priceFormat}} ATN</p>
                 </div>  
-                <div v-else>
+                <div 
+                  class="circle-wrapper" 
+                  v-else-if="
+                    stateChannelStatus === 'opening' || 
+                    stateChannelStatus === 'syncing' || 
+                    stateChannelStatus === 'closing'"
+                >
                   <div class="wait">
                     <div class="circle circle1"></div>
                     <div class="circle circle2"></div>
@@ -51,16 +56,18 @@
                   <p class="syncing">syncing</p>
                 </div>             
                 <P class="description">A channel was found for this address.</P>
-                <Input 
-                  search 
-                  enter-button="TOP UP" 
-                  placeholder=" 0 ATN" 
-                  size="large" 
-                  class="top-up" 
-                  v-model="topupValue"
-                  v-on:on-search="topup"
-                />
-                <button @click="closeChannel">close channel</button>
+                <div class="btn-wrapper" v-if="stateChannelStatus==='synced'">
+                  <Input 
+                    search 
+                    enter-button="TOP UP" 
+                    placeholder=" 0 ATN" 
+                    size="large" 
+                    class="top-up" 
+                    v-model="topupValue"
+                    v-on:on-search="topup"
+                  />
+                  <button class="close-channel" @click="closeChannel">CLOSE</button>
+                </div>
               </div>
             </div>  
 
@@ -95,7 +102,8 @@ export default {
       status: 0,
       depositValue: "",
       topupValue: "",
-      storageCache: {}
+      storageCache: {},
+      timer: null
     };
   },
   props: {
@@ -107,36 +115,45 @@ export default {
   computed: {
     ...mapGetters(["address", "stateChannelStatus", "stateChannelBanlance"]),
     dbotAddr() {
-      return this.$route.params.address;
+      return (
+        "0xa70cbefe78cd8bfd47ea3d480b6216e221c45954" ||
+        this.$route.params.address
+      );
     },
     cacheKey() {
-      return this.account + this.dbotAddr;
+      return this.address + "_" + this.dbotAddr;
     }
   },
   mounted() {
     this.init();
   },
+  beforeDestroy() {
+    clearInterval(this.timer);
+    this.timer = null;
+  },
   methods: {
     ...mapActions(["setStateChannel"]),
     nextStep(value) {
-      this.openChannel();
+      this.createNewChannel();
     },
     numberHandler(num) {
       const _num = new BN(num, 10);
-      const multi = new BN("10e18");
+      const multi = new BN("1e18");
+      const rtn = _num.times(multi).toString(10);
 
-      return _num.times(multi).toString(10);
+      console.log("numberHandler:", num, rtn);
+
+      return rtn;
     },
     init() {
       // TODO: 检查状态管理器里是否已有 state channel 的状态，如果有，return
 
-      const cache = localStorage.get(CACHE_KEY);
-      let res = null;
+      const cache = localStorage.getItem(CACHE_KEY);
       let currentStatus = "";
 
       if (!cache) return;
 
-      this.storageCache = Object.freeze(JSON.parse(cache));
+      this.storageCache = JSON.parse(cache);
       const currentDbotCache = this.storageCache[this.cacheKey];
 
       if (!currentDbotCache) return;
@@ -144,22 +161,231 @@ export default {
       const { status, hash } = currentDbotCache;
 
       // opening, closing, close, syncing, synced
-
       switch (status) {
         case "opening":
         case "closing":
+        case "syncing":
           this.setStateChannel({ status });
-          res = this.waitTx(hash, status);
+          currentStatus = this.waitTx(hash, status);
           break;
         case "close":
+          this.setStateChannel({ status });
           return;
         default:
           break;
       }
 
-      if (res === -1) return;
+      if (currentStatus !== "syncing") return;
 
-      // get balance
+      // getItem balance
+      this.updateDeposit(currentStatus);
+    },
+    async updateDeposit(status, hash, fromLink = false) {
+      if (hash) {
+        status = await this.waitTx(hash, status);
+      }
+
+      let depositByLink = null;
+      let depositComputed = 0;
+
+      if (fromLink) {
+        depositByLink = await this.getDeposit();
+      }
+
+      let channelDetail = await this.getChannelDetail();
+
+      if (fromLink) {
+        if (!channelDetail) {
+          this.timer = setInterval(async () => {
+            channelDetail = await this.getChannelDetail();
+
+            if (channelDetail || channelDetail === "error") {
+              clearInterval(this.timer);
+              this.timer = null;
+
+              // 提示异常
+              return;
+            }
+
+            const { deposit } = channelDetail;
+
+            if (depositByLink === deposit) {
+              clearInterval(this.timer);
+              this.timer = null;
+            }
+          }, 1000);
+        }
+        const { balance, deposit } = channelDetail;
+
+        depositComputed = new BN(deposit, 10)
+          .minus(new BN(balance, 10))
+          .toString(10);
+      } else {
+        const { balance, deposit } = channelDetail;
+
+        depositComputed = new BN(deposit, 10)
+          .minus(new BN(balance, 10))
+          .toString(10);
+      }
+
+      status = "synced";
+
+      this.setStateChannel({ status, banlance: depositComputed });
+      this.storageCache[this.cacheKey] = { status };
+      localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+    },
+    async waitTx(hash, status) {
+      // 根据交易 hash， 获取当前交易状态
+      console.log("wait tx hash:", hash);
+
+      const _status = status;
+      const tx = await atn.waitTx(hash);
+      const txHash = tx.hash;
+      const txStatus = tx.status;
+
+      switch (status) {
+        case "opening":
+          status = txStatus ? "syncing" : "close";
+          break;
+        case "closing":
+          status = txStatus ? "close" : "syncing";
+          break;
+        case "syncing":
+          txStatus || (status = "synced");
+          break;
+        default:
+          break;
+      }
+
+      if (_status === status) {
+        this.setStateChannel({ status });
+        this.storageCache[this.cacheKey] = { status, hash: txHash };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+      }
+
+      return status;
+    },
+    async getDeposit() {
+      const deposit = await atn.getChannelDeposit(this.dbotAddr, this.address);
+
+      if (!deposit) {
+        // TODO: 如果为空，需提示
+      }
+
+      console.log("getDeposit:", deposit);
+
+      return deposit;
+    },
+    async getChannelDetail() {
+      let channelDetail = null;
+
+      try {
+        channelDetail = await atn.getChannelDetail(this.dbotAddr, this.address);
+      } catch (e) {
+        console.error("getChannelDetail:", e);
+
+        return "error";
+      }
+
+      if (!channelDetail) {
+        // TODO: 判断 getChannelDetail 返回结果
+      }
+
+      console.log("getChannelDetail:", channelDetail);
+
+      return channelDetail;
+    },
+    async topup() {
+      let status = "syncing";
+      let txHash = "";
+
+      this.setStateChannel({ status });
+
+      await atn.topUpChannel(
+        this.dbotAddr,
+        this.numberHandler(this.topupValue),
+        this.address,
+        (err, hash) => {
+          if (err) return;
+
+          txHash = hash;
+        }
+      );
+
+      if (txHash) {
+        this.storageCache[this.cacheKey] = { status, hash: txHash };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+
+        await this.updateDeposit(status, txHash, true);
+      } else {
+        // TODO: 如果没有 hash
+      }
+    },
+    async createNewChannel() {
+      let status = "syncing";
+      let txHash = "";
+
+      if (!this.address) {
+        this.$Notice.warning({
+          title: "未登录",
+          desc: "您需要使用您的ATN钱包登录"
+        });
+
+        return;
+      }
+
+      // 创建用户和Dbot交易通道
+      this.setStateChannel({ status });
+
+      try {
+        await atn.createChannel(
+          this.dbotAddr,
+          this.numberHandler(this.depositValue),
+          this.address,
+          (err, hash) => {
+            if (err) return;
+
+            txHash = hash;
+          }
+        );
+      } catch (e) {
+        console.error("Create new channel failure:", e);
+
+        status = "syncing";
+        this.setStateChannel({ status });
+        await this.updateDeposit(status, null, false);
+
+        return "error";
+      }
+
+      this.storageCache[this.cacheKey] = { status, hash: txHash };
+      localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+
+      await this.updateDeposit(status, txHash, true);
+    },
+    async closeChannel() {
+      // channelDetail 可以在 update deposit 的时候缓存。
+      const channelDetail = await this.getChannelDetail();
+
+      console.log("closeChannel:", this.dbotAddr, this.address, channelDetail);
+
+      try {
+        const closeResult = await atn.closeChannel(
+          this.dbotAddr,
+          channelDetail.balance,
+          this.address
+        );
+
+        this.storageCache[this.cacheKey] = { status: "close" };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+      } catch (e) {
+        console.error("closeChannel:", e);
+        // exception
+        this.$Notice.warning({
+          title: "关闭 channel 失败",
+          desc: "抱歉，关闭 channel 失败，请稍后重试"
+        });
+      }
     }
   }
 };
@@ -256,17 +482,15 @@ export default {
 
     .center {
       position: relative;
-
-      .bg {
-        background-image: url(../assets/channel-bg.png);
-        width: 495px;
-        height: 300px;
-      }
+      background: url(../assets/channel-bg.png) no-repeat center center /
+        contain;
 
       .content {
-        position: absolute;
-        margin-top: -300px;
-        margin-left: 45px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         //-----------------------open
         .title {
           font-size: 18px;
@@ -281,13 +505,15 @@ export default {
           text-align: center;
           margin-bottom: 12px;
         }
+
+        .circle-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
         //---------------------------loading
         .wait {
-          margin: 30px 0 12px 103px;
-          margin-top: 30px;
-          margin-bottom: 12px;
           display: flex;
-          flex-direction: row;
           justify-content: space-between;
           width: 134px;
 
@@ -296,8 +522,9 @@ export default {
             height: 9px;
             border-radius: 50%;
             animation-name: fadeIn;
-            animation-duration: 2s;
+            animation-duration: 2.6s;
             animation-iteration-count: infinite;
+            animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
             background: tranparent;
           }
 
@@ -337,6 +564,13 @@ export default {
           display: flex;
           flex-direction: row;
         }
+
+        .btn-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
         .top-up {
           width: 270px;
           height: 50px;
@@ -349,7 +583,7 @@ export default {
             color: #aaaaaa;
           }
           & /deep/ .ivu-input-search {
-            width: 138px;
+            width: 90px;
             background: #797bf8 !important;
             border-color: #797bf8 !important;
           }
@@ -358,12 +592,15 @@ export default {
           margin-left: 10px;
           width: 90px;
           height: 52px;
-          background: #dfdfdf;
-          border-radius: 6px;
-          font-size: 18px;
-          color: #ff5655;
+          background: #ff5655;
+          border-radius: 4px;
+          font-size: 14px;
+          color: #fff;
           text-align: center;
-          font-weight: 600;
+          // font-weight: 600;
+          border: none;
+          outline: none;
+          cursor: pointer;
         }
       }
     }

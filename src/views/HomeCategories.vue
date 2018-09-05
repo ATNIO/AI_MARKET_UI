@@ -1,5 +1,5 @@
 <template>
-  <div class="home-categories" v-if="categoryIsShow">
+  <div class="home-categories">
     <Menu 
       :active-name="currentItem" 
       :open-names="currentSubmenu"
@@ -32,10 +32,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["categories", "currentSubmenu", "currentItem"]),
-    categoryIsShow() {
-      return Object.keys(this.categories).length > 0;
-    }
+    ...mapGetters(["categories", "currentSubmenu", "currentItem"])
   },
   methods: {
     ...mapActions(["setCategory"]),

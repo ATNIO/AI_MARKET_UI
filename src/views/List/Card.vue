@@ -144,6 +144,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      // pointer-events: none;
 
       .left {
         display: flex;
