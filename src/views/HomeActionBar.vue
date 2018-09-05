@@ -1,6 +1,6 @@
 <template>
   <section class="action-bar">
-    <h2>{{ currentItem }}</h2>
+    <div class="current-item">{{ currentItem }}</div>
     <div class="right">
       <span>Sort By:</span>
       <Select 
@@ -80,8 +80,9 @@ export default {
   align-items: center;
   justify-content: space-between;
 
-  h2 {
-    font-size: 24px;
+  .current-item {
+    font-size: 28px;
+    text-transform: capitalize;
   }
 
   .right {

@@ -4,7 +4,7 @@
         <div class="content">
             <div class="deposit">
                 <span class="deposit-title">ACCOUNT：DEPOSIT </span>
-                <Icon type="ios-download-outline" size="34" color="#11124C" class="title-icon"/>
+                <Icon custom="icon-download" size="30" color="#11124C" class="title-icon"/>
 
 
                 <div class="address">
@@ -17,7 +17,7 @@
 
             <div class="withdraw">
                 <span class="withdraw-title">ACCOUNT：WITHDRAW  </span>
-                <Icon type="ios-repeat" size="34" color="#11124C" class="repeat-icon"/>
+                <Icon custom="icon-withdraw" size="30" color="#11124C" class="repeat-icon"/>
                 <div class="topic lasttopic">Recipient Address:</div>
                 <Input v-model="toAddress" size="large" placeholder="Recipient Address" class="address-input"/>
 
