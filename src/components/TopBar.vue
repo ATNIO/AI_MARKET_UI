@@ -672,6 +672,7 @@ export default {
       border-radius: 4px;
       font-size: 16px;
       color: #ffffff;
+      cursor: pointer;
     }
   }
   .ledger {
