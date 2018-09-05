@@ -113,10 +113,7 @@ export default {
       };
     },
     dbot() {
-      //const d = this.dbots.filter(item => this.dbotAddress === item.addr)[0];
-      //this.likeCount = d.collect_count.upcount;
-      //return d;
-      return this.dbots.filter(item => this.dbotAddress === item.addr)[0];
+      return this.getDbot;
     },
     visibleType() {
       return this.visible ? "ios-star" : "ios-star-outline";
@@ -170,6 +167,11 @@ export default {
     },
     onCopy() {
       this.$Message.success("Copy success.");
+    },
+    getDbot() {
+      const d = this.dbots.filter(item => this.dbotAddress === item.addr)[0];
+      this.likeCount = d.collect_count.upcount;
+      return d;
     },
     checkLogin(account) {
       if (account.replace(/(^\s*)|(\s*$)/g, "").length != 0) {
