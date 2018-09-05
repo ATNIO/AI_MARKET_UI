@@ -8,11 +8,17 @@
                 </div>
             </router-link>
 
-            <div id="fade" class="black_overlay" v-if="searchShow || searchEmpty" @click="clearSearch"></div>
+            <div id="fade" class="black_overlay" v-if="searchShow || searchEmpty || searchHistoryShow" @click="clearSearch"></div>
             <div class="search">
-                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput"
-                       v-on:on-keyup="searchEvent"/>
-
+                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch"/>
+                <div class="search-history" v-if="searchHistoryShow">
+                  <ul mode="out-in" v-cloak>
+                    <li v-for="(value,index) in currentSearchHistory" class="search-history-option" @mouseover="moveHistory(index)" :key="index">
+                      <span :class="{historySelected:index==now}" class="search-history-detail" @click="selectHistory(value)">{{value}}</span>
+                      <a href="#" class="search-history-delete" @click="deleteSearchHistory(index);">Delete</a>
+                    </li>
+                  </ul>
+                </div>
                 <div class="search-empty" v-if="searchEmpty">Sorry, the result is empty.</div>
                 <div class="search-select" v-if="searchShow">
                     <!--
@@ -23,9 +29,9 @@
                     <hr class="search-hr"></hr>
                     -->
                     <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
-                        <li v-for="(value,index) in searchResult" :class="{selectback:index==now}"
-                            class="search-select-option" @mouseover="selectHover(index)" @click="selectClick(value)"
-                            :key="value">
+                        <li v-for="(value,index) in searchResult" :class="{selectback:index==now}" 
+                            class="search-select-option" @mouseover="selectHover(index)" @click="selectClick(value)" 
+                            :key="index">
                             <div class="logo-tag">
                                 <div class="item-image-padding">
                                     <img class="item-image" :src="value.logo" alt="">
@@ -143,11 +149,12 @@ export default {
       searchFrom: 0,
       searchSize: 10,
       searchingFlag: false,
-      searchEmpty: false
+      searchEmpty: false,
+      searchHistoryShow: false
     };
   },
   computed: {
-    ...mapGetters(["address"])
+    ...mapGetters(["address", "currentSearchHistory"])
   },
   mounted() {
     this.check();
@@ -161,7 +168,7 @@ export default {
     );
   },
   methods: {
-    ...mapActions(["setAddress"]),
+    ...mapActions(["setAddress", "setCurrentSearchHistory"]),
     async check() {
       const { check } = this.$api.user;
       const account = this.address;
@@ -295,8 +302,8 @@ export default {
       if (event.keyCode == keyEnter) {
         if (this.now >= 0 && this.now < this.searchResult.length) {
           this.selectClick(this.searchResult[this.now]);
-          return;
         }
+        return;
       }
       this.searchFrom = 0;
       this.searchingFlag = true;
@@ -356,6 +363,7 @@ export default {
 
       this.searchEmpty = this.search1.length > 0 && result.length == 0;
       this.searchShow = this.searchResult.length > 0;
+      this.searchHistoryShow = this.search1.length <= 0;
       this.searchingFlag = false;
     },
     async selectClick(value) {
@@ -363,14 +371,44 @@ export default {
         name: "detail",
         params: { address: value.dbot_address }
       });
+      var currentHistories = this.currentSearchHistory;
+      const search1 = this.search1.trim();
+      var index = currentHistories.indexOf(search1);
+
+      if (index != -1) {
+        currentHistories.splice(index, 1);
+      }
+      currentHistories.unshift(search1);
+      this.setCurrentSearchHistory(currentHistories);
       this.clearSearch();
+    },
+    async selectHistory(value) {
+      this.search1 = value;
+      this.searchFrom = 0;
+      this.searchHistoryShow = false;
+      await this.search();
+    },
+    async deleteSearchHistory(index) {
+      var currentHistories = this.currentSearchHistory;
+      currentHistories.splice(index, 1);
+      this.setCurrentSearchHistory(currentHistories);
+    },
+    async readySearch() {
+      this.searchHistoryShow = this.search1.length <= 0;
     },
     async clearSearch() {
       this.searchShow = false;
       this.searchEmpty = false;
+      this.searchHistoryShow = false;
       this.search1 = "";
     },
     selectHover(index) {
+      if (index != this.lastMouse) {
+        this.now = index;
+        this.lastMouse = index;
+      }
+    },
+    moveHistory(index) {
       if (index != this.lastMouse) {
         this.now = index;
         this.lastMouse = index;
@@ -416,7 +454,7 @@ export default {
     .search {
       width: 590px;
       height: 30px;
-      z-index: 9999;
+      z-index: 1000;
       .search-empty {
         width: 590px;
         height: 45px;
@@ -428,6 +466,39 @@ export default {
         border-radius: 4px;
         margin-top: 6px;
         padding-left: 30px;
+      }
+      .search-history {
+        border-radius: 4px;
+        margin-top: 8px;
+        width: 590px;
+        background-color: #fff;
+        .search-history-option {
+          box-sizing: border-box;
+          height: 20px;
+          margin-left: 30px;
+          margin-right: 30px;
+          .search-history-detail {
+            width: 480px;
+            overflow: hidden;
+            float: left;
+          }
+          .search-history-delete {
+            float: right;
+          }
+          .historySelected {
+            color: #797bf8;
+          }
+        }
+      }
+      .search-history li {
+        list-style-type: none;
+        padding: 0;
+        margin-left: 30px;
+        margin-right: 30px;
+        border: 0px solid #d4d4d4;
+        border-top: none;
+        background-color: #fff;
+        width: 407;
       }
       .search-select {
         border-radius: 4px;
@@ -676,7 +747,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: black;
-  z-index: 9001;
+  z-index: 999;
   -moz-opacity: 0.8;
   opacity: 0.5;
   filter: alpha(opacity=80);
