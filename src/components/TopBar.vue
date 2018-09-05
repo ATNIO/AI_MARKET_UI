@@ -25,7 +25,7 @@
             </Dropdown>
             <div id="fade" class="black_overlay" v-if="fadeShow()" @click="clearSearch"></div>
             <div class="search">
-                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch"/>
+                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch" v-on:on-change="searchValueChange"/>
                 <div class="search-history" v-if="searchHistoryShow">
                   <ul mode="out-in" v-cloak>
                     <li v-for="(value,index) in currentSearchHistory" class="search-history-option" @mouseover="moveHistory(index)" :key="index">
@@ -345,6 +345,11 @@ export default {
         this.now = -1;
         return;
       }
+    },
+    async searchValueChange() {
+      if (this.searchingFlag) {
+        return;
+      }
       this.searchFrom = 0;
       this.searchingFlag = true;
       setTimeout(async () => {
@@ -408,6 +413,9 @@ export default {
       this.searchingFlag = false;
     },
     async selectClick(value) {
+      if (value.dbot_address.indexOf(this.search1.trim()) > 0) {
+        value.dbot_address = this.search1;
+      }
       this.$router.push({
         name: "detail",
         params: { address: value.dbot_address }

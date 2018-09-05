@@ -24,7 +24,13 @@
     <div class="content-body">
 
       <!-- 我来组成 parameters -->
-      <Parameters :param="parameters" :isDeprecated="isDeprecated" :price="endpoint.price"></Parameters>
+      <Parameters 
+        :param="parameters" 
+        :isDeprecated="isDeprecated" 
+        :price="endpoint.price"
+        :method="endpoint.method"
+        :uri="endpoint.uri"
+      ></Parameters>
 
       <!-- 我来组成 response -->
       <Response :responses="responses"></Response>
