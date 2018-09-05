@@ -37,8 +37,8 @@ export default {
           label: "Price"
         },
         {
-          value: "OutDate",
-          label: "OutDate"
+          value: "Date",
+          label: "Date"
         }
       ]
     };
