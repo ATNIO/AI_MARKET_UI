@@ -398,6 +398,8 @@ export default {
 
       if (index != -1) {
         currentHistories.splice(index, 1);
+      } else if (currentHistories.length >= 20) {
+        currentHistories.splice(currentHistories.length - 1, 1);
       }
       currentHistories.unshift(search1);
       this.setCurrentSearchHistory(currentHistories);
