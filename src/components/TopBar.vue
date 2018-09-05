@@ -7,7 +7,21 @@
                     <span class="title">AI Market</span>
                 </div>
             </router-link>
+             <Dropdown placement="bottom-end" v-on:on-click="_click" class="transform">
+                <Icon custom="icon-transform" color="#fff" size="20" ></Icon>
+                <DropdownMenu slot="list">
+                    <DropdownItem name="personal">
+                        <a href="https://github.com/ATNIO">Git ATN</a>
+                    </DropdownItem>
+                    <DropdownItem name="logout">
+                      <a href="https://github.com/ATNIO/atn-wallet/releases">Git Wallet</a>
+                    </DropdownItem>
+                    <DropdownItem name="logout">
+                      <a href="http://119.3.57.66:4065">Explore</a>
+                    </DropdownItem>
 
+                </DropdownMenu>
+            </Dropdown>
             <div id="fade" class="black_overlay" v-if="fadeShow()" @click="clearSearch"></div>
             <div class="search">
                 <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch"/>
@@ -476,6 +490,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 
     .i-title {
       display: flex;
@@ -483,10 +498,25 @@ export default {
 
       .image {
         margin-right: 12px;
+        width: 50px;
+        height: 50px;
       }
       .title {
         font-size: 20px;
         color: #ffffff;
+      }
+    }
+    .transform {
+      position: absolute;
+      left: 274px;
+      top: 20px;
+      text-align: center;
+      z-index: 1000;
+
+      a {
+        color: #3f485c;
+        font-family: SourceHanSansCN-Bold;
+        font-size: 16px;
       }
     }
 
@@ -654,10 +684,12 @@ export default {
       }
 
       .avatar {
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
         border-radius: 100%;
         overflow: hidden;
+        box-shadow: none;
+        // border:1px solid #ffffff !important;
         margin-right: 10px;
       }
     }

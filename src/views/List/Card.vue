@@ -13,11 +13,11 @@
       <div class="footer">
         <div class="left">
           <div class="comment" @click.stop="editComment">
-            <Icon custom="icon-comment"/>
+            <Icon custom="icon-uncomment"/>
             <span>{{ item.reply_count.count }}</span>
           </div>
           <div class="star">
-            <Icon custom="icon-star" />
+            <Icon custom="icon-unstar" />
             <span>{{ item.collect_count.upcount }}</span>
           </div>
         </div>
