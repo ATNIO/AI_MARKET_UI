@@ -8,7 +8,7 @@
                 </div>
             </router-link>
 
-            <div id="fade" class="black_overlay" v-if="searchShow || searchEmpty || searchHistoryShow" @click="clearSearch"></div>
+            <div id="fade" class="black_overlay" v-if="fadeShow()" @click="clearSearch"></div>
             <div class="search">
                 <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch"/>
                 <div class="search-history" v-if="searchHistoryShow">
@@ -386,7 +386,8 @@ export default {
 
       this.searchEmpty = this.search1.length > 0 && result.length == 0;
       this.searchShow = this.searchResult.length > 0;
-      this.searchHistoryShow = this.search1.length <= 0;
+      this.searchHistoryShow =
+        this.search1.length <= 0 && this.currentSearchHistory.length > 0;
       this.searchingFlag = false;
     },
     async selectClick(value) {
@@ -417,17 +418,28 @@ export default {
       var currentHistories = this.currentSearchHistory;
       currentHistories.splice(index, 1);
       this.setCurrentSearchHistory(currentHistories);
+      this.searchHistoryShow =
+        this.search1.length <= 0 && this.currentSearchHistory.length > 0;
     },
     async readySearch() {
-      document.body.parentNode.style.overflow = "hidden";
-      this.searchHistoryShow = this.search1.length <= 0;
+      this.searchHistoryShow =
+        this.search1.length <= 0 && this.currentSearchHistory.length > 0;
+    },
+    fadeShow() {
+      const fadeshow =
+        this.searchShow || this.searchEmpty || this.searchHistoryShow;
+      if (fadeshow) {
+        document.body.parentNode.style.overflow = "hidden";
+      } else {
+        document.body.parentNode.style.overflow = "auto";
+      }
+      return fadeshow;
     },
     async clearSearch() {
       this.searchShow = false;
       this.searchEmpty = false;
       this.searchHistoryShow = false;
       this.search1 = "";
-      document.body.parentNode.style.overflow = "auto";
     },
     selectHover(index) {
       if (index != this.lastMouse) {
