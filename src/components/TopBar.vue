@@ -175,13 +175,15 @@ export default {
       if (account.replace(/(^\s*)|(\s*$)/g, "").length != 0) {
         const response = await check(account);
         const { status, data } = response;
-        if (status === 200) {
+        if (status === 200 && data.err) {
           this.loginShow = false;
           this.isLogin = data.err;
           return true;
         }
       } else {
-        this.setAddress();
+        this.loginShow = true;
+        this.isLogin = false;
+        this.setAddress("");
         return false;
       }
     },

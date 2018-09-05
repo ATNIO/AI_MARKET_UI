@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Card",
   props: {
@@ -47,7 +48,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["setTabsValue"]),
     _click() {
+      this.setTabsValue("1");
       const { addr } = this.item;
       this.$router.push({
         name: "detail",
@@ -57,7 +60,15 @@ export default {
       });
     },
     editComment() {
-      console.log("nininininininininininini");
+      this.setTabsValue("0");
+      const { addr } = this.item;
+
+      this.$router.push({
+        name: "detail",
+        params: {
+          address: addr
+        }
+      });
     }
   }
 };

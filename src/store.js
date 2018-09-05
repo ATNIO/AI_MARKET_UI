@@ -26,8 +26,8 @@ export default new Vuex.Store({
     currentComments: [],
     currentCommentsPage: 1,
     currentCommentsCount: 0,
-
-    searchHistory: []
+    searchHistory: [],
+    tabsValue: "1"
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
@@ -103,6 +103,9 @@ export default new Vuex.Store({
     },
     [types.SET_SEARCH_HISTORY](state, histories = []) {
       state.searchHistory = histories;
+    },
+    [types.SET_TABS_VALUE](state, tab) {
+      state.tabsValue = tab;
     }
   },
   actions: {
@@ -157,6 +160,9 @@ export default new Vuex.Store({
     },
     setCurrentSearchHistory({ commit }, payload) {
       commit(types.SET_SEARCH_HISTORY, payload);
+    },
+    setTabsValue({ commit }, value) {
+      commit(types.SET_TABS_VALUE, value);
     }
   },
   getters: {
@@ -213,6 +219,9 @@ export default new Vuex.Store({
     },
     currentSearchHistory(state) {
       return state.searchHistory;
+    },
+    tabsValue(state) {
+      return state.tabsValue;
     }
   }
 });
