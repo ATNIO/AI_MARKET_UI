@@ -12,6 +12,7 @@
       autosize
       placeholder="Enter something..."
       :disabled="!isEditable"
+      :clearable="!isEditable"
       :class="{ dark: theme === 'dark' }"
       v-on:on-change="valueChange"
     />

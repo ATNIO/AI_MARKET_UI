@@ -38,7 +38,7 @@ export default {
         },
         {
           value: "OutDate",
-          label: "OutDate"
+          label: "Date"
         }
       ]
     };

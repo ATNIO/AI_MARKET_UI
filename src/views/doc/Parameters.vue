@@ -25,6 +25,9 @@
         @click="callAi"
       >Sign Balance to Execute API</Button>
     </div>
+    <div class="clear-btn" v-if="serverRes">
+      <Button @click="clear">Clear</Button>
+    </div>
   </section>
 </template>
 
@@ -121,7 +124,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["address", "stateChannel"]),
+    ...mapGetters(["address", "stateChannel", "serverRes"]),
     parametersType() {
       return this.param.map(parameter => parameter.in).reduce((pre, cur) => {
         pre.includes(cur) || pre.push(cur);
@@ -190,6 +193,9 @@ export default {
       }
 
       return true;
+    },
+    clear() {
+      this.setServerRes(null);
     },
     async callAi() {
       if (!this.checkBeforeCall()) return;
@@ -401,6 +407,26 @@ export default {
       background: #9ea0f9;
       border-radius: 4px;
       font-size: 18px;
+
+      &:hover {
+        background: #7c7fff;
+      }
+    }
+  }
+
+  .clear-btn {
+    width: 100%;
+    height: 50px;
+    margin-top: 16px;
+
+    & /deep/ .ivu-btn-default {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      background: #9ea0f9;
+      font-size: 18px;
+      color: #ffffff;
 
       &:hover {
         background: #7c7fff;
