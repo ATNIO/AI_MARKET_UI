@@ -1,31 +1,33 @@
-<template>
-  <section class="parameters">
-    <h3>
-      Parameters
-      <span class="note">
-        (<span style="color: red">&#8727;</span> is required)
-      </span>
-    </h3>
-    <div v-if="param.length === 0" class="no-parameter">
-      <span>No parameter</span>
-    </div>
-    <div v-else class="re-header">
-      <p>Name</p>
+ <template>
+   <section class="parameters">
+     <h3>
+       Parameters
+       <span class="note">
+         (<span style="color: red">&#8727;</span> is required)
+       </span>
+     </h3>
+     <div v-if="param.length === 0" class="no-parameter">
+       <span>No parameter</span>
+     </div>
+     <div v-else class="re-header">
+       <p>Name</p>
       <p>Description</p>
     </div>
     <div class="parameters-content">
-      <parameter-form :param="param"></parameter-form>
+      <parameter-form ref="form" :param="param"></parameter-form>
     </div>
     <div class="action-bar">
       <span>{{ price | priceFormat }} ATN</span>
-      <Button type="primary" :disabled="isDeprecated">Sign Balance to Execute API</Button>
+      <Button type="primary" :disabled="isDeprecated" @click="callAi">Sign Balance to Execute API</Button>
     </div>
   </section>
 </template>
-
-<script>
+ <script>
+import Atn from "atn-js";
+import { mapGetters, mapActions } from "vuex";
 import ParameterForm from "./ParameterForm";
-
+const atn = new Atn(window.atn3);
+const CACHE_KEY = "DETAIL_STATE_CHANNEL";
 export default {
   name: "Parameters",
   components: { ParameterForm },
@@ -46,9 +48,18 @@ export default {
     price: {
       type: String,
       default: "0"
+    },
+    method: {
+      type: String,
+      default: "GET"
+    },
+    uri: {
+      type: String,
+      default: ""
     }
   },
   computed: {
+    ...mapGetters(["address", "stateChannel"]),
     parametersType() {
       return this.param.map(parameter => parameter.in).reduce((pre, cur) => {
         pre.includes(cur) || pre.push(cur);
@@ -59,9 +70,19 @@ export default {
     parametersRender() {
       return this.param.reduce((pre, cur) => {
         pre[cur.in] ? pre[cur.in].push(cur) : (pre[cur.in] = [cur]);
-
         return pre;
       }, {});
+    },
+    dbotAddr() {
+      return this.$route.params.address;
+    },
+    cacheKey() {
+      return this.address + "_" + this.dbotAddr;
+    },
+    stateChannelStatus() {
+      const dbotStateChannel = this.stateChannel[this.cacheKey];
+      if (!dbotStateChannel) return "close";
+      return dbotStateChannel.status;
     }
   },
   watch: {
@@ -76,12 +97,49 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    ...mapActions(["setStateChannel"]),
+    checkBeforeCall() {
+      if (!this.address) {
+        this.$Notice.warning({
+          title: "未登录",
+          desc: "您需要使用您的ATN钱包登录"
+        });
+        return false;
+      }
+      if (this.stateChannelStatus === "close") {
+        this.$Notice.warning({
+          title: "未检测到 state channel",
+          desc: "您需要打开一个 state channel，以便成功调用该 API"
+        });
+        return false;
+      }
+      if (this.stateChannelStatus !== "synced") {
+        this.$Notice.warning({
+          title: "state channel 尚未准备好",
+          desc: "state channel 正在打开或者正在同步数据，请稍后再试"
+        });
+        return false;
+      }
+      return true;
+    },
+    async callAi() {
+      if (!this.checkBeforeCall()) return;
+      const paramsModel = this.$refs.form.paramModel;
+      const options = {};
+      const callResult = await atn.callAi(
+        this.dbotAddr,
+        this.method,
+        this.uri,
+        options,
+        this.address
+      );
+    }
+  }
 };
 </script>
-
-
-<style lang="less" scoped>
+  
+ <style lang="less" scoped>
 .parameters {
   h3 {
     margin-bottom: 30px;
