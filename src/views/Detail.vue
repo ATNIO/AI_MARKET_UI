@@ -62,7 +62,7 @@
                                     @click="_click()"
                                     size="20"
                             />
-                            <span>{{dbot.collect_count.upcount}}</span>
+                            <span>{{this.likeCount}}</span>
                         </p>
                         <p class="update">update: {{dbot.update_at | timeFormat}}</p>
                     </div>
@@ -98,7 +98,8 @@ export default {
     return {
       detail: {},
       data: data[0],
-      visible: false
+      visible: false,
+      likeCount: 0
     };
   },
   computed: {
@@ -121,6 +122,7 @@ export default {
   mounted() {
     this.fetch();
     this.getLikeVote();
+    //this.likeCount=this.dbot().collect_count.upcount;
 
     // Swagger("https://petstore.swagger.io/v2/swagger.json").then(data => {
     //   this.setDocData({ data });
@@ -184,6 +186,7 @@ export default {
       const { status, data } = response;
       if (status === 200) {
         this.visible = data.voted.upvoted;
+        this.likeCount = data.count.upcount;
       }
     },
     async setLikeVote(value) {
@@ -202,10 +205,12 @@ export default {
       if (status === 200 && data.err != false) {
         this.visible = value;
         if (value) {
-          this.dbot.collect_count.upcount++;
+          this.likeCount++;
         } else {
-          this.dbot.collect_count.upcount--;
+          this.likeCount--;
         }
+        this.getLikeVote();
+
         this.$Notice.success({
           title: "点评成功",
           desc: "您评价了该服务! "
