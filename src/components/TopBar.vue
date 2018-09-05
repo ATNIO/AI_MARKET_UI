@@ -7,7 +7,8 @@
                     <span class="title">AI Market</span>
                 </div>
             </router-link>
-             <Dropdown placement="bottom-end" v-on:on-click="_click" class="transform">
+            <div class="center">
+              <Dropdown placement="bottom-end" v-on:on-click="_click" class="transform">
                 <Icon custom="icon-transform" color="#fff" size="20" ></Icon>
                 <DropdownMenu slot="list">
                     <DropdownItem name="personal">
@@ -61,6 +62,8 @@
                     </transition-group>
                 </div>
             </div>
+            </div>
+            
 
             <div class="personal-center">
                 <div v-show="loginShow">
@@ -490,7 +493,12 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
+
+    .center {
+      display: flex;
+      flex-direction: row;
+      margin-left: -120px;
+    }
 
     .i-title {
       display: flex;
@@ -507,10 +515,9 @@ export default {
       }
     }
     .transform {
-      position: absolute;
-      left: 274px;
-      top: 20px;
       text-align: center;
+      margin-right: 20px;
+      margin-top: 6px;
       z-index: 1000;
 
       a {
