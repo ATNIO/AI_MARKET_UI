@@ -284,27 +284,48 @@ export default {
       const keyDownArray = 40;
       const keyUpArray = 38;
       const keyEnter = 13;
-      if (this.now >= this.searchResult.length) {
-        this.now = this.searchResult.length - 1;
+      if (this.searchHistoryShow) {
+        if (this.now >= this.currentSearchHistory.length) {
+          this.now = this.currentSearchHistory.length - 1;
+        }
+      } else {
+        if (this.now >= this.searchResult.length) {
+          this.now = this.searchResult.length - 1;
+        }
       }
       if (event.keyCode == keyDownArray) {
         this.now++;
-        if (this.searchResult.length == this.now) {
+        if (this.searchHistoryShow) {
+          if (this.currentSearchHistory.length <= this.now) {
+            this.now = 0;
+          }
+        } else if (this.searchResult.length <= this.now) {
           this.now = 0;
         }
         return;
       }
       if (event.keyCode == keyUpArray) {
         this.now--;
-        if (this.now == -1) {
-          this.now = this.searchResult.length - 1;
+        if (this.now <= -1) {
+          if (this.searchHistoryShow) {
+            this.now = this.currentSearchHistory.length - 1;
+          } else {
+            this.now = this.searchResult.length - 1;
+          }
         }
         return;
       }
       if (event.keyCode == keyEnter) {
-        if (this.now >= 0 && this.now < this.searchResult.length) {
-          this.selectClick(this.searchResult[this.now]);
+        if (this.search1.length == 0) {
+          if (this.now >= 0 && this.now < this.currentSearchHistory.length) {
+            this.selectHistory(this.currentSearchHistory[this.now]);
+          }
+        } else {
+          if (this.now >= 0 && this.now < this.searchResult.length) {
+            this.selectClick(this.searchResult[this.now]);
+          }
         }
+        this.now = -1;
         return;
       }
       this.searchFrom = 0;
@@ -379,6 +400,8 @@ export default {
 
       if (index != -1) {
         currentHistories.splice(index, 1);
+      } else if (currentHistories.length >= 20) {
+        currentHistories.splice(currentHistories.length - 1, 1);
       }
       currentHistories.unshift(search1);
       this.setCurrentSearchHistory(currentHistories);
@@ -396,6 +419,7 @@ export default {
       this.setCurrentSearchHistory(currentHistories);
     },
     async readySearch() {
+      document.body.parentNode.style.overflow = "hidden";
       this.searchHistoryShow = this.search1.length <= 0;
     },
     async clearSearch() {
@@ -403,6 +427,7 @@ export default {
       this.searchEmpty = false;
       this.searchHistoryShow = false;
       this.search1 = "";
+      document.body.parentNode.style.overflow = "auto";
     },
     selectHover(index) {
       if (index != this.lastMouse) {
@@ -473,7 +498,9 @@ export default {
         border-radius: 4px;
         margin-top: 8px;
         width: 590px;
+        max-height: 600px;
         background-color: #fff;
+        overflow: auto;
         .search-history-option {
           box-sizing: border-box;
           height: 20px;
@@ -507,9 +534,11 @@ export default {
         margin-top: 6px;
         top: 45px;
         width: 590px;
+        max-height: 600px;
         border: 1px solid #d4d4d4;
         background-color: #fff;
         padding-bottom: 27px;
+        overflow: auto;
         .search-top {
           height: 18px;
           background-color: #fff;
