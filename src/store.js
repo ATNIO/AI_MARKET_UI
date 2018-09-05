@@ -27,7 +27,9 @@ export default new Vuex.Store({
     currentCommentsPage: 1,
     currentCommentsCount: 0,
     searchHistory: [],
-    tabsValue: "1"
+    tabsValue: "1",
+
+    serverRes: null
   },
   mutations: {
     [types.SET_DOC_DATA](state, data = {}) {
@@ -106,6 +108,9 @@ export default new Vuex.Store({
     },
     [types.SET_TABS_VALUE](state, tab) {
       state.tabsValue = tab;
+    },
+    [types.SET_SERVER_RES](state, res) {
+      state.serverRes = Object.freeze(res);
     }
   },
   actions: {
@@ -163,6 +168,9 @@ export default new Vuex.Store({
     },
     setTabsValue({ commit }, value) {
       commit(types.SET_TABS_VALUE, value);
+    },
+    setServerRes({ commit }, res) {
+      commit(types.SET_SERVER_RES, res);
     }
   },
   getters: {
@@ -222,6 +230,9 @@ export default new Vuex.Store({
     },
     tabsValue(state) {
       return state.tabsValue;
+    },
+    serverRes(state) {
+      return state.serverRes;
     }
   }
 });

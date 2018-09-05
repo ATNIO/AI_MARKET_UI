@@ -7,7 +7,7 @@
     </div>
     <Input 
       v-if="currentView === 0"
-      v-model="jsonData" 
+      :value="jsonData" 
       type="textarea" 
       autosize
       placeholder="Enter something..."
@@ -100,6 +100,10 @@ export default {
     color: #fff;
   }
 
+  & /deep/ .ivu-input[disabled] {
+    cursor: text;
+  }
+
   .view-change {
     margin-bottom: 10px;
     cursor: pointer;
@@ -109,6 +113,7 @@ export default {
       font-size: 12px;
 
       &.dark {
+        cursor: text;
         color: #0d0628;
       }
     }

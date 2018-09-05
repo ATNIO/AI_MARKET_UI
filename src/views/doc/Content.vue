@@ -32,6 +32,9 @@
         :uri="endpoint.uri"
       ></Parameters>
 
+      <!-- 我来组成 server res -->
+      <server-res></server-res>
+
       <!-- 我来组成 response -->
       <Response :responses="responses"></Response>
 
@@ -39,7 +42,6 @@
       <model-list :definitions="definitions"></model-list>
 
     </div>
-
   </article>
 </template>
 
@@ -47,10 +49,11 @@
 import Parameters from "./Parameters";
 import Response from "./Response";
 import ModelList from "./ModelList";
+import ServerRes from "./ServerResponse";
 
 export default {
   name: "Content",
-  components: { Parameters, Response, ModelList },
+  components: { Parameters, Response, ModelList, ServerRes },
   props: {
     spec: {
       type: Object,

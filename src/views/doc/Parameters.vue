@@ -18,7 +18,12 @@
     </div>
     <div class="action-bar">
       <span>{{ price | priceFormat }} ATN</span>
-      <Button type="primary" :disabled="isDeprecated" @click="callAi">Sign Balance to Execute API</Button>
+      <Button 
+        :loading="isLoading" 
+        type="primary" 
+        :disabled="isDeprecated" 
+        @click="callAi"
+      >Sign Balance to Execute API</Button>
     </div>
   </section>
 </template>
@@ -26,18 +31,71 @@
 <script>
 import Atn from "atn-js";
 import { mapGetters, mapActions } from "vuex";
+import BN from "bignumber.js";
 
 import ParameterForm from "./ParameterForm";
 
 const atn = new Atn(window.atn3);
 const CACHE_KEY = "DETAIL_STATE_CHANNEL";
 
+function getOptions(model) {
+  const headers = {};
+  const path = {}; // TODO: 这个还不知道怎么处理
+  const query = {};
+  const formdata = new FormData();
+  let body = {};
+
+  let isbody = false;
+  let isFormdata = false;
+
+  for (let key in model) {
+    if (model.hasOwnProperty(key)) {
+      const { value, pt, nt } = model[key];
+
+      switch (pt.toLowerCase()) {
+        case "header":
+          headers[key] = value;
+          break;
+        case "path":
+          path[key] = value;
+          break;
+        case "query":
+          query[key] = value;
+          break;
+        case "body":
+          isbody = true;
+          body = JSON.parse(value);
+          break;
+        case "formdata":
+          isFormdata = true;
+          if (nt === "file") {
+            value.map(item => {
+              formdata.append(key, item.file);
+            });
+          } else {
+            formdata.append(key, value);
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  return {
+    headers,
+    params: query,
+    data: isbody ? body : isFormdata ? formdata : {}
+  };
+}
+
 export default {
   name: "Parameters",
   components: { ParameterForm },
   data() {
     return {
-      parameterModel: {}
+      parameterModel: {},
+      isLoading: false
     };
   },
   props: {
@@ -105,7 +163,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setStateChannel"]),
+    ...mapActions(["setStateChannel", "setServerRes"]),
     checkBeforeCall() {
       if (!this.address) {
         this.$Notice.warning({
@@ -136,15 +194,72 @@ export default {
     async callAi() {
       if (!this.checkBeforeCall()) return;
 
+      this.isLoading = true;
+
       const paramsModel = this.$refs.form.paramModel;
-      const options = {};
-      const callResult = await atn.callAi(
-        this.dbotAddr,
-        this.method,
-        this.uri,
-        options,
-        this.address
-      );
+      const options = getOptions(paramsModel);
+
+      options.method = this.method;
+      let callResult = null;
+
+      try {
+        callResult = await atn.callAPI(
+          this.dbotAddr,
+          this.method,
+          this.uri,
+          options,
+          this.address
+        );
+
+        this.isLoading = false;
+
+        const { status, msg, data } = callResult;
+
+        if (status === 200) {
+          this.setServerRes(data);
+        } else {
+          this.$Message.error(msg);
+        }
+      } catch (e) {
+        console.error("call ai:", e);
+        this.$Message.error(e);
+      }
+
+      this.getChannelDetail();
+    },
+    async getChannelDetail() {
+      let channelDetail = null;
+
+      this.setStateChannel({
+        status: "syncing",
+        storeKey: this.cacheKey
+      });
+
+      try {
+        channelDetail = await atn.getChannelDetail(this.dbotAddr, this.address);
+      } catch (e) {
+        console.error("getChannelDetail catch:", e);
+
+        return "error";
+      }
+
+      console.log("channelDetail:", channelDetail);
+
+      if (!channelDetail) {
+        // TODO: 判断 getChannelDetail 返回结果
+        console.error("getChannelDetail:", channelDetail);
+      }
+
+      const { deposit, balance } = channelDetail;
+      const depositComputed = new BN(deposit, 10)
+        .minus(new BN(balance, 10))
+        .toString(10);
+
+      this.setStateChannel({
+        status: "synced",
+        balance: depositComputed,
+        storeKey: this.cacheKey
+      });
     }
   }
 };
