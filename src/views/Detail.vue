@@ -1,81 +1,81 @@
 <template>
-    <section class="detail">
-        <div class="bg"></div>
+  <section class="detail">
+    <div class="bg"></div>
 
-        <div class="container">
-            <div class="breadcrumb">
-                <Breadcrumb separator=">">
-                    <BreadcrumbItem to="/">{{data.name}}</BreadcrumbItem>
-                    <BreadcrumbItem to="/detail">{{dbot.name}}</BreadcrumbItem>
-                </Breadcrumb>
-            </div>
-
-            <div class="card">
-                <!-- 左边logo和tag -->
-                <div class="logo-tag">
-                    <div class="wrapper">
-                        <div class="logo" :style="logo"></div>
-                        <span class="tagtitle"><Icon type="md-bookmark" color="#87C5FE"/> Tag:</span>
-                        <ul class="tag">
-                            <li v-for="item in dbot.tags" v-bind:key="item">
-                                <span>{{item}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 右边详细 -->
-                <div class="content">
-                    <p class="name">{{dbot.name}}</p>
-                    <p class="address">
-                        <span>Address：{{dbot.addr}}</span>
-                        <Icon
-                                type="ios-copy-outline"
-                                size="20"
-                                v-clipboard:copyhttplist="dbot.addr"
-                                v-clipboard:success="onCopy"
-                        />
-                    </p>
-                    <p class="domain">
-                        <span>Domain：{{dbot.domain}}</span>
-                        <Icon
-                                type="ios-copy-outline"
-                                size="20"
-                                v-clipboard:copyhttplist="dbot.domain"
-                                v-clipboard:success="onCopy"
-                        />
-                    </p>
-                    <p class="auther">
-                        <span>{{dbot.owner}}</span>
-                        <Icon
-                                type="ios-copy-outline"
-                                size="20"
-                                v-clipboard:copyhttplist="dbot.owner"
-                                v-clipboard:success="onCopy"
-                        />
-                    </p>
-                    <p class="description">{{dbot.description}}</p>
-                    <div class="like">
-                        <p class="stars">
-                            <Icon
-                                    :type="visibleType"
-                                    @click="_click()"
-                                    size="20"
-                            />
-                            <span>{{this.likeCount}}</span>
-                        </p>
-                        <p class="update">update: {{dbot.update_at | timeFormat}}</p>
-                    </div>
-                </div>
-            </div>
-
-
-            <channel :dbot="dbot"></channel>
-
-
-            <detail-container></detail-container>
+    <div class="container">
+        <div class="breadcrumb">
+          <Breadcrumb separator=">">
+            <BreadcrumbItem to="/" class="current-item">{{currentItem}}</BreadcrumbItem>
+            <BreadcrumbItem to="/detail">{{dbot.name}}</BreadcrumbItem>
+          </Breadcrumb>
         </div>
-    </section>
+
+        <div class="card">
+          <!-- 左边logo和tag -->
+          <div class="logo-tag">
+            <div class="wrapper">
+              <div class="logo" :style="logo"></div>
+              <span class="tagtitle"><Icon custom="icon-tag" color="#87C5FE"/> Tag:</span>
+              <ul class="tag">
+                <li v-for="item in dbot.tags" v-bind:key="item">
+                <span>{{item}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 右边详细 -->
+          <div class="content">
+            <p class="name">{{dbot.name}}</p>
+            <p class="address">
+              <span>Address：{{dbot.addr}}</span> 
+              <Icon 
+                custom="i-icon icon-copy"
+                size="20"
+                v-clipboard:copyhttplist="dbot.addr"
+                v-clipboard:success="onCopy"
+                />
+            </p>
+            <p class="domain">
+              <span>Domain：{{dbot.domain}}</span>
+              <Icon
+                custom="i-icon icon-copy"
+                size="20"
+                v-clipboard:copyhttplist="dbot.domain"
+                v-clipboard:success="onCopy"
+              />
+            </p>
+            <p class="auther">
+              <span>{{dbot.owner}}</span>
+              <Icon
+                custom="i-icon icon-copy"
+                size="20"
+                v-clipboard:copyhttplist="dbot.owner"
+                v-clipboard:success="onCopy"
+              />
+            </p>
+            <p class="description">{{dbot.description}}</p>
+            <div class="like">
+              <p class="stars">
+                <Icon
+                :custom="visibleType"
+                @click="_click()"
+                size="20"
+                />
+                <span class="star-count">{{this.likeCount}}</span>
+              </p>
+              <p class="update">update: {{dbot.update_at | timeFormat}}</p>
+            </div>
+          </div>  
+        </div>
+
+
+        <channel :dbot="dbot"></channel>
+
+
+        <detail-container></detail-container>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -103,7 +103,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["addressInDetail", "dbots", "address"]),
+    ...mapGetters(["addressInDetail", "dbots", "address", "currentItem"]),
     dbotAddress() {
       return this.$route.params.address;
     },
@@ -116,7 +116,7 @@ export default {
       return this.dbots.filter(item => this.dbotAddress === item.addr)[0];
     },
     visibleType() {
-      return this.visible ? "ios-star" : "ios-star-outline";
+      return this.visible ? "ios-star-outline" : "ios-star";
     }
   },
   mounted() {
@@ -249,6 +249,11 @@ export default {
     .breadcrumb {
       margin: 40px 0 20px;
 
+      .current-item {
+        text-transform: capitalize;
+        font-weight: 600;
+      }
+
       & /deep/ .ivu-breadcrumb a {
         font-size: 18px;
         color: #ffffff;
@@ -360,6 +365,9 @@ export default {
             justify-content: flex-end;
             align-items: center;
             margin-bottom: 10px;
+            .star-count {
+              margin-left: 4px;
+            }
 
             span {
               padding-top: 2px;
