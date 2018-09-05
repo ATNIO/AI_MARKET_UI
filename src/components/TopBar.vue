@@ -278,9 +278,6 @@ export default {
       }
     },
     async searchEvent(event) {
-      if (this.searchingFlag) {
-        return;
-      }
       const keyDownArray = 40;
       const keyUpArray = 38;
       const keyEnter = 13;
@@ -330,6 +327,9 @@ export default {
       }
     },
     async searchValueChange() {
+      if (this.searchingFlag) {
+        return;
+      }
       this.searchFrom = 0;
       this.searchingFlag = true;
       setTimeout(async () => {
