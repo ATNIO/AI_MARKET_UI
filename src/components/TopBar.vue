@@ -7,7 +7,8 @@
                     <span class="title">AI Market</span>
                 </div>
             </router-link>
-             <Dropdown placement="bottom-end" v-on:on-click="_click" class="transform">
+            <div class="center">
+              <Dropdown placement="bottom-end" v-on:on-click="_click" class="transform">
                 <Icon custom="icon-transform" color="#fff" size="20" ></Icon>
                 <DropdownMenu slot="list">
                     <DropdownItem name="personal">
@@ -24,7 +25,7 @@
             </Dropdown>
             <div id="fade" class="black_overlay" v-if="fadeShow()" @click="clearSearch"></div>
             <div class="search">
-                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch" v-on:on-change="searchValueChange"/>
+                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch"/>
                 <div class="search-history" v-if="searchHistoryShow">
                   <ul mode="out-in" v-cloak>
                     <li v-for="(value,index) in currentSearchHistory" class="search-history-option" @mouseover="moveHistory(index)" :key="index">
@@ -61,6 +62,8 @@
                     </transition-group>
                 </div>
             </div>
+            </div>
+            
 
             <div class="personal-center">
                 <div v-show="loginShow">
@@ -292,6 +295,9 @@ export default {
       }
     },
     async searchEvent(event) {
+      if (this.searchingFlag) {
+        return;
+      }
       const keyDownArray = 40;
       const keyUpArray = 38;
       const keyEnter = 13;
@@ -337,11 +343,6 @@ export default {
           }
         }
         this.now = -1;
-        return;
-      }
-    },
-    async searchValueChange() {
-      if (this.searchingFlag) {
         return;
       }
       this.searchFrom = 0;
@@ -407,9 +408,6 @@ export default {
       this.searchingFlag = false;
     },
     async selectClick(value) {
-      if (value.dbot_address.indexOf(this.search1.trim()) > 0) {
-        value.dbot_address = this.search1;
-      }
       this.$router.push({
         name: "detail",
         params: { address: value.dbot_address }
@@ -495,7 +493,12 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
+
+    .center {
+      display: flex;
+      flex-direction: row;
+      margin-left: -120px;
+    }
 
     .i-title {
       display: flex;
@@ -512,10 +515,9 @@ export default {
       }
     }
     .transform {
-      position: absolute;
-      left: 274px;
-      top: 20px;
       text-align: center;
+      margin-right: 20px;
+      margin-top: 6px;
       z-index: 1000;
 
       a {
