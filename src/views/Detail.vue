@@ -62,7 +62,7 @@
                                     @click="_click()"
                                     size="20"
                             />
-                            <span>{{this.likeCount}}</span>
+                            <span>{{dbot.collect_count.upcount}}</span>
                         </p>
                         <p class="update">update: {{dbot.update_at | timeFormat}}</p>
                     </div>
@@ -98,8 +98,7 @@ export default {
     return {
       detail: {},
       data: data[0],
-      visible: false,
-      likeCount: 0
+      visible: false
     };
   },
   computed: {
@@ -113,7 +112,7 @@ export default {
       };
     },
     dbot() {
-      return this.getDbot;
+      return this.dbots.filter(item => this.dbotAddress === item.addr)[0];
     },
     visibleType() {
       return this.visible ? "ios-star" : "ios-star-outline";
@@ -168,11 +167,6 @@ export default {
     onCopy() {
       this.$Message.success("Copy success.");
     },
-    getDbot() {
-      const d = this.dbots.filter(item => this.dbotAddress === item.addr)[0];
-      this.likeCount = d.collect_count.upcount;
-      return d;
-    },
     checkLogin(account) {
       if (account.replace(/(^\s*)|(\s*$)/g, "").length != 0) {
         return true;
@@ -190,7 +184,6 @@ export default {
       const { status, data } = response;
       if (status === 200) {
         this.visible = data.voted.upvoted;
-        this.likeCount = data.count.upcount;
       }
     },
     async setLikeVote(value) {
@@ -209,9 +202,9 @@ export default {
       if (status === 200 && data.err != false) {
         this.visible = value;
         if (value) {
-          this.likeCount++;
+          this.dbot.collect_count.upcount++;
         } else {
-          this.likeCount--;
+          this.dbot.collect_count.upcount--;
         }
         this.$Notice.success({
           title: "点评成功",
