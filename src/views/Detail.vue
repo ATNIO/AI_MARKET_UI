@@ -203,12 +203,14 @@ export default {
       const response = await setLikeVote(dbot, user, value);
       const { status, data } = response;
       if (status === 200 && data.err != false) {
+        /*
         this.visible = value;
         if (value) {
           this.likeCount++;
         } else {
           this.likeCount--;
         }
+        */
         this.getLikeVote();
 
         this.$Notice.success({
