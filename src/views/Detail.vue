@@ -1,82 +1,82 @@
 <template>
-  <section class="detail">
-    <div class="bg"></div>
+    <section class="detail">
+        <div class="bg"></div>
 
-    <div class="container">
-        <div class="breadcrumb">
-          <Breadcrumb separator=">">
-            <BreadcrumbItem to="/" class="current-item">{{currentItem}}</BreadcrumbItem>
-            <BreadcrumbItem to="/detail">{{dbot.name}}</BreadcrumbItem>
-          </Breadcrumb>
-        </div>
-
-        <div class="card">
-          <!-- 左边logo和tag -->
-          <div class="logo-tag">
-            <div class="wrapper">
-              <div class="logo" :style="logo"></div>
-              <span class="tagtitle"><Icon custom="icon-tag" color="#87C5FE"/> Tag:</span>
-              <ul class="tag">
-                <li v-for="item in dbot.tags" v-bind:key="item">
-                <span>{{item}}</span>
-                </li>
-              </ul>
+        <div class="container">
+            <div class="breadcrumb">
+                <Breadcrumb separator=">">
+                    <BreadcrumbItem to="/" class="current-item">{{currentItem}}</BreadcrumbItem>
+                    <BreadcrumbItem to="/detail">{{dbot.name}}</BreadcrumbItem>
+                </Breadcrumb>
             </div>
-          </div>
 
-          <!-- 右边详细 -->
-          <div class="content">
-            <p class="name">{{dbot.name}}</p>
-            <p class="address">
-              <span>Address：{{dbot.addr}}</span> 
-              <Icon 
-                custom="i-icon icon-copy"
-                size="20"
-                v-clipboard:copyhttplist="dbot.addr"
-                v-clipboard:success="onCopy"
-                />
-            </p>
-            <p class="domain">
-              <span>Domain：{{dbot.domain}}</span>
-              <Icon
-                custom="i-icon icon-copy"
-                size="20"
-                v-clipboard:copyhttplist="dbot.domain"
-                v-clipboard:success="onCopy"
-              />
-            </p>
-            <p class="auther">
-              <span>{{dbot.owner}}</span>
-              <Icon
-                custom="i-icon icon-copy"
-                size="20"
-                v-clipboard:copyhttplist="dbot.owner"
-                v-clipboard:success="onCopy"
-              />
-            </p>
-            <p class="description">{{dbot.description}}</p>
-            <div class="like">
-              <p class="stars">
-                <Icon
-                :custom="visibleType"
-                @click="_click()"
-                size="20"
-                color="#797bf8"
-                />
-                <span class="star-count">{{this.likeCount}}</span>
-              </p>
-              <p class="update">update: {{dbot.update_at | timeFormat}}</p>
+            <div class="card">
+                <!-- 左边logo和tag -->
+                <div class="logo-tag">
+                    <div class="wrapper">
+                        <div class="logo" :style="logo"></div>
+                        <span class="tagtitle"><Icon custom="icon-tag" color="#87C5FE"/> Tag:</span>
+                        <ul class="tag">
+                            <li v-for="item in dbot.tags" v-bind:key="item">
+                                <span>{{item}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 右边详细 -->
+                <div class="content">
+                    <p class="name">{{dbot.name}}</p>
+                    <p class="address">
+                        <span>Address：{{dbot.addr}}</span>
+                        <Icon
+                                custom="i-icon icon-copy"
+                                size="20"
+                                v-clipboard:copyhttplist="dbot.addr"
+                                v-clipboard:success="onCopy"
+                        />
+                    </p>
+                    <p class="domain">
+                        <span>Domain：{{dbot.domain}}</span>
+                        <Icon
+                                custom="i-icon icon-copy"
+                                size="20"
+                                v-clipboard:copyhttplist="dbot.domain"
+                                v-clipboard:success="onCopy"
+                        />
+                    </p>
+                    <p class="auther">
+                        <span>{{dbot.owner}}</span>
+                        <Icon
+                                custom="i-icon icon-copy"
+                                size="20"
+                                v-clipboard:copyhttplist="dbot.owner"
+                                v-clipboard:success="onCopy"
+                        />
+                    </p>
+                    <p class="description">{{dbot.description}}</p>
+                    <div class="like">
+                        <p class="stars">
+                            <Icon
+                                    :custom="visibleType"
+                                    @click="_click()"
+                                    size="20"
+                                    color="#797bf8"
+                            />
+                            <span class="star-count">{{this.likeCount}}</span>
+                        </p>
+                        <p class="update">update: {{dbot.update_at | timeFormat}}</p>
+                    </div>
+                </div>
             </div>
-          </div>  
+
+
+            <channel :dbot="dbot"></channel>
+
+
+            <detail-container></detail-container>
         </div>
-
-
-        <channel :dbot="dbot"></channel>
-
-
-        <detail-container></detail-container>
-    </div>
-  </section>
+    </section>
 </template>
 
 <script>
@@ -117,17 +117,12 @@ export default {
       return this.dbots.filter(item => this.dbotAddress === item.addr)[0];
     },
     visibleType() {
-      return this.visible ? "ios-star-outline" : "ios-star";
+      return this.visible ? "icon-star" : "icon-unstar";
     }
   },
-  mounted() {
+  created() {
     this.fetch();
     this.getLikeVote();
-    //this.likeCount=this.dbot().collect_count.upcount;
-
-    // Swagger("https://petstore.swagger.io/v2/swagger.json").then(data => {
-    //   this.setDocData({ data });
-    // });
   },
   methods: {
     ...mapActions(["setDocData", "setDetailData"]),
@@ -205,13 +200,13 @@ export default {
       const { status, data } = response;
       if (status === 200 && data.err != false) {
         /*
-        this.visible = value;
-        if (value) {
-          this.likeCount++;
-        } else {
-          this.likeCount--;
-        }
-        */
+                    this.visible = value;
+                    if (value) {
+                      this.likeCount++;
+                    } else {
+                      this.likeCount--;
+                    }
+                    */
         this.getLikeVote();
 
         this.$Notice.success({
