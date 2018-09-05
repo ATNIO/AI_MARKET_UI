@@ -415,6 +415,7 @@ export default {
       this.setCurrentSearchHistory(currentHistories);
     },
     async readySearch() {
+      document.body.parentNode.style.overflow = "hidden";
       this.searchHistoryShow = this.search1.length <= 0;
     },
     async clearSearch() {
@@ -422,6 +423,7 @@ export default {
       this.searchEmpty = false;
       this.searchHistoryShow = false;
       this.search1 = "";
+      document.body.parentNode.style.overflow = "auto";
     },
     selectHover(index) {
       if (index != this.lastMouse) {
@@ -492,7 +494,9 @@ export default {
         border-radius: 4px;
         margin-top: 8px;
         width: 590px;
+        max-height: 600px;
         background-color: #fff;
+        overflow: auto;
         .search-history-option {
           box-sizing: border-box;
           height: 20px;
@@ -526,9 +530,11 @@ export default {
         margin-top: 6px;
         top: 45px;
         width: 590px;
+        max-height: 600px;
         border: 1px solid #d4d4d4;
         background-color: #fff;
         padding-bottom: 27px;
+        overflow: auto;
         .search-top {
           height: 18px;
           background-color: #fff;
