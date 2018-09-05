@@ -16,7 +16,7 @@
         :class="sortDir === 1 ? 'asc' : 'desc' "
         @click="sortDirChange"
       >
-        <Icon custom="i-icon icon-sort" size="20" />
+        <Icon custom="i-icon icon-sort" size="26" color="#DFDFDF"/>
       </div>
     </div>
   </section>
@@ -92,22 +92,13 @@ export default {
 
     .btn-sort {
       margin-left: 6px;
-      padding: 1px;
-      box-sizing: border-box;
-      border-width: 1px;
-      border-style: solid;
-      border-radius: 2px;
       cursor: pointer;
     }
 
     .asc {
-      border-color: transparent;
     }
 
     .desc {
-      border-color: #797bf8;
-      background: #ffffff;
-
       & /deep/ i::before {
         color: #797bf8;
       }
