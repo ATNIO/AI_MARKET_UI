@@ -48,7 +48,7 @@
                       @click="_click(index)" 
                       :class="{ active: index === profile }"
                       >
-                        <Icon custom="icon-profile" size="41" class="list-icon"/>
+                        <Icon custom="icon-profile" size="32" class="list-icon"/>
                         <span class="trash"> Profile</span>
                     </div>
                 </router-link>
@@ -58,7 +58,7 @@
                       class="channel-list" 
                       @click="_click1(index)" 
                       :class="{ active: index === channel }">
-                        <Icon custom="icon-channel-list" size="41" class="list-icon"/>
+                        <Icon custom="icon-channel-list" size="32" class="list-icon"/>
                         <span class="trash">  Channel list</span>
                     </div>
                 </router-link>
@@ -155,6 +155,7 @@ export default {
   }
 
   .balance-box {
+    margin-top: 20px;
     width: 230px;
     height: 54px;
     padding: 0 8px;
@@ -205,6 +206,7 @@ export default {
       padding-top: 8px;
       color: #3f485c;
       transition: all 0.2s ease;
+      margin-bottom: 25px;
     }
     .channel-list {
       width: 290px;

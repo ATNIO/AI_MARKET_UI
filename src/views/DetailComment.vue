@@ -37,6 +37,7 @@
             </ul>
         </div>
         <Page
+                v-show = "currentComments != ''"
                 class-name="page"
                 :total="currentCommentsCount"
                 show-total
