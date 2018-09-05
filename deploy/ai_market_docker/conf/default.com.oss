@@ -1,0 +1,18 @@
+server {
+  root /usr/share/nginx/html;
+  location / {
+        expires 1d;
+        etag off;
+        proxy_pass http://ai-market-ui.oss-cn-hangzhou.aliyuncs.com/;
+        proxy_set_header Host "ai-market-ui.oss-cn-hangzhou.aliyuncs.com";
+        try_files $uri $uri/ @router;
+    }
+
+  location /api/ {
+    proxy_pass http://119.3.62.127:4001;
+    proxy_set_header Host $http_host;
+  }
+  location @router {
+    rewrite ^.*$ /index.html last;
+  }
+}
