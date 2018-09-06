@@ -12,10 +12,10 @@
                 <Icon custom="icon-transform" color="#fff" size="20" ></Icon>
                 <DropdownMenu slot="list">
                     <DropdownItem name="personal">
-                        <a href="https://github.com/ATNIO">Git ATN</a>
+                        <a href="http://119.3.50.67:4000/">Faucet</a>
                     </DropdownItem>
                     <DropdownItem name="logout">
-                      <a href="https://github.com/ATNIO/atn-wallet/releases">Git Wallet</a>
+                      <a href="https://github.com/ATNIO/atn-wallet/releases">Wallet Download</a>
                     </DropdownItem>
                     <DropdownItem name="logout">
                       <a href="http://119.3.57.66:4065">Explore</a>
