@@ -71,20 +71,30 @@ export default {
 
       return rtn;
     },
+    cacheHander({ status, hash }) {
+      if (status === "synced") {
+        // TODO: delete
+        delete this.storageCache[this.cacheKey];
+      } else {
+        this.storageCache[this.cacheKey] = { status, hash };
+      }
+
+      localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+    },
     async init() {
       const cache = localStorage.getItem(CACHE_KEY);
-      let currentStatus = "";
 
       // 没有缓存，退出。
       if (!cache) return;
 
       this.storageCache = JSON.parse(cache);
-      const currentDbotCache = this.storageCache[this.cacheKey];
 
       // 没有当前 dbot 的缓存，退出。
-      if (!currentDbotCache) return;
+      if (!(new String(this.cacheKey) in this.storageCache)) return;
 
+      const currentDbotCache = this.storageCache[this.cacheKey];
       let { status, hash } = currentDbotCache;
+      let currentStatus = "";
 
       // opening, closing, close, syncing, synced
       switch (status) {
@@ -176,8 +186,9 @@ export default {
         storeKey: this.cacheKey
       });
       // 缓存当前 dbot 的 state channel 的信息
-      this.storageCache[this.cacheKey] = { status };
-      localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+      // this.storageCache[this.cacheKey] = { status };
+      // localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+      this.cacheHander({ status });
     },
     async waitTx(hash, status) {
       // 根据交易 hash， 获取当前交易状态
@@ -185,9 +196,15 @@ export default {
       // hash
       // timeout (default: 5e3) 超时时间
       // confirmations (default: 6) 确认次数
-      const tx = await atn.waitTx(hash, undefined, 3);
+      const tx = await atn.waitTx(hash, undefined, 4);
       const txHash = tx.hash;
       const txStatus = tx.status;
+
+      if (tx.status === 51) {
+        // waitTx Timeout
+        this.$Message.error("超时，请稍后刷新重试");
+        return;
+      }
 
       switch (status) {
         case "opening":
@@ -205,8 +222,9 @@ export default {
 
       if (_status === status) {
         this.setStateChannel({ status, storeKey: this.cacheKey });
-        this.storageCache[this.cacheKey] = { status, hash: txHash };
-        localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+        // this.storageCache[this.cacheKey] = { status, hash: txHash };
+        // localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+        this.cacheHander({ status, hash: txHash });
       }
 
       return status;
@@ -215,10 +233,9 @@ export default {
       const deposit = await atn.getChannelDeposit(this.dbotAddr, this.address);
 
       if (!deposit) {
-        // TODO: 如果为空，需提示
+        // TODO: 如果为空，需提示，待优化
+        console.log("getDeposit:", deposit);
       }
-
-      console.log("getDeposit:", deposit);
 
       return deposit;
     },
@@ -234,8 +251,21 @@ export default {
       }
 
       if (!channelDetail) {
-        // TODO: 判断 getChannelDetail 返回结果
+        // TODO: 待优化
         console.error("getChannelDetail:", channelDetail);
+      }
+
+      const { status, msg } = channelDetail;
+
+      if (status === 11) {
+        // Init Dbot Fail
+        this.setStateChannel({ status: "close", storeKey: this.cacheKey });
+
+        return "error";
+      } else if (status === 12) {
+        // Get channels from server errors
+        // TODO: 暂时不知道改成什么状态比较合适
+        return "error";
       }
 
       return channelDetail;
@@ -258,8 +288,10 @@ export default {
       );
 
       if (txHash) {
-        this.storageCache[this.cacheKey] = { status, hash: txHash };
-        localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+        // this.storageCache[this.cacheKey] = { status, hash: txHash };
+        // localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+
+        this.cacheHander({ status, hash: txHash });
 
         await this.updateDeposit(status, txHash, true);
       } else {
@@ -283,7 +315,7 @@ export default {
       this.setStateChannel({ status, storeKey: this.cacheKey });
 
       try {
-        await atn.createChannel(
+        const res = await atn.createChannel(
           this.dbotAddr,
           this.numberHandler(this.depositValue),
           this.address,
@@ -295,24 +327,19 @@ export default {
         );
 
         status = "syncing";
-
         this.setStateChannel({ status, storeKey: this.cacheKey });
 
-        // 持久化存储当前状态
-        this.storageCache[this.cacheKey] = { status, hash: txHash };
-        localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
-
-        await this.updateDeposit(status, txHash, true);
+        if (res.status === 21) {
+          // Channel has exist
+          this.updateDeposit(status, null, false);
+        } else {
+          this.cacheHander({ status, hash: txHash });
+          this.updateDeposit(status, txHash, true);
+        }
       } catch (e) {
         // 通常进入到这个分支是因为 channel is exit. 所以这时可直接调用 updateDeposit 查询余额。
         // TODO: 不排除有别的异常的可能性，需要补充处理
-        console.error("Create new channel failure:", e);
-
-        status = "syncing";
-
-        this.setStateChannel({ status, storeKey: this.cacheKey });
-
-        await this.updateDeposit(status, null, false);
+        console.error("Creates new channel failure:", e);
       }
     },
     async closeChannel() {
@@ -321,6 +348,11 @@ export default {
       this.setStateChannel({ status, storeKey: this.cacheKey });
       // channelDetail 可以在 update deposit 的时候缓存。
       const channelDetail = await this.getChannelDetail();
+
+      if (channelDetail === "error") {
+        this.$Message.error("error");
+        return;
+      }
 
       try {
         const closeResult = await atn.closeChannel(
@@ -332,10 +364,19 @@ export default {
 
             this.setStateChannel({ status, storeKey: this.cacheKey });
 
-            this.storageCache[this.cacheKey] = { status };
-            localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+            // this.storageCache[this.cacheKey] = { status };
+            // delete this.storageCache[this.cacheKey];
+            // localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
+
+            this.cacheHander({ status });
           }
         );
+
+        if (closeResult.status === 31) {
+          // Init Dbot Fail
+        } else if (closeResult.status === 32) {
+          // Get Delete Close_Signature From DbotServer Error
+        }
       } catch (e) {
         // 关闭 channel 出现异常
         console.error("closeChannel:", e);

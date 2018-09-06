@@ -219,6 +219,21 @@ export default {
 
         this.isLoading = false;
 
+        // 41  Init Dbot Fail
+        // 42  Get EndPoint Fail
+        // 43  Get Channel From Server
+        // 44  No Channel For Call AI
+
+        if (
+          callResult.status === 41 ||
+          callResult.status === 42 ||
+          callResult.status === 43 ||
+          callResult.status === 44
+        ) {
+          this.$Message.error(callResult.msg);
+          return;
+        }
+
         const { status, msg, data } = callResult;
 
         if (status === 200) {
@@ -249,11 +264,16 @@ export default {
         return "error";
       }
 
-      console.log("channelDetail:", channelDetail);
-
       if (!channelDetail) {
-        // TODO: 判断 getChannelDetail 返回结果
-        console.error("getChannelDetail:", channelDetail);
+        console.error("getChannelDetail call ai:", channelDetail);
+      }
+
+      if (status === 11) {
+        // Init Dbot Fail
+        // TODO: ???????
+      } else if (status === 12) {
+        // Get channels from server errors
+        // TODO: 暂时不知道改成什么状态比较合适
       }
 
       const { deposit, balance } = channelDetail;
@@ -263,7 +283,7 @@ export default {
 
       this.setStateChannel({
         status: "synced",
-        balance: depositComputed,
+        banlance: depositComputed,
         storeKey: this.cacheKey
       });
     }
