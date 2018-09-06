@@ -5,6 +5,7 @@ server {
         etag off;
         proxy_pass http://ai-market-ui.oss-cn-hangzhou.aliyuncs.com/;
         proxy_set_header Host "ai-market-ui.oss-cn-hangzhou.aliyuncs.com";
+        proxy_set_header Referer “refer_content”;#OSS控制台设置的Referer
         try_files $uri $uri/ @router;
     }
 
