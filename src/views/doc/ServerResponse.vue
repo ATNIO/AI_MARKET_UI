@@ -1,5 +1,5 @@
 <template>
-  <section class="server-res" v-if="serverRes">
+  <section class="server-res" v-if="serverRes && serverRes[cacheKey]">
     <h3>Server response</h3>
     <div class="re-header">
       <p>Code</p>
@@ -40,20 +40,28 @@ import { mapGetters } from "vuex";
 export default {
   name: "ServerRes",
   computed: {
-    ...mapGetters(["serverRes"]),
+    ...mapGetters(["serverRes", "address"]),
     status() {
-      return this.serverRes ? this.serverRes.status : "";
+      return this.serverRes && this.serverRes[this.cacheKey]
+        ? this.serverRes[this.cacheKey].status
+        : "";
+    },
+    dbotAddr() {
+      return this.$route.params.address;
+    },
+    cacheKey() {
+      return this.address + "_" + this.dbotAddr;
     },
     response() {
-      if (!this.serverRes) return "";
+      if (!(this.serverRes && this.serverRes[this.cacheKey])) return "";
 
-      const { items, error_code, error_msg } = this.serverRes.data;
+      // const { items, error_code, error_msg } = this.serverRes[this.cacheKey].data;
 
-      return error_code ? error_msg : JSON.stringify(items, null, 2);
+      return JSON.stringify(this.serverRes[this.cacheKey].data, null, 2);
     },
     headers() {
-      return this.serverRes
-        ? JSON.stringify(this.serverRes.headers, null, 2)
+      return this.serverRes && this.serverRes[this.cacheKey]
+        ? JSON.stringify(this.serverRes[this.cacheKey].headers, null, 2)
         : "";
     }
   }

@@ -25,7 +25,7 @@
         @click="callAi"
       >Sign Balance to Execute API</Button>
     </div>
-    <div class="clear-btn" v-if="serverRes">
+    <div class="clear-btn" v-if="serverRes && serverRes[cacheKey]">
       <Button @click="clear">Clear</Button>
     </div>
   </section>
@@ -187,7 +187,7 @@ export default {
       return true;
     },
     clear() {
-      this.setServerRes(null);
+      this.setServerRes({ storeKey: this.cacheKey, data: null });
     },
     async callAi() {
       if (!this.checkBeforeCall()) return;
@@ -216,23 +216,18 @@ export default {
         // 43  Get Channel From Server
         // 44  No Channel For Call AI
 
-        if (
-          callResult.status === 41 ||
-          callResult.status === 42 ||
-          callResult.status === 43 ||
-          callResult.status === 44
-        ) {
+        const { status, msg, data } = callResult;
+
+        if (status === 41 || status === 42 || status === 43 || status === 44) {
           this.$Message.error(callResult.msg);
           return;
         }
 
-        const { status, msg, data } = callResult;
-
-        if (status === 200) {
-          this.setServerRes(data);
-        } else {
-          this.$Message.error(msg);
-        }
+        // if (status === 200) {
+        this.setServerRes({ storeKey: this.cacheKey, data });
+        // } else {
+        //   this.$Message.error(msg);
+        // }
       } catch (e) {
         console.error("call ai:", e);
         this.$Message.error(e);

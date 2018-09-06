@@ -109,8 +109,17 @@ export default new Vuex.Store({
     [types.SET_TABS_VALUE](state, tab) {
       state.tabsValue = tab;
     },
-    [types.SET_SERVER_RES](state, res) {
-      state.serverRes = Object.freeze(res);
+    [types.SET_SERVER_RES](state, payload) {
+      const temp = state.serverRes || {};
+      const { storeKey, data } = payload;
+
+      if (data) {
+        temp[storeKey] = data;
+      } else {
+        delete temp[storeKey];
+      }
+
+      state.serverRes = temp;
     }
   },
   actions: {
