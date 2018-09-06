@@ -149,6 +149,7 @@ export default {
 
             new Swagger({ spec: JSON.parse(specification.data) })
               .then(data => {
+                console.log(data);
                 this.setDocData({ data });
               })
               .catch(e => {

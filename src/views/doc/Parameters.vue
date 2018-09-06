@@ -1,16 +1,16 @@
-<template>
-  <section class="parameters">
-    <h3>
-      Parameters
-      <span class="note">
-        (<span style="color: red">&#8727;</span> is required)
-      </span>
-    </h3>
-    <div v-if="param.length === 0" class="no-parameter">
-      <span>No parameter</span>
-    </div>
-    <div v-else class="re-header">
-      <p>Name</p>
+ <template>
+   <section class="parameters">
+     <h3>
+       Parameters
+       <span class="note">
+         (<span style="color: red">&#8727;</span> is required)
+       </span>
+     </h3>
+     <div v-if="param.length === 0" class="no-parameter">
+       <span>No parameter</span>
+     </div>
+     <div v-else class="re-header">
+       <p>Name</p>
       <p>Description</p>
     </div>
     <div class="parameters-content">
@@ -30,14 +30,12 @@
     </div>
   </section>
 </template>
-
-<script>
+ <script>
 import Atn from "atn-js";
 import { mapGetters, mapActions } from "vuex";
 import BN from "bignumber.js";
 
 import ParameterForm from "./ParameterForm";
-
 const atn = new Atn(window.atn3);
 const CACHE_KEY = "DETAIL_STATE_CHANNEL";
 
@@ -135,7 +133,6 @@ export default {
     parametersRender() {
       return this.param.reduce((pre, cur) => {
         pre[cur.in] ? pre[cur.in].push(cur) : (pre[cur.in] = [cur]);
-
         return pre;
       }, {});
     },
@@ -147,9 +144,7 @@ export default {
     },
     stateChannelStatus() {
       const dbotStateChannel = this.stateChannel[this.cacheKey];
-
       if (!dbotStateChannel) return "close";
-
       return dbotStateChannel.status;
     }
   },
@@ -175,7 +170,6 @@ export default {
         });
         return false;
       }
-
       if (this.stateChannelStatus === "close") {
         this.$Notice.warning({
           title: "未检测到 state channel",
@@ -183,7 +177,6 @@ export default {
         });
         return false;
       }
-
       if (this.stateChannelStatus !== "synced") {
         this.$Notice.warning({
           title: "state channel 尚未准备好",
@@ -191,7 +184,6 @@ export default {
         });
         return false;
       }
-
       return true;
     },
     clear() {
@@ -290,9 +282,8 @@ export default {
   }
 };
 </script>
-
-
-<style lang="less" scoped>
+  
+ <style lang="less" scoped>
 .parameters {
   h3 {
     margin-bottom: 30px;

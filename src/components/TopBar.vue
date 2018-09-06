@@ -7,10 +7,25 @@
                     <span class="title">AI Market</span>
                 </div>
             </router-link>
+            <div class="center">
+              <Dropdown placement="bottom-end" v-on:on-click="_click" class="transform">
+                <Icon custom="icon-transform" color="#fff" size="20" ></Icon>
+                <DropdownMenu slot="list">
+                    <DropdownItem name="personal">
+                        <a href="http://119.3.50.67:4000/">Faucet</a>
+                    </DropdownItem>
+                    <DropdownItem name="logout">
+                      <a href="https://github.com/ATNIO/atn-wallet/releases">Wallet Download</a>
+                    </DropdownItem>
+                    <DropdownItem name="logout">
+                      <a href="http://119.3.57.66:4065">Explore</a>
+                    </DropdownItem>
 
+                </DropdownMenu>
+            </Dropdown>
             <div id="fade" class="black_overlay" v-if="fadeShow()" @click="clearSearch"></div>
             <div class="search">
-                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch"/>
+                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch" v-on:on-change="searchValueChange"/>
                 <div class="search-history" v-if="searchHistoryShow">
                   <ul mode="out-in" v-cloak>
                     <li v-for="(value,index) in currentSearchHistory" class="search-history-option" @mouseover="moveHistory(index)" :key="index">
@@ -47,6 +62,8 @@
                     </transition-group>
                 </div>
             </div>
+            </div>
+            
 
             <div class="personal-center">
                 <div v-show="loginShow">
@@ -328,6 +345,11 @@ export default {
         this.now = -1;
         return;
       }
+    },
+    async searchValueChange() {
+      if (this.searchingFlag) {
+        return;
+      }
       this.searchFrom = 0;
       this.searchingFlag = true;
       setTimeout(async () => {
@@ -391,6 +413,9 @@ export default {
       this.searchingFlag = false;
     },
     async selectClick(value) {
+      if (value.dbot_address.indexOf(this.search1.trim()) > 0) {
+        value.dbot_address = this.search1;
+      }
       this.$router.push({
         name: "detail",
         params: { address: value.dbot_address }
@@ -477,16 +502,36 @@ export default {
     justify-content: space-between;
     align-items: center;
 
+    .center {
+      display: flex;
+      flex-direction: row;
+      margin-left: -120px;
+    }
+
     .i-title {
       display: flex;
       align-items: center;
 
       .image {
         margin-right: 12px;
+        width: 50px;
+        height: 50px;
       }
       .title {
         font-size: 20px;
         color: #ffffff;
+      }
+    }
+    .transform {
+      text-align: center;
+      margin-right: 20px;
+      margin-top: 6px;
+      z-index: 1000;
+
+      a {
+        color: #3f485c;
+        font-family: SourceHanSansCN-Bold;
+        font-size: 16px;
       }
     }
 
@@ -654,10 +699,12 @@ export default {
       }
 
       .avatar {
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
         border-radius: 100%;
         overflow: hidden;
+        box-shadow: none;
+        // border:1px solid #ffffff !important;
         margin-right: 10px;
       }
     }
