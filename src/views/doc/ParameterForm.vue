@@ -142,7 +142,7 @@ export default {
           const item = (pre[cur.name] = { pt: cur.in, nt: cur.type });
 
           if (cur.enum) {
-            pre[cur.name].value = cur.default || cur.enum[0];
+            pre[cur.name].value = cur.default;
           } else if (cur.type === "file") {
             pre[cur.name].value = [];
           } else {

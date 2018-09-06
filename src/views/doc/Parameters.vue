@@ -73,7 +73,7 @@ function getOptions(model) {
             value.map(item => {
               formdata.append(key, item.file);
             });
-          } else {
+          } else if (!(value === null || value === undefined)) {
             formdata.append(key, value);
           }
           break;
