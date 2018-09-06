@@ -31,6 +31,7 @@
                     v-model="paramModel[p.name].value" 
                     :multiple="p.collectionFormat === 'multi'" 
                     style="width:100%"
+                    clearable
                   >
                     <Option v-for="item in p.enum" :value="item" :key="item">{{ item }}</Option>
                   </Select>
@@ -43,6 +44,7 @@
                     v-model="paramModel[p.name].value"
                     :placeholder="p.description" 
                     style="width: 100%" 
+                    clearable
                   />
                 </template>
 

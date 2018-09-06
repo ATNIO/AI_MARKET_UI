@@ -37,7 +37,7 @@ export default {
           label: "Price"
         },
         {
-          value: "Date",
+          value: "OutDate",
           label: "Date"
         }
       ]

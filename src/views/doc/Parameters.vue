@@ -25,6 +25,9 @@
         @click="callAi"
       >Sign Balance to Execute API</Button>
     </div>
+    <div class="clear-btn" v-if="serverRes">
+      <Button @click="clear">Clear</Button>
+    </div>
   </section>
 </template>
  <script>
@@ -119,7 +122,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["address", "stateChannel"]),
+    ...mapGetters(["address", "stateChannel", "serverRes"]),
     parametersType() {
       return this.param.map(parameter => parameter.in).reduce((pre, cur) => {
         pre.includes(cur) || pre.push(cur);
@@ -183,6 +186,9 @@ export default {
       }
       return true;
     },
+    clear() {
+      this.setServerRes(null);
+    },
     async callAi() {
       if (!this.checkBeforeCall()) return;
 
@@ -204,6 +210,21 @@ export default {
         );
 
         this.isLoading = false;
+
+        // 41  Init Dbot Fail
+        // 42  Get EndPoint Fail
+        // 43  Get Channel From Server
+        // 44  No Channel For Call AI
+
+        if (
+          callResult.status === 41 ||
+          callResult.status === 42 ||
+          callResult.status === 43 ||
+          callResult.status === 44
+        ) {
+          this.$Message.error(callResult.msg);
+          return;
+        }
 
         const { status, msg, data } = callResult;
 
@@ -235,11 +256,16 @@ export default {
         return "error";
       }
 
-      console.log("channelDetail:", channelDetail);
-
       if (!channelDetail) {
-        // TODO: 判断 getChannelDetail 返回结果
-        console.error("getChannelDetail:", channelDetail);
+        console.error("getChannelDetail call ai:", channelDetail);
+      }
+
+      if (status === 11) {
+        // Init Dbot Fail
+        // TODO: ???????
+      } else if (status === 12) {
+        // Get channels from server errors
+        // TODO: 暂时不知道改成什么状态比较合适
       }
 
       const { deposit, balance } = channelDetail;
@@ -249,7 +275,7 @@ export default {
 
       this.setStateChannel({
         status: "synced",
-        balance: depositComputed,
+        banlance: depositComputed,
         storeKey: this.cacheKey
       });
     }
@@ -392,6 +418,26 @@ export default {
       background: #9ea0f9;
       border-radius: 4px;
       font-size: 18px;
+
+      &:hover {
+        background: #7c7fff;
+      }
+    }
+  }
+
+  .clear-btn {
+    width: 100%;
+    height: 50px;
+    margin-top: 16px;
+
+    & /deep/ .ivu-btn-default {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      background: #9ea0f9;
+      font-size: 18px;
+      color: #ffffff;
 
       &:hover {
         background: #7c7fff;
