@@ -255,7 +255,7 @@ export default {
         console.error("getChannelDetail:", channelDetail);
       }
 
-      const { status, msg } = channelDetail;
+      const { status } = channelDetail;
 
       if (status === 11) {
         // Init Dbot Fail
@@ -265,6 +265,9 @@ export default {
       } else if (status === 12) {
         // Get channels from server errors
         // TODO: 暂时不知道改成什么状态比较合适
+        return "error";
+      } else if (status === 13) {
+        // Get Dbot Domain error
         return "error";
       }
 
