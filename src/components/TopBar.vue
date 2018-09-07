@@ -220,7 +220,8 @@ export default {
               content:
                 "检测到您的账号发生更改，请通过钱包签名以便使用新的账号重新登录",
               okText: "confirm",
-              onOk: () => {
+              onOk: async () => {
+                await this.logout();
                 this.goLogin(this.selectedAddress);
               }
             });
@@ -266,6 +267,12 @@ export default {
       }
 
       const params = await atn.getRegisterLoginParams(account.toLowerCase());
+      const { code } = params;
+
+      if (code === -32603) {
+        return;
+      }
+
       const sig = await atn.getLoginSign(account.toLowerCase());
       const response = await login(params, sig);
       const { data, status } = response;
