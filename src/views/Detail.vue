@@ -5,7 +5,7 @@
         <div class="container">
             <div class="breadcrumb">
                 <Breadcrumb separator=">">
-                    <BreadcrumbItem to="/" class="current-item">{{currentItem}}</BreadcrumbItem>
+                    <BreadcrumbItem to="/" class="current-item">{{currentItem | upperFirst }}</BreadcrumbItem>
                     <BreadcrumbItem to="/detail">{{dbot.name}}</BreadcrumbItem>
                 </Breadcrumb>
             </div>
@@ -83,11 +83,10 @@
 import Swagger from "swagger-client";
 import dayjs from "dayjs";
 import { mapActions, mapGetters } from "vuex";
-
 import data from "../mock/listData.js";
 import Channel from "./Channel.vue";
-
 import DetailContainer from "./DetailContainer";
+import { upperFirst } from "lodash";
 
 export default {
   name: "Detail",
@@ -220,6 +219,9 @@ export default {
   filters: {
     timeFormat(time) {
       return dayjs(time).format("YYYY/MM/DD");
+    },
+    upperFirst(value) {
+      return value ? upperFirst(value) : "";
     }
   }
 };
@@ -246,7 +248,6 @@ export default {
       margin: 40px 0 20px;
 
       .current-item {
-        text-transform: capitalize;
         font-weight: 600;
       }
 
