@@ -42,27 +42,18 @@
 
 
             <div class="list">
-                <router-link :to="{name: 'AccountProfile'}">
+                <router-link
+                  v-for="route in routeList"
+                  :key="route.routeName" 
+                  :to="{name: route.routeName}"
+                >
                     <div 
                       class="profile" 
-                      @click="_click(index)" 
-                      :class="{ active: index === profile }"
-                      >
-                        <Icon custom="icon-profile" size="32" class="list-icon"/>
-                        <span class="trash"> Profile</span>
+                      :class="{ active: currentRouteName === route.routeName }">
+                        <Icon :custom="route.icon" size="32" class="list-icon"/>
+                        <span class="trash">{{ route.label }}</span>
                     </div>
                 </router-link>
-
-                <router-link :to="{name: 'ChannelList'}">
-                    <div 
-                      class="channel-list" 
-                      @click="_click1(index)" 
-                      :class="{ active: index === channel }">
-                        <Icon custom="icon-channel-list" size="32" class="list-icon"/>
-                        <span class="trash">  Channel list</span>
-                    </div>
-                </router-link>
-
             </div>
         </div>
 
@@ -76,16 +67,28 @@ import { mapGetters } from "vuex";
 import AccountProfile from "./AccountProfile";
 import ChannelList from "./ChannelList";
 
+const routeList = [
+  {
+    label: "Profile",
+    routeName: "AccountProfile",
+    icon: "icon-profile"
+  },
+  {
+    label: "ChannelList",
+    routeName: "ChannelList",
+    icon: "icon-channel-list"
+  }
+];
+
 export default {
   name: "my-account",
   data() {
     return {
       visible: true,
-      profile: 1,
-      channel: 2,
-      index: 1,
       balance: "0000.00",
-      balanceHolder: "****"
+      balanceHolder: "****",
+      routeList,
+      currentRouteName: "AccountProfile"
     };
   },
   components: {
@@ -102,18 +105,15 @@ export default {
       return this.visible ? this.balance : this.balanceHolder;
     }
   },
+  watch: {
+    $route: {
+      immediate: true,
+      handler(val) {
+        this.currentRouteName = val.name;
+      }
+    }
+  },
   methods: {
-    _click(index) {
-      this.profile = index;
-      this.channel = 0;
-      // TODOS
-    },
-    _click1(index) {
-      this.channel = index;
-      this.profile = 0;
-      // TODOS
-    },
-
     async getBalance() {
       this.$atn.web3.eth.getBalance(this.address).then(balance => {
         this.balance = this.$atn.web3.utils.fromWei(balance);
@@ -207,14 +207,6 @@ export default {
       color: #3f485c;
       transition: all 0.2s ease;
       margin-bottom: 25px;
-    }
-    .channel-list {
-      width: 290px;
-      height: 60px;
-      font-size: 24px;
-      padding-top: 8px;
-      color: #3f485c;
-      transition: all 0.2s ease;
     }
   }
 }

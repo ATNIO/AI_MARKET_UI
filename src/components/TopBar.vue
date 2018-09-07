@@ -73,7 +73,10 @@
                     <Icon custom="icon-channel" size="24" color="#ffffff" class="icon"/>
                     <Dropdown placement="bottom-end" v-on:on-click="_click">
                         <div class="avatar-wrapper">
-                            <avatar :text="address.toLowerCase()"></avatar>
+                          <router-link to="/my-account/ChannelList">
+                            <avatar :text="address.toLowerCase()" @click="changelist"></avatar>
+                          </router-link>
+                            
                             <Icon custom="icon-allow" color="#fff"></Icon>
                         </div>
                         <DropdownMenu slot="list">
@@ -185,7 +188,14 @@ export default {
     );
   },
   methods: {
-    ...mapActions(["setAddress", "setCurrentSearchHistory"]),
+    ...mapActions([
+      "setAddress",
+      "setCurrentSearchHistory",
+      "setToChannelList"
+    ]),
+    changelist() {
+      this.setToChannelList("1");
+    },
     async check() {
       const { check } = this.$api.user;
       const account = this.address;
