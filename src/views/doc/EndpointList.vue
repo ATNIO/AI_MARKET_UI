@@ -75,7 +75,7 @@ aside {
         transition: background 0.3s;
 
         &.current {
-          background: #87c5fe;
+          background: #797bf8;
 
           p {
             color: #fff;

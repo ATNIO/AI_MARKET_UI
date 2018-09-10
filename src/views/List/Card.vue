@@ -8,7 +8,7 @@
       </p>
       <div class="auther">
         <!-- <div class="avatar"></div> -->
-        <a href="#" target="_blank" @click.stop  >{{ item.addr }}</a>
+        <a href="#" target="_blank" @click.stop>{{ item.addr }}</a>
       </div>
       <div class="footer">
         <div class="left">

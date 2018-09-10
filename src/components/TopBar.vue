@@ -12,13 +12,13 @@
                 <Icon custom="icon-transform" color="#fff" size="20" ></Icon>
                 <DropdownMenu slot="list">
                     <DropdownItem name="personal">
-                        <a href="http://119.3.50.67:4000/">Faucet</a>
+                        <a href="https://faucet.atn.io/">Faucet</a>
                     </DropdownItem>
                     <DropdownItem name="logout">
                       <a href="https://github.com/ATNIO/atn-wallet/releases">Wallet Download</a>
                     </DropdownItem>
                     <DropdownItem name="logout">
-                      <a href="http://119.3.57.66:4065">Explore</a>
+                      <a href="https://explorer.atn.io/">Explore</a>
                     </DropdownItem>
 
                 </DropdownMenu>
