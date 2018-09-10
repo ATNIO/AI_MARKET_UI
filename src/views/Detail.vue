@@ -46,6 +46,11 @@
                         />
                     </p>
                     <p class="auther">
+                        <avatar
+                          :text="dbot.owner.toLowerCase()"
+                          :width="32"
+                          :height="32"
+                        ></avatar>
                         <span>{{dbot.owner}}</span>
                         <Icon
                                 custom="i-icon icon-copy"
@@ -322,6 +327,13 @@ export default {
         .auther {
           display: flex;
           align-items: center;
+
+          .avatar {
+            border-radius: 100%;
+            overflow: hidden;
+            box-shadow: none;
+            margin-right: 8px;
+          }
 
           & /deep/ .ivu-icon {
             margin-left: 10px;
