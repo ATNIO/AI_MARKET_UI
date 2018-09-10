@@ -1,5 +1,5 @@
 <template>
-  <Form refs="parameter-form" :model="paramModel" @submit.native.prevent>
+  <Form refs="parameter-form" :model="paramModel" @submit.native.prevent :rules="rules">
     <template v-for="(parameters, key) in parametersRender">
       <div class="wrapper" :key="key">
         <h4 class="title">{{ key | upperFirst }}</h4>
@@ -132,6 +132,39 @@ export default {
 
         return pre;
       }, {});
+    },
+    rules() {
+      return this.param.reduce((pre, cur) => {
+        const { required, name, type } = cur;
+        pre[name] = [
+          {
+            required,
+            trigger: "blur",
+            message: required ? "cannot empty here" : ""
+          },
+          {
+            type: "string",
+            trigger: "blur"
+          }
+        ];
+        return pre;
+      }, {});
+
+      // return this.param.reduce((pre, cur) => {
+      //   const { required, name, type } = cur;
+      //   const trigger = cur.enum ? "blur" : "change";
+
+      //   pre[name] = [{
+      //     required,
+      //     trigger,
+      //     message: required ? "The name cannot be empty" : ""
+      //   }, {
+      //     type,
+      //     trigger
+      //   }];
+
+      //   return pre;
+      // }, {});
     }
   },
   watch: {

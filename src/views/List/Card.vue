@@ -7,8 +7,12 @@
         {{ item.description }}
       </p>
       <div class="auther">
-        <!-- <div class="avatar"></div> -->
-        <a href="#" target="_blank" @click.stop>{{ item.addr }}</a>
+        <avatar
+          :text="item.owner.toLowerCase()"
+          :width="20"
+          :height="20"
+        ></avatar>
+        <a href="#" target="_blank" @click.stop>{{ item.owner }}</a>
       </div>
       <div class="footer">
         <div class="left">
@@ -128,15 +132,16 @@ export default {
       align-items: center;
 
       .avatar {
-        width: 20px;
-        height: 20px;
-        margin-right: 6px;
         border-radius: 100%;
+        overflow: hidden;
+        box-shadow: none;
+        margin-right: 6px;
       }
 
       a {
         text-overflow: ellipsis;
         overflow: hidden;
+        color: #788091;
       }
     }
 
