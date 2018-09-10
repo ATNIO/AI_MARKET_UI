@@ -12,7 +12,7 @@
           :width="20"
           :height="20"
         ></avatar>
-        <a href="#" target="_blank" @click.stop>{{ item.owner }}</a>
+        <a href="#" target="_blank" @click.stop :title=" item.owner">{{ item.owner }}</a>
       </div>
       <div class="footer">
         <div class="left">
