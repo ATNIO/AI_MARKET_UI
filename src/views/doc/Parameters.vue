@@ -39,7 +39,7 @@ import ParameterForm from "./ParameterForm";
 const atn = new Atn(window.atn3);
 const CACHE_KEY = "DETAIL_STATE_CHANNEL";
 
-function getOptions(model) {
+function getOptions(model, schema) {
   const headers = {};
   const path = {}; // TODO: 这个还不知道怎么处理
   const query = {};
@@ -49,39 +49,37 @@ function getOptions(model) {
   let isbody = false;
   let isFormdata = false;
 
-  for (let key in model) {
-    if (model.hasOwnProperty(key)) {
-      const { value, pt, nt } = model[key];
-
-      switch (pt.toLowerCase()) {
-        case "header":
-          headers[key] = value;
-          break;
-        case "path":
-          path[key] = value;
-          break;
-        case "query":
-          query[key] = value;
-          break;
-        case "body":
-          isbody = true;
-          body = JSON.parse(value);
-          break;
-        case "formdata":
-          isFormdata = true;
-          if (nt === "file") {
-            value.map(item => {
-              formdata.append(key, item.file);
-            });
-          } else if (!(value === null || value === undefined)) {
-            formdata.append(key, value);
-          }
-          break;
-        default:
-          break;
-      }
+  schema.map(item => {
+    switch (item.in.toLowerCase()) {
+      case "header":
+        headers[item.name] = model[item.name];
+        break;
+      case "path":
+        path[item.name] = model[item.name];
+        break;
+      case "query":
+        query[item.name] = model[item.name];
+        break;
+      case "body":
+        isbody = true;
+        body = JSON.parse(model[item.name]);
+        break;
+      case "formdata":
+        isFormdata = true;
+        if (item.type === "file") {
+          model[item.name].map(file => {
+            formdata.append(item.name, file.file);
+          });
+        } else if (
+          !(model[item.name] === null || model[item.name] === undefined)
+        ) {
+          formdata.append(item.name, model[item.name]);
+        }
+        break;
+      default:
+        break;
     }
-  }
+  });
 
   return {
     headers,
@@ -195,10 +193,12 @@ export default {
       this.isLoading = true;
 
       const paramsModel = this.$refs.form.paramModel;
-      const options = getOptions(paramsModel);
+      const options = getOptions(paramsModel, this.param);
 
       options.method = this.method;
       let callResult = null;
+
+      console.log(options);
 
       try {
         callResult = await atn.callAPI(

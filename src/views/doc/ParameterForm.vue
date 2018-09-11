@@ -20,7 +20,7 @@
                 <!-- body -->
                 <template v-if="p.in === 'body'">
                   <Schema
-                    v-model="paramModel[p.name].value"
+                    v-model="paramModel[p.name]"
                     :schema="p.schema"
                   ></Schema>
                 </template>
@@ -28,7 +28,7 @@
                 <!-- select -->
                 <template v-else-if="p.enum">
                   <Select 
-                    v-model="paramModel[p.name].value" 
+                    v-model="paramModel[p.name]" 
                     :multiple="p.collectionFormat === 'multi'" 
                     style="width:100%"
                     clearable
@@ -41,7 +41,7 @@
                 <template v-else-if="p.type === 'string' || p.type === 'array'">
                   <Input 
                     :name="p.name"
-                    v-model="paramModel[p.name].value"
+                    v-model="paramModel[p.name]"
                     :placeholder="p.description" 
                     style="width: 100%" 
                     clearable
@@ -54,7 +54,7 @@
                 <!-- integer -->
                 <template v-else-if="p.type === 'integer'" >
                   <InputNumber 
-                    v-model="paramModel[p.name].value"
+                    v-model="paramModel[p.name]"
                     :placeholder="p.description"
                     style="width: 100%" 
                   ></InputNumber>
@@ -63,7 +63,7 @@
                 <!-- file -->
                 <template v-else-if="p.type === 'file'">
                   <vue-upload-component
-                    :value="paramModel[p.name].value" 
+                    :value="paramModel[p.name]" 
                     @input="val => updateFiles(val, p.name)"
                     class="upload"
                   >
@@ -71,7 +71,7 @@
                     <span class="upload-text">Select the file to upload</span>
                   </vue-upload-component>
                   <ul class="uploaded-list">
-                    <li v-for="file in paramModel[p.name].value" :key="file.name">
+                    <li v-for="file in paramModel[p.name]" :key="file.name">
                       <span>{{ file.name }}</span>
                       <Icon type="ios-close" size="24" @click.native="handleRemove(p.name, file)" />
                     </li>
@@ -136,35 +136,22 @@ export default {
     rules() {
       return this.param.reduce((pre, cur) => {
         const { required, name, type } = cur;
+        const trigger = cur.enum ? "change" : "blur";
+
         pre[name] = [
           {
             required,
-            trigger: "blur",
-            message: required ? "cannot empty here" : ""
+            trigger,
+            message: required ? "The name cannot be empty" : ""
           },
           {
-            type: "string",
-            trigger: "blur"
+            type,
+            trigger
           }
         ];
+
         return pre;
       }, {});
-
-      // return this.param.reduce((pre, cur) => {
-      //   const { required, name, type } = cur;
-      //   const trigger = cur.enum ? "blur" : "change";
-
-      //   pre[name] = [{
-      //     required,
-      //     trigger,
-      //     message: required ? "The name cannot be empty" : ""
-      //   }, {
-      //     type,
-      //     trigger
-      //   }];
-
-      //   return pre;
-      // }, {});
     }
   },
   watch: {
@@ -172,14 +159,12 @@ export default {
       immediate: true,
       handler(val) {
         this.paramModel = val.reduce((pre, cur) => {
-          const item = (pre[cur.name] = { pt: cur.in, nt: cur.type });
-
           if (cur.enum) {
-            pre[cur.name].value = cur.default;
+            pre[cur.name] = cur.default;
           } else if (cur.type === "file") {
-            pre[cur.name].value = [];
+            pre[cur.name] = [];
           } else {
-            pre[cur.name].value = "";
+            pre[cur.name] = "";
           }
 
           return pre;
@@ -189,26 +174,26 @@ export default {
   },
   methods: {
     updateFiles(val, field) {
-      const files = this.paramModel[field].value;
+      const files = this.paramModel[field];
 
-      this.paramModel[field].value = [...files, ...val];
+      this.paramModel[field] = [...files, ...val];
     },
     handleRemove(field, file) {
-      // const files = this.paramModel[field].value;
+      // const files = this.paramModel[field];
       // const reader = new FileReader();
 
       // reader.onload = e => {
       //   const binaryData = e.target.result;
       //   const base64Srt = btoa(binaryData);
 
-      //   this.paramModel[field].value.splice(files.indexOf(file), 1);
+      //   this.paramModel[field].splice(files.indexOf(file), 1);
       // };
 
       // reader(files.file);
 
-      const files = this.paramModel[field].value;
+      const files = this.paramModel[field];
 
-      this.paramModel[field].value.splice(files.indexOf(file), 1);
+      this.paramModel[field].splice(files.indexOf(file), 1);
     }
   },
   filters: {
