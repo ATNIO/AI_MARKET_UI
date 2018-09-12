@@ -11,14 +11,14 @@
               <Dropdown placement="bottom-end" v-on:on-click="_click" class="transform">
                 <Icon custom="icon-transform" color="#fff" size="20" ></Icon>
                 <DropdownMenu slot="list">
-                    <DropdownItem name="personal">
-                        <a href="https://faucet.atn.io/">Faucet</a>
+                    <DropdownItem name="Faucet">
+                        <a href="https://faucet-test.atnio.net/">Faucet</a>
                     </DropdownItem>
-                    <DropdownItem name="logout">
+                    <DropdownItem name="Wallet">
                       <a href="https://github.com/ATNIO/atn-wallet/releases">Wallet Download</a>
                     </DropdownItem>
-                    <DropdownItem name="logout">
-                      <a href="https://explorer.atn.io/">Explore</a>
+                    <DropdownItem name="Explore">
+                      <a href="https://explorer-test.atnio.net/">Explore</a>
                     </DropdownItem>
 
                 </DropdownMenu>
