@@ -21,7 +21,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "ChannelRecord",
+  name: "AccountRecord",
   created() {},
   props: {
     item: {

@@ -73,7 +73,7 @@
                     <Icon custom="icon-channel" size="24" color="#ffffff" class="icon"/>
                     <Dropdown placement="bottom-end" v-on:on-click="_click">
                         <div class="avatar-wrapper">
-                          <router-link to="/my-account/ChannelList">
+                          <router-link to="/my-account/AccountChannelList">
                             <avatar :text="address.toLowerCase()" @click="changelist"></avatar>
                           </router-link>
                             
