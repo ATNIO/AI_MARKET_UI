@@ -65,7 +65,7 @@
 <script>
 import { mapGetters } from "vuex";
 import AccountProfile from "./AccountProfile";
-import ChannelList from "./ChannelList";
+import AccountChannelList from "./AccountChannelList";
 
 const routeList = [
   {
@@ -75,7 +75,7 @@ const routeList = [
   },
   {
     label: "ChannelList",
-    routeName: "ChannelList",
+    routeName: "AccountChannelList",
     icon: "icon-channel-list"
   }
 ];
@@ -93,7 +93,7 @@ export default {
   },
   components: {
     AccountProfile,
-    ChannelList
+    AccountChannelList
   },
   computed: {
     ...mapGetters(["address"]),

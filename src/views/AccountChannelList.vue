@@ -1,8 +1,8 @@
 <template>
-    <div class="channel-list">
+    <div class="account-channel-list">
         <span class="title">Channel list</span>
         <ul>
-            <channel-record v-for="(item, index) in this.records" :key="index" :item="item"></channel-record>
+            <account-record v-for="(item, index) in this.records" :key="index" :item="item"></account-record>
         </ul>
         <Page
                 class-name="page"
@@ -16,13 +16,13 @@
 </template>
 
 <script>
-import ChannelRecord from "./ChannelRecord";
+import AccountRecord from "./AccountRecord";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "ChannelList",
+  name: "AccountChannelList",
   components: {
-    ChannelRecord
+    AccountRecord
   },
   data() {
     return {
@@ -63,7 +63,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.channel-list {
+.account-channel-list {
   margin-left: 20px;
   margin-top: 42px;
   position: relative;

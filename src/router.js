@@ -4,7 +4,7 @@ import Router from "vue-router";
 const Home = () => import("./views/Home.vue");
 const Detail = () => import("./views/Detail.vue");
 const MyAccount = () => import("./views/MyAccount.vue");
-const ChannelList = () => import("./views/ChannelList.vue");
+const AccountChannelList = () => import("./views/AccountChannelList.vue");
 const AccountProfile = () => import("./views/AccountProfile.vue");
 
 Vue.use(Router);
@@ -29,9 +29,9 @@ export default new Router({
       component: MyAccount,
       children: [
         {
-          path: "ChannelList",
-          name: "ChannelList",
-          component: ChannelList
+          path: "AccountChannelList",
+          name: "AccountChannelList",
+          component: AccountChannelList
         },
         {
           path: "AccountProfile",

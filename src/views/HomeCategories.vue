@@ -8,14 +8,14 @@
       v-on:on-select="_click"
       v-on:on-open-change="openChange"
     >
-      <MenuItem name="all" class="father-father">{{currentItem | upperFirst}} </MenuItem>
+      <MenuItem name="all" class="father-father">All</MenuItem>
       <template v-for="(child, key) in categories">
         <Submenu :name="key" :key="key" class="father">
           <template slot="title">
               {{ key }}
           </template>
           <template v-for="item in child">
-            <MenuItem :name="item" :key="item" class="son">{{ item }} </MenuItem>
+            <MenuItem :name="item" :key="item" class="son">{{ item }}</MenuItem>
           </template>
         </Submenu>
       </template>
