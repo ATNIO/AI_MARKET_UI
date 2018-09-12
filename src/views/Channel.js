@@ -1,5 +1,4 @@
 import { mapGetters, mapActions } from "vuex";
-import data from "../mock/listData.js";
 import Atn from "atn-js";
 import BN from "bignumber.js";
 
@@ -10,8 +9,6 @@ export default {
   name: "Channel",
   data() {
     return {
-      balance: 80,
-      data: data[0],
       status: 0,
       depositValue: "",
       topupValue: "",
