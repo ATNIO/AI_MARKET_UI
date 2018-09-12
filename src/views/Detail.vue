@@ -14,7 +14,10 @@
                 <!-- 左边logo和tag -->
                 <div class="logo-tag">
                     <div class="wrapper">
-                        <div class="logo" :style="logo"></div>
+                        <div class="logo">
+                          <img :src="dbot.logo" alt="" class="image">
+                        </div>
+
                         <span class="tagtitle"><Icon custom="icon-tag" color="#87C5FE"/> Tag:</span>
                         <ul class="tag">
                             <li v-for="item in dbot.tags" v-bind:key="item">
@@ -110,11 +113,11 @@ export default {
     dbotAddress() {
       return this.$route.params.address;
     },
-    logo() {
-      return {
-        backgroundImage: `url(${this.dbot.logo})`
-      };
-    },
+    // logo() {
+    //   return {
+    //     backgroundImage: `url(${this.dbot.logo})`
+    //   };
+    // },
     dbot() {
       return this.dbots.filter(item => this.dbotAddress === item.addr)[0];
     },
@@ -277,11 +280,14 @@ export default {
         .logo {
           width: 267px;
           height: 156px;
-          background-repeat: no-repeat;
-          background-position: center center;
-          background-color: #f7f6fe;
-          background-size: cover;
           margin-bottom: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .image {
+            width: 50%;
+            height: 50%;
+          }
         }
         .tagtitle {
           font-size: 12px;
