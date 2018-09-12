@@ -1,6 +1,8 @@
 <template>
   <li class="card" @click="_click">
-    <div class="logo" :style="logo"></div>
+    <div class="logo">
+      <img :src="item.logo" alt="" class="image">
+    </div>
     <div class="content">
       <h2>{{ item.name }}</h2>
       <p class="description">
@@ -44,13 +46,13 @@ export default {
       default: () => ({})
     }
   },
-  computed: {
-    logo() {
-      return {
-        backgroundImage: `url(${this.item.logo})`
-      };
-    }
-  },
+  // computed: {
+  //   logo() {
+  //     return {
+  //       backgroundImage: `url(${this.item.logo})`
+  //     };
+  //   }
+  // },
   methods: {
     ...mapActions(["setTabsValue"]),
     _click() {
@@ -80,8 +82,8 @@ export default {
 
 <style lang="less" scoped>
 .card {
-  width: 290px;
-  margin: 0 10px 10px 0;
+  width: 280px;
+  margin: 0 20px 10px 0;
   flex: 0 0 auto;
   background: #ffffff;
   // box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
@@ -100,10 +102,16 @@ export default {
   }
 
   .logo {
-    height: 175px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 50% 50%;
+    height: 150px;
+    width: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .image {
+      margin-top: 10px;
+      width: 50%;
+      height: 50%;
+    }
   }
 
   .content {

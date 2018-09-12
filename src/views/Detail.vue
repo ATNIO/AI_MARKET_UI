@@ -88,7 +88,6 @@
 import Swagger from "swagger-client";
 import dayjs from "dayjs";
 import { mapActions, mapGetters } from "vuex";
-import data from "../mock/listData.js";
 import Channel from "./Channel.vue";
 import DetailContainer from "./DetailContainer";
 import { upperFirst } from "lodash";
@@ -102,7 +101,6 @@ export default {
   data() {
     return {
       detail: {},
-      data: data[0],
       visible: false,
       likeCount: 0
     };
