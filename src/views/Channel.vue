@@ -1,7 +1,7 @@
 <template>
   <section> 
     <!-- 通道未开通 -->
-    <template v-if="stateChannelStatus === 'close'">
+    <template v-if="!isLogin || (stateChannelStatus === 'normal' && stateChannelBanlance < 0)">
       <div class="inaccessible">
         <div class="wrapper">
             <p class="title">No channel was found registered for you on this Dbot</p>
@@ -34,16 +34,15 @@
 
             <div class="center">
               <div class="content">
-                <div v-if="stateChannelStatus==='synced'">
+                <div v-if="stateChannelStatus==='normal' && stateChannelBanlance >= 0">
                   <p class="title">Remaining  Balance </p>
                   <p class="balance">{{stateChannelBanlance | priceFormat}} ATN</p>
                 </div>  
                 <div 
                   class="circle-wrapper" 
                   v-else-if="
-                    stateChannelStatus === 'opening' || 
-                    stateChannelStatus === 'syncing' || 
-                    stateChannelStatus === 'closing'"
+                    stateChannelStatus === 'waitingTX' || 
+                    stateChannelStatus === 'waitingSync'"
                 >
                   <div class="wait">
                     <div class="circle circle1"></div>
@@ -53,10 +52,10 @@
                     <div class="circle circle5"></div>
                     <div class="circle circle6"></div>
                   </div>
-                  <p class="syncing">{{ stateChannelStatus }}</p>
+                  <p class="syncing">{{ showChannelWaiting }}</p>
                 </div>             
                 <P class="description">A channel was found for this address.</P>
-                <div class="btn-wrapper" v-if="stateChannelStatus==='synced'">
+                <div class="btn-wrapper" v-if="stateChannelStatus==='normal' && stateChannelBanlance >= 0">
                   <Input 
                     search 
                     enter-button="TOP UP" 

@@ -174,7 +174,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["address", "currentSearchHistory"])
+    ...mapGetters(["address", "networkVersion", "currentSearchHistory"])
   },
   mounted() {
     this.check();
@@ -183,6 +183,7 @@ export default {
       "update",
       ({ selectedAddress, networkVersion }) => {
         this.selectedAddress = selectedAddress;
+        this.selectedNetworkVersion = networkVersion;
         this.accountChange();
       }
     );
@@ -190,6 +191,7 @@ export default {
   methods: {
     ...mapActions([
       "setAddress",
+      "setNetworkVersion",
       "setCurrentSearchHistory",
       "setToChannelList"
     ]),
@@ -222,7 +224,10 @@ export default {
     },
     accountChange() {
       if (this.isLogin) {
-        if (this.selectedAddress.toLowerCase() !== this.address.toLowerCase()) {
+        if (
+          this.selectedAddress.toLowerCase() !== this.address.toLowerCase() ||
+          this.selectedNetworkVersion != this.networkVersion
+        ) {
           if (!this.noticeLock) {
             this.noticeLock = true;
             this.$Modal.warning({
@@ -232,7 +237,7 @@ export default {
               okText: "confirm",
               onOk: async () => {
                 await this.logout();
-                this.goLogin(this.selectedAddress);
+                this.goLogin(this.selectedAddress, this.selectedNetworkVersion);
               }
             });
           }
@@ -264,15 +269,19 @@ export default {
       const accounts = await eth.getAccounts();
       return accounts[0];
     },
-    async goLogin(account) {
+    async getNetworkID() {
+      //TODO
+      return 17;
+    },
+    async goLogin(account, networkID) {
       const { login } = this.$api.user;
 
       if (!account) {
         return this.notice({
           type: "warning",
-          title: "Attempt to login AI Market by MetaMask",
+          title: "Attempt to login AI Market by ATN wallet",
           desc:
-            "我们检测到您已安装MetaMask浏览器插件并尝试用MetaMask登录 AI Market，请先在您的MetaMask浏览器插件创建账户或解锁后再尝试用MetaMask解锁"
+            "我们检测到您已安装ATN钱包的浏览器插件并尝试用ATN钱包登录 AI Market，请先在您的ATN钱包浏览器插件创建账户或解锁后再尝试用ATN钱包解锁"
         });
       }
 
@@ -292,12 +301,14 @@ export default {
         this.loginShow = false;
         this.isLogin = true;
         this.setAddress(account);
+        this.setNetworkVersion(networkID);
       }
       this.noticeLock = false;
     },
     async loginByMetamask() {
       const account = await this.getAccounts();
-      this.goLogin(account);
+      const networkID = await this.getNetworkID();
+      this.goLogin(account, networkID);
     },
     async logout() {
       const { logout } = this.$api.user;
