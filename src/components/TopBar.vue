@@ -270,8 +270,8 @@ export default {
       return accounts[0];
     },
     async getNetworkID() {
-      //TODO
-      return 17;
+      const ID = await atn.getCurrentNetworkId();
+      return ID;
     },
     async goLogin(account, networkID) {
       const { login } = this.$api.user;
