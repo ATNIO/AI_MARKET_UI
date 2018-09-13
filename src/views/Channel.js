@@ -13,7 +13,8 @@ export default {
       depositValue: "",
       topupValue: "",
       storageCache: {},
-      timer: null
+      timer: null,
+      waitFlag: { flag: true }
     };
   },
   props: {
@@ -60,6 +61,7 @@ export default {
     // 在页面注销后清除定时器
     clearInterval(this.timer);
     this.timer = null;
+    this.waitFlag.flag = false;
   },
   methods: {
     ...mapActions(["setStateChannel"]),
@@ -364,7 +366,7 @@ export default {
           this.updateStatus("waitTxenter");
           return;
         }
-        const tx = await atn.waitTx(para.hash, undefined, 4);
+        const tx = await atn.waitTx(para.hash, undefined, 4, this.waitFlag);
         const txHash = tx.hash;
         const txStatus = tx.status;
 
