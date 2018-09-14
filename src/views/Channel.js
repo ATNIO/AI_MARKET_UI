@@ -59,9 +59,9 @@ export default {
       var status = this.stateChannel[this.cacheKey];
       if (!status) return "ERR";
       if (status.status == "waitingTX") {
-        return "正在等待交易上链";
+        return "Waiting for channel being written to blockchain.";
       } else if (status.status == "waitingSync") {
-        return "正在等待dbot服务确认交易";
+        return "Waiting for dbot server confirming the transaction.";
       }
     }
   },
