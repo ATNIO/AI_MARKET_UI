@@ -50,8 +50,8 @@ export default new Vuex.Store({
     [types.SET_ADDRESS](state, address = "") {
       state.address = address;
     },
-    [types.SET_NETWORKID](state, networkID = "") {
-      state.networkID = networkID;
+    [types.SET_NETWORKID](state, networkVersion = "") {
+      state.networkVersion = networkVersion;
     },
     [types.SET_DETAIL_DATA](state, payload = {}) {
       state.detailData = payload;
@@ -135,8 +135,8 @@ export default new Vuex.Store({
     setAddress({ commit }, address) {
       commit(types.SET_ADDRESS, address);
     },
-    setNetworkVersion({ commit }, networkID) {
-      commit(types.SET_NETWORKID, networkID);
+    setNetworkVersion({ commit }, networkVersion) {
+      commit(types.SET_NETWORKID, networkVersion);
     },
     setDetailData({ commit }, payload) {
       commit(types.SET_DETAIL_DATA, payload);
@@ -194,7 +194,7 @@ export default new Vuex.Store({
       return state.address;
     },
     networkVersion(state) {
-      return state.networkID;
+      return state.networkVersion;
     },
     addressInDetail(state) {
       return state.detailData.addr;

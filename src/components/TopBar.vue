@@ -213,6 +213,7 @@ export default {
         this.loginShow = true;
         this.isLogin = false;
         this.setAddress("");
+        this.setNetworkVersion("");
         return false;
       }
     },
@@ -224,6 +225,8 @@ export default {
     },
     accountChange() {
       if (this.isLogin) {
+        console.log("selected:", this.selectedNetworkVersion);
+        console.log("saved:", this.networkVersion);
         if (
           this.selectedAddress.toLowerCase() !== this.address.toLowerCase() ||
           this.selectedNetworkVersion != this.networkVersion
@@ -273,7 +276,7 @@ export default {
       const ID = await atn.getCurrentNetworkId();
       return ID;
     },
-    async goLogin(account, networkID) {
+    async goLogin(account, networkVersion) {
       const { login } = this.$api.user;
 
       if (!account) {
@@ -301,14 +304,17 @@ export default {
         this.loginShow = false;
         this.isLogin = true;
         this.setAddress(account);
-        this.setNetworkVersion(networkID);
+        this.setNetworkVersion(networkVersion);
+        console.log("check:", this.address);
+        console.log("check:", this.networkVersion);
       }
       this.noticeLock = false;
     },
     async loginByMetamask() {
       const account = await this.getAccounts();
-      const networkID = await this.getNetworkID();
-      this.goLogin(account, networkID);
+      const networkVersion = await this.getNetworkID();
+      console.log("loginByMetamask", networkVersion);
+      this.goLogin(account, networkVersion);
     },
     async logout() {
       const { logout } = this.$api.user;
@@ -318,6 +324,7 @@ export default {
         this.loginShow = true;
         this.isLogin = false;
         this.setAddress();
+        this.setNetworkVersion();
         Cookies.remove("token", { path: "/" });
         Cookies.remove("token.sig", { path: "/" });
       }
