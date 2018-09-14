@@ -23,6 +23,17 @@ export default {
       default: () => ({})
     }
   },
+  watch: {
+    cacheKey: {
+      immediate: true,
+      handler(val) {
+        if (this.address) {
+          console.log("network or address has been changed");
+          this.updateStatus("initenter");
+        }
+      }
+    }
+  },
   computed: {
     ...mapGetters(["address", "networkVersion", "stateChannel"]),
     dbotAddr() {
