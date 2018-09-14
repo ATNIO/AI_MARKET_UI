@@ -13,7 +13,8 @@ export default {
       depositValue: "",
       topupValue: "",
       storageCache: {},
-      timer: null
+      timer: null,
+      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 32000 }
     };
   },
   props: {
@@ -22,43 +23,83 @@ export default {
       default: () => ({})
     }
   },
+  watch: {
+    cacheKey: {
+      immediate: true,
+      handler(val) {
+        if (this.address) {
+          console.log("network or address has been changed");
+          this.updateStatus("initenter");
+        }
+      }
+    }
+  },
   computed: {
-    ...mapGetters(["address", "stateChannel"]),
+    ...mapGetters(["address", "networkVersion", "stateChannel"]),
     dbotAddr() {
       return this.$route.params.address;
     },
+    isLogin() {
+      return this.address;
+    },
     cacheKey() {
-      return this.address + "_" + this.dbotAddr;
+      return this.networkVersion + "_" + this.address + "_" + this.dbotAddr;
     },
     stateChannelStatus() {
-      const dbotStateChannel = this.stateChannel[this.cacheKey];
-
-      if (!dbotStateChannel) return "close";
-
-      return dbotStateChannel.status;
+      var status = this.stateChannel[this.cacheKey];
+      if (status) return status.status;
+      return null;
     },
     stateChannelBanlance() {
-      const dbotStateChannel = this.stateChannel[this.cacheKey];
-
-      if (!dbotStateChannel) return "";
-
-      return dbotStateChannel.banlance;
+      var status = this.stateChannel[this.cacheKey];
+      if (status) return status.balance;
+      return 0;
+    },
+    syncpecent() {
+      const percent = Math.round(
+        ((this.waitFlag.loopTime - this.waitFlag.startTime) /
+          this.waitFlag.totalTime) *
+          100
+      );
+      return percent > 100 ? 100 : percent < 0 ? 0 : percent;
+    },
+    showChannelWaiting() {
+      var status = this.stateChannel[this.cacheKey];
+      if (!status) return "ERR";
+      if (status.status == "waitingTX") {
+        return "Waiting for channel transaction blockchain.";
+      } else if (status.status == "waitingSync") {
+        return "Waiting for Dbotserver confirming transaction.";
+      }
+      if (status.status == "TXErr") {
+        return "Connect blockchain network exception";
+      } else if (status.status == "dbotErr") {
+        return "Connect Dbotserver exception";
+      }
     }
   },
   mounted() {
-    // 如果状态管理器里有关于 state channel 的状态，无需重新去查询
-    if (!this.stateChannel[this.cacheKey]) return;
-    this.init();
+    this.updateStatus("initenter");
   },
   beforeDestroy() {
     // 在页面注销后清除定时器
     clearInterval(this.timer);
     this.timer = null;
+    this.waitFlag.flag = false;
   },
   methods: {
     ...mapActions(["setStateChannel"]),
     nextStep(value) {
-      this.createNewChannel();
+      this.updateStatus("open");
+    },
+    async topup() {
+      this.updateStatus("topup");
+    },
+    async closeChannel() {
+      this.updateStatus("close");
+    },
+    async refreshChannel() {
+      this.updateStatus("refresh");
     },
     numberHandler(num) {
       // 对ATN 数字处理
@@ -68,323 +109,407 @@ export default {
 
       return rtn;
     },
-    cacheHander({ status, hash }) {
-      if (status === "synced") {
-        // TODO: delete
-        delete this.storageCache[this.cacheKey];
-      } else {
-        this.storageCache[this.cacheKey] = { status, hash };
-      }
-
-      localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
-    },
-    async init() {
+    // reutrn {status, balance, hash}
+    //TODO move to compute
+    getStatusCache() {
+      var status = this.stateChannel[this.cacheKey];
+      if (status) return status;
       const cache = localStorage.getItem(CACHE_KEY);
-
-      // 没有缓存，退出。
-      if (!cache) return;
-
-      this.storageCache = JSON.parse(cache);
-
-      // 没有当前 dbot 的缓存，退出。
-      if (!(new String(this.cacheKey) in this.storageCache)) return;
-
-      const currentDbotCache = this.storageCache[this.cacheKey];
-      let { status, hash } = currentDbotCache;
-      let currentStatus = "";
-
-      // opening, closing, close, syncing, synced
-      switch (status) {
-        case "opening":
-        case "closing":
-        case "syncing":
-          this.setStateChannel({ status, storeKey: this.cacheKey });
-          currentStatus = await this.waitTx(hash, status);
-          break;
-        case "synced":
-          await this.updateDeposit(status, null, false);
-          break;
-        case "close":
-          this.setStateChannel({ status, storeKey: this.cacheKey });
-          return;
-        default:
-          break;
+      if (!cache) {
+        return { status: null, balance: -1, usedbalance: -1, hash: null };
       }
+      const storageCache = JSON.parse(cache);
 
-      // 当处于 syncing 状态时，才去查询当前 state channel 的余额。
-      if (currentStatus !== "syncing") return;
-
-      // 查询当前 state channel 的余额
-      this.updateDeposit(currentStatus);
+      if (!(new String(this.cacheKey) in storageCache)) {
+        return { status: null, balance: -1, usedbalance: -1, hash: null };
+      }
+      return storageCache[this.cacheKey];
     },
-    /**
-     * @param status String 状态
-     * @param hash String 哈希值(需要去调用 waitTx 查询线上处理结果的时候才用)
-     * @param fromLink Boolean 是否从链上查询(getDeposit 是从链上获取数据，
-     * 用来和 dbot server 获取到的数据进行对比，以判断服务器是否同步完链上的数据)
-     */
-    async updateDeposit(status, hash, fromLink = false) {
-      // 详细信息请看流程图
-      if (hash) {
-        status = await this.waitTx(hash, status);
-      }
-
-      let depositByLink = null;
-      let depositComputed = 0;
-
-      if (fromLink) {
-        depositByLink = await this.getDeposit();
-      }
-
-      let channelDetail = await this.getChannelDetail();
-
-      if (fromLink) {
-        if (!channelDetail) {
-          this.timer = setInterval(async () => {
-            channelDetail = await this.getChannelDetail();
-
-            if (channelDetail || channelDetail === "error") {
-              clearInterval(this.timer);
-              this.timer = null;
-
-              // 提示异常
-              return;
-            }
-
-            const { deposit } = channelDetail;
-
-            if (depositByLink === deposit) {
-              clearInterval(this.timer);
-              this.timer = null;
-            }
-          }, 1000);
-        }
-
-        const { balance, deposit } = channelDetail;
-
-        depositComputed = new BN(deposit, 10)
-          .minus(new BN(balance, 10))
-          .toString(10);
-      } else {
-        const { balance, deposit } = channelDetail;
-
-        depositComputed = new BN(deposit, 10)
-          .minus(new BN(balance, 10))
-          .toString(10);
-      }
-
-      // 成功获取到余额之后，将 state channel 状态更改为 synced.
-      status = "synced";
-
-      // 将 state channel 的信息存储到状态管理器
+    setStatusCache(status, balance, usedbalance, hash) {
       this.setStateChannel({
         status,
-        banlance: depositComputed,
+        balance,
+        usedbalance,
+        hash,
         storeKey: this.cacheKey
       });
-      // 缓存当前 dbot 的 state channel 的信息
-      // this.storageCache[this.cacheKey] = { status };
-      // localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
-      this.cacheHander({ status });
+      // TODO localStorage
     },
-    async waitTx(hash, status) {
-      // 根据交易 hash， 获取当前交易状态
-      const _status = status;
-      // hash
-      // timeout (default: 5e3) 超时时间
-      // confirmations (default: 6) 确认次数
-      const tx = await atn.waitTx(hash, undefined, 4);
-      const txHash = tx.hash;
-      const txStatus = tx.status;
-
-      if (tx.status === 51) {
-        // waitTx Timeout
-        this.$Message.error("超时，请稍后刷新重试");
-        return;
-      }
-
+    async updateStatus(action) {
+      let { status, balance, usedbalance, hash } = this.getStatusCache();
+      let para = { action, balance, usedbalance, hash };
+      console.log(status);
+      console.log(para);
+      var ret = true;
       switch (status) {
-        case "opening":
-          status = txStatus ? "syncing" : "close";
+        case null:
+          // 初始状态，无缓存，需要分别从链上和dbotserver上获取信息
+          ret = await this.unknownProcess(para);
           break;
-        case "closing":
-          status = txStatus ? "close" : "syncing";
+        case "normal":
+          ret = await this.normalProcess(para);
           break;
-        case "syncing":
-          txStatus || (status = "synced");
+        case "waitingTX":
+          ret = await this.waitingTxProcess(para);
+          break;
+        case "waitingSync":
+          ret = await this.waitingSyncProcess(para);
+          break;
+        case "TXErr":
+          ret = await this.txErrProcess(para);
+          break;
+        case "dbotErr":
+          ret = await this.dbotErrProcess(para);
           break;
         default:
+          console.log("status cannot be processed");
           break;
       }
-
-      if (_status === status) {
-        this.setStateChannel({ status, storeKey: this.cacheKey });
-        // this.storageCache[this.cacheKey] = { status, hash: txHash };
-        // localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
-        this.cacheHander({ status, hash: txHash });
+      if (!ret) {
+        //err
       }
-
-      return status;
     },
-    async getDeposit() {
-      const deposit = await atn.getChannelDeposit(this.dbotAddr, this.address);
-
-      if (!deposit) {
-        // TODO: 如果为空，需提示，待优化
-        console.log("getDeposit:", deposit);
+    async unknownProcess(para) {
+      if (para.action != "initenter") {
+        return false;
       }
-
-      return deposit;
-    },
-    async getChannelDetail() {
-      let channelDetail = null;
-
-      try {
-        channelDetail = await atn.getChannelDetail(this.dbotAddr, this.address);
-      } catch (e) {
-        console.error("getChannelDetail catch:", e);
-
-        return "error";
+      if (!this.address) {
+        this.setStatusCache("normal", -1, -1, null);
+        return false;
       }
-
-      if (!channelDetail) {
-        // TODO: 待优化
-        console.error("getChannelDetail:", channelDetail);
-      }
-
-      const { status } = channelDetail;
-
-      if (status === 11) {
-        // Init Dbot Fail
-        this.setStateChannel({ status: "close", storeKey: this.cacheKey });
-
-        return "error";
-      } else if (status === 12) {
-        // Get channels from server errors
-        // TODO: 暂时不知道改成什么状态比较合适
-        return "error";
-      } else if (status === 13) {
-        // Get Dbot Domain error
-        return "error";
-      }
-
-      return channelDetail;
-    },
-    async topup() {
-      let status = "syncing";
-      let txHash = "";
-
-      this.setStateChannel({ status, storeKey: this.cacheKey });
-
-      await atn.topUpChannel(
-        this.dbotAddr,
-        this.numberHandler(this.topupValue),
-        this.address,
-        (err, hash) => {
-          if (err) return;
-
-          txHash = hash;
+      let { err, info } = await this.loadingChannelInfo();
+      if (err) {
+        if (info == null) {
+          this.setStatusCache("normal", -1, -1, null);
+          this.updateStatus("unknownenter");
+          return;
         }
-      );
-
-      if (txHash) {
-        // this.storageCache[this.cacheKey] = { status, hash: txHash };
-        // localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
-
-        this.cacheHander({ status, hash: txHash });
-
-        await this.updateDeposit(status, txHash, true);
+        const remainbalance = new BN(info.deposit, 10)
+          .minus(new BN(info.balance, 10))
+          .toString(10);
+        this.setStatusCache("normal", remainbalance, info.balance, null);
+        this.updateStatus("unknownenter");
+        return;
       } else {
-        // TODO: 如果没有 hash
+        if (info) {
+          console.log(info);
+        }
+        this.setStatusCache("waitingSync", -1, -1, null);
+        this.updateStatus("unknownenter");
       }
     },
-    async createNewChannel() {
-      let status = "opening";
-      let txHash = "";
-
+    checkLogin() {
       if (!this.address) {
         this.$Notice.warning({
           title: "未登录",
           desc: "您需要使用您的ATN钱包登录"
         });
 
-        return;
+        return false;
       }
-
-      // 创建用户和Dbot交易通道
-      this.setStateChannel({ status, storeKey: this.cacheKey });
-
-      try {
-        const res = await atn.createChannel(
-          this.dbotAddr,
-          this.numberHandler(this.depositValue),
-          this.address,
-          (err, hash) => {
-            if (err) return;
-
-            txHash = hash;
+      return true;
+    },
+    async normalProcess(para) {
+      switch (para.action) {
+        case "unknownenter":
+          //do nothing, only show view
+          console.log("unknownenter normal, now you can open channel");
+          return true;
+        case "waitSyncenter":
+          return;
+        case "openenter":
+          //do nothing
+          console.log("open channel failed, please retry");
+          return true;
+        case "open":
+          if (!this.checkLogin()) {
+            return true;
           }
-        );
+          try {
+            const res = await atn.createChannel(
+              this.dbotAddr,
+              this.numberHandler(this.depositValue),
+              this.address,
+              (err, hash) => {
+                if (err || hash == null) {
+                  // 重新从网络上获取数据
+                  if (err.status == 21) {
+                    this.setStatusCache(null, -1, -1, null);
+                    this.updateStatus("initenter");
+                  }
+                  return;
+                }
+                this.setStatusCache("waitingTX", 0, -1, hash);
+                this.updateStatus("openenter");
+              }
+            );
+          } catch (e) {
+            console.log(e);
+            this.$Notice.warning({
+              title: "打开 channel 失败",
+              desc: "抱歉, 打开channel失败，请检查网络和签名"
+            });
+            this.setStatusCache("normal", para.balance, para.usedbalance, null);
+            this.updateStatus("openenter");
+            return true;
+          }
+          break;
+        case "close":
+          // close the channel if exist
+          if (para.balance >= 0) {
+            try {
+              const closeResult = await atn.closeChannel(
+                this.dbotAddr,
+                this.address,
+                para.usedbalance,
+                (err, hash) => {
+                  if (err || hash == null) {
+                    this.$Notice.warning({
+                      title: "关闭 channel 失败",
+                      desc: "抱歉，关闭 channel 失败，请稍后重试"
+                    });
+                    this.setStatusCache(
+                      "normal",
+                      para.balance,
+                      para.usedbalance,
+                      null
+                    );
+                    return;
+                  }
+                  this.setStatusCache(
+                    "waitingTX",
+                    para.balance,
+                    para.usedbalance,
+                    hash
+                  );
+                }
+              );
 
-        status = "syncing";
-        this.setStateChannel({ status, storeKey: this.cacheKey });
-
-        if (res.status === 21) {
-          // Channel has exist
-          this.updateDeposit(status, null, false);
-        } else {
-          this.cacheHander({ status, hash: txHash });
-          this.updateDeposit(status, txHash, true);
-        }
-      } catch (e) {
-        // 通常进入到这个分支是因为 channel is exit. 所以这时可直接调用 updateDeposit 查询余额。
-        // TODO: 不排除有别的异常的可能性，需要补充处理
-        console.error("Creates new channel failure:", e);
+              if (closeResult.status === 31) {
+                // Init Dbot Fail
+                this.$Notice.warning({
+                  title: "关闭 channel 失败",
+                  desc: "抱歉，无法连接dbot服务器, 请稍后重试"
+                });
+                this.setStatusCache(
+                  "normal",
+                  para.balance,
+                  para.usedbalance,
+                  null
+                );
+                this.updateStatus("closeenter");
+                return false;
+              } else if (closeResult.status === 32) {
+                // Get Delete Close_Signature From DbotServer Error
+                this.$Notice.warning({
+                  title: "关闭 channel 失败",
+                  desc: "抱歉，无法获取dbot服务器签名, 请稍后重试"
+                });
+                this.setStatusCache(
+                  "dbotErr",
+                  para.balance,
+                  para.usedbalance,
+                  null
+                );
+                this.updateStatus("closeenter");
+                return false;
+              }
+            } catch (e) {
+              console.error("closeChannel:", e);
+              // exception
+              this.$Notice.warning({
+                title: "关闭 channel 失败",
+                desc: "抱歉，关闭 channel 失败，请稍后重试"
+              });
+              this.setStatusCache(
+                "normal",
+                para.balance,
+                para.usedbalance,
+                null
+              );
+              this.updateStatus("closeenter");
+              return false;
+            }
+          }
+          this.updateStatus("closeenter");
+          return true;
+        case "initenter":
+          // should check current status
+          break;
+        case "topup":
+          if (!this.checkLogin()) {
+            return true;
+          }
+          try {
+            await atn.topUpChannel(
+              this.dbotAddr,
+              this.numberHandler(this.topupValue),
+              this.address,
+              (err, hash) => {
+                if (err || hash == null) {
+                  this.$Notice.warning({
+                    title: "topup channel 失败",
+                    desc: "抱歉，topup channel 失败，请稍后重试"
+                  });
+                  return;
+                }
+                this.setStatusCache(
+                  "waitingTX",
+                  para.balance,
+                  para.usedbalance,
+                  hash
+                );
+                this.updateStatus("topupenter");
+              }
+            );
+          } catch (e) {
+            this.setStatusCache("normal", para.balance, para.usedbalance, null);
+          }
       }
     },
-    async closeChannel() {
-      let status = "closing";
-
-      this.setStateChannel({ status, storeKey: this.cacheKey });
-      // channelDetail 可以在 update deposit 的时候缓存。
-      const channelDetail = await this.getChannelDetail();
-
-      if (channelDetail === "error") {
-        this.$Message.error("error");
-        return;
+    async waitingTxProcess(para) {
+      switch (para.action) {
+        case "openenter":
+          // update view
+          break;
+        case "closeenter":
+          // update view
+          break;
+        case "topupenter":
+          // update view
+          break;
+        case "txErrenter":
+          // update view
+          break;
+        case "initenter":
+          break;
       }
-
       try {
-        const closeResult = await atn.closeChannel(
-          this.dbotAddr,
-          this.address,
-          channelDetail.balance,
-          (err, hash) => {
-            status = "close";
+        if (para.hash == null) {
+          console.log("feta Err: waitingtxprocess cannot find hash");
+          this.setStatusCache(
+            "TXErr",
+            para.balance,
+            para.usedbalance,
+            para.hash
+          );
+          this.updateStatus("waitTxenter");
+          return;
+        }
+        const tx = await atn.waitTx(para.hash, undefined, 4, this.waitFlag);
+        const txHash = tx.hash;
+        const txStatus = tx.status;
+        this.waitFlag.loopTime =
+          this.waitFlag.startTime + this.waitFlag.totalTime;
 
-            this.setStateChannel({ status, storeKey: this.cacheKey });
-
-            // this.storageCache[this.cacheKey] = { status };
-            // delete this.storageCache[this.cacheKey];
-            // localStorage.setItem(CACHE_KEY, JSON.stringify(this.storageCache));
-
-            this.cacheHander({ status });
-          }
+        if (tx.status === 51 || tx.status == false) {
+          this.setStatusCache(
+            "TXErr",
+            para.balance,
+            para.usedbalance,
+            para.hash
+          );
+          this.updateStatus("waitTxenter");
+          return;
+        }
+        this.setStatusCache(
+          "waitingSync",
+          para.balance,
+          para.usedbalance,
+          null
         );
+      } catch (e) {
+        console.log("waitingTxProcess exception:", e);
+        this.setStatusCache("TXErr", para.balance, para.usedbalance, para.hash);
+      }
+      this.updateStatus("waitTxenter");
+    },
+    async txErrProcess(para) {
+      switch (para.action) {
+        case "waitTxenter":
+          // update view
+          return true;
+        case "TXErr":
+          return true;
+      }
+      this.setStatusCache("waitingTX", 0, -1, para.hash);
+      this.updateStatus("txErrenter");
+      return true;
+    },
+    async waitingSyncProcess(para) {
+      // change view
 
-        if (closeResult.status === 31) {
-          // Init Dbot Fail
-        } else if (closeResult.status === 32) {
-          // Get Delete Close_Signature From DbotServer Error
+      // 加一个保护，防止程序BUG启动多个定时器
+      if (this.timer != null) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
+      this.retrySyncTimes = 0;
+
+      this.timer = setInterval(async () => {
+        try {
+          if (this.retrySyncTimes % 2 != 0) return;
+          this.retrySyncTimes += 1;
+          let { err, info } = await this.loadingChannelInfo();
+          if (err) {
+            if (info) {
+              const remainbalance = new BN(info.deposit, 10)
+                .minus(new BN(info.balance, 10))
+                .toString(10);
+              this.setStatusCache("normal", remainbalance, info.balance, null);
+            } else {
+              this.setStatusCache("normal", -1, -1, null);
+            }
+          } else {
+            if (this.retrySyncTimes < 20) {
+              this.waitFlag.loopTime = this.waitFlag.loopTime + 1000;
+              this.retrySyncTimes += 1;
+              return;
+            } else {
+              this.setStatusCache("dbotErr", -1, -1, null);
+            }
+          }
+        } catch (e) {
+          this.setStatusCache("dbotErr", -1, -1, null);
+        }
+        this.waitFlag.loopTime = this.waitFlag.totalTime;
+        clearInterval(this.timer);
+        this.timer = null;
+        this.updateStatus("waitSyncenter");
+      }, 1000);
+    },
+    async dbotErrProcess(para) {
+      switch (para.action) {
+        case "waitSyncenter":
+        case "closeenter":
+          // only change view
+          break;
+        default:
+          this.setStatusCache("waitingSync", -1, -1, null);
+          this.updateStatus("dbotErrcenter");
+      }
+    },
+    async loadingChannelInfo() {
+      try {
+        const dchannel = await atn.getChannelDetail(
+          this.dbotAddr,
+          this.address
+        );
+        const deposit = await atn.getChannelDeposit(
+          this.dbotAddr,
+          this.address
+        );
+        //console.log("loadingChannelInfo:", dchannel, deposit);
+        if (dchannel == undefined && deposit == 0) {
+          return { err: true, info: null };
+        }
+        if (dchannel != undefined && dchannel.deposit == deposit) {
+          return { err: true, info: dchannel };
+        } else {
+          return { err: false, info: dchannel };
         }
       } catch (e) {
-        // 关闭 channel 出现异常
-        console.error("closeChannel:", e);
-        // exception
-        this.$Notice.warning({
-          title: "关闭 channel 失败",
-          desc: "抱歉，关闭 channel 失败，请稍后重试"
-        });
+        return { err: false, info: e };
       }
     }
   }

@@ -123,7 +123,7 @@
         .wait {
           display: flex;
           justify-content: space-between;
-          width: 134px;
+          width: 334px;
 
           .circle {
             width: 9px;
@@ -156,10 +156,37 @@
           }
         }
         .syncing {
-          font-size: 48px;
+          margin-top: 58px;
+          font-size: 24px;
           color: #959595;
           letter-spacing: 0;
           text-align: center;
+        }
+        .warning-wrapper{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          
+          .warning{
+            font-size: 32px;
+            color: #F5AD11;
+            letter-spacing: 0;
+            text-align: center;
+          }
+          .refresh-channel {
+            margin-top: 10px;
+            width: 140px;
+            height: 50px;
+            background: #797bf8;
+            border-radius: 4px;
+            font-size: 24px;
+            color: #fff;
+            text-align: center;
+            // font-weight: 600;
+            border: none;
+            outline: none;
+            cursor: pointer;
+          }
         }
         //----------------back
         .description {

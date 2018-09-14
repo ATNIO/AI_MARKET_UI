@@ -16,6 +16,7 @@ export default new Vuex.Store({
     currentPage: 1,
     querying: false,
     address: "",
+    networkVersion: "",
     stateChannel: {},
     categories: {},
     currentSubmenu: [],
@@ -50,32 +51,27 @@ export default new Vuex.Store({
     [types.SET_ADDRESS](state, address = "") {
       state.address = address;
     },
+    [types.SET_NETWORKID](state, networkVersion = "") {
+      state.networkVersion = networkVersion;
+    },
     [types.SET_DETAIL_DATA](state, payload = {}) {
       state.detailData = payload;
     },
-    [types.SET_STATE_CHANNEL_BANLANCE](state, { storeKey, banlance }) {
+    [types.SET_STATE_CHANNEL_INFO](
+      state,
+      { storeKey, balance, usedbalance, status, hash }
+    ) {
       let stateChannel = state.stateChannel[storeKey];
 
       if (stateChannel) {
-        stateChannel.banlance = banlance;
-      } else {
-        stateChannel = { banlance };
-      }
-
-      // TODO:  待优化 SET_STATE_CHANNEL_BANLANCE 与 SET_STATE_CHANNEL_STATUS 应该合并
-      state.stateChannel[storeKey] = { ...stateChannel };
-      state.stateChannel = { ...state.stateChannel };
-    },
-    [types.SET_STATE_CHANNEL_STATUS](state, { storeKey, status }) {
-      let stateChannel = state.stateChannel[storeKey];
-
-      if (stateChannel) {
+        stateChannel.balance = balance;
+        stateChannel.usedbalance = usedbalance;
         stateChannel.status = status;
+        stateChannel.hash = hash;
       } else {
-        stateChannel = { status };
+        stateChannel = { balance, usedbalance, status, hash };
       }
 
-      // TODO:  待优化 SET_STATE_CHANNEL_BANLANCE 与 SET_STATE_CHANNEL_STATUS 应该合并
       state.stateChannel[storeKey] = { ...stateChannel };
       state.stateChannel = { ...state.stateChannel };
     },
@@ -140,14 +136,14 @@ export default new Vuex.Store({
     setAddress({ commit }, address) {
       commit(types.SET_ADDRESS, address);
     },
+    setNetworkVersion({ commit }, networkVersion) {
+      commit(types.SET_NETWORKID, networkVersion);
+    },
     setDetailData({ commit }, payload) {
       commit(types.SET_DETAIL_DATA, payload);
     },
     setStateChannel({ commit }, payload) {
-      const { status, banlance } = payload;
-
-      status && commit(types.SET_STATE_CHANNEL_STATUS, payload);
-      banlance && commit(types.SET_STATE_CHANNEL_BANLANCE, payload);
+      commit(types.SET_STATE_CHANNEL_INFO, payload);
     },
     setCategories({ commit }, categories) {
       commit(types.SET_CATEGORIES, categories);
@@ -197,6 +193,9 @@ export default new Vuex.Store({
     },
     address(state) {
       return state.address;
+    },
+    networkVersion(state) {
+      return state.networkVersion;
     },
     addressInDetail(state) {
       return state.detailData.addr;
