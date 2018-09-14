@@ -47,13 +47,7 @@
                     stateChannelStatus === 'dbotErr'"
                 >
                   <div class="wait">
-                    <div class="circle circle1"></div>
-                    <div class="circle circle2"></div>
-                    <div class="circle circle3"></div>
-                    <div class="circle circle4"></div>
-                    <div class="circle circle5"></div>
-                    <div class="circle circle6"></div>
-                    <!--<ProgressBar :barwidth="syncpecent"></ProgressBar>-->
+                    <Progress :percent="syncpecent" stroke-width=2 />
                   </div>
                   <div
                     v-if="
