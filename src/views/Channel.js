@@ -67,9 +67,14 @@ export default {
       var status = this.stateChannel[this.cacheKey];
       if (!status) return "ERR";
       if (status.status == "waitingTX") {
-        return "Waiting for channel being written to blockchain.";
+        return "Waiting for channel transaction blockchain.";
       } else if (status.status == "waitingSync") {
-        return "Waiting for dbot server confirming the transaction.";
+        return "Waiting for Dbotserver confirming transaction.";
+      }
+      if (status.status == "TXErr") {
+        return "Connect blockchain network exception";
+      } else if (status.status == "dbotErr") {
+        return "Connect Dbotserver exception";
       }
     }
   },
@@ -92,6 +97,9 @@ export default {
     },
     async closeChannel() {
       this.updateStatus("close");
+    },
+    async refreshChannel() {
+      this.updateStatus("refresh");
     },
     numberHandler(num) {
       // 对ATN 数字处理

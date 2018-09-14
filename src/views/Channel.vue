@@ -42,7 +42,9 @@
                   class="circle-wrapper" 
                   v-else-if="
                     stateChannelStatus === 'waitingTX' || 
-                    stateChannelStatus === 'waitingSync'"
+                    stateChannelStatus === 'waitingSync' ||
+                    stateChannelStatus === 'TXErr' ||
+                    stateChannelStatus === 'dbotErr'"
                 >
                   <div class="wait">
                     <div class="circle circle1"></div>
@@ -53,9 +55,21 @@
                     <div class="circle circle6"></div>
                     <!--<ProgressBar :barwidth="syncpecent"></ProgressBar>-->
                   </div>
-                  <p class="syncing">{{ showChannelWaiting }}</p>
+                  <div
+                    v-if="
+                      stateChannelStatus === 'waitingTX' ||
+                      stateChannelStatus === 'waitingSync'"
+                  >
+                    <p class="syncing">{{ showChannelWaiting }}</p>
+                  </div>
+                  <div class="warning-wrapper" v-else>
+                    <p class="warning"> {{ showChannelWaiting }} </p>
+                    <Button class="refresh-channel" @click="refreshChannel" type="primary">
+                      <Icon type="md-refresh" />
+                      Refresh
+                    </Button>
+                  </div>
                 </div>             
-                <P class="description">A channel was found for this address.</P>
                 <div class="btn-wrapper" v-if="stateChannelStatus==='normal' && stateChannelBanlance >= 0">
                   <Input 
                     search 
