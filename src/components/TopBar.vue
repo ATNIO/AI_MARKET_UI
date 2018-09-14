@@ -225,8 +225,6 @@ export default {
     },
     accountChange() {
       if (this.isLogin) {
-        console.log("selected:", this.selectedNetworkVersion);
-        console.log("saved:", this.networkVersion);
         if (
           this.selectedAddress.toLowerCase() !== this.address.toLowerCase() ||
           this.selectedNetworkVersion != this.networkVersion
@@ -288,6 +286,7 @@ export default {
         });
       }
 
+      this.setNetworkVersion(networkVersion);
       const params = await atn.getRegisterLoginParams(account.toLowerCase());
       const { code } = params;
 
@@ -304,16 +303,12 @@ export default {
         this.loginShow = false;
         this.isLogin = true;
         this.setAddress(account);
-        this.setNetworkVersion(networkVersion);
-        console.log("check:", this.address);
-        console.log("check:", this.networkVersion);
       }
       this.noticeLock = false;
     },
     async loginByMetamask() {
       const account = await this.getAccounts();
       const networkVersion = await this.getNetworkID();
-      console.log("loginByMetamask", networkVersion);
       this.goLogin(account, networkVersion);
     },
     async logout() {

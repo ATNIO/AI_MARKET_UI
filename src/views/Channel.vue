@@ -1,7 +1,7 @@
 <template>
   <section> 
     <!-- 通道未开通 -->
-    <template v-if="!isLogin || (stateChannelStatus === 'normal' && stateChannelBanlance < 0)">
+    <template v-if="!isLogin || (stateChannelStatus === 'normal' && stateChannelBanlance < 0) || stateChannelStatus === null">
       <div class="inaccessible">
         <div class="wrapper">
             <p class="title">No channel was found registered for you on this Dbot</p>

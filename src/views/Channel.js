@@ -120,7 +120,7 @@ export default {
       // TODO localStorage
     },
     async updateStatus(action) {
-      if (!this.checkLogin()) {
+      if (!this.address || !this.networkVersion) {
         return;
       }
 

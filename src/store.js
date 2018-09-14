@@ -16,6 +16,7 @@ export default new Vuex.Store({
     currentPage: 1,
     querying: false,
     address: "",
+    networkVersion: "",
     stateChannel: {},
     categories: {},
     currentSubmenu: [],
