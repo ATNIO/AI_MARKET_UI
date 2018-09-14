@@ -14,7 +14,7 @@ export default {
       topupValue: "",
       storageCache: {},
       timer: null,
-      waitFlag: { flag: true }
+      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 32000 }
     };
   },
   props: {
@@ -54,6 +54,14 @@ export default {
       var status = this.stateChannel[this.cacheKey];
       if (status) return status.balance;
       return 0;
+    },
+    syncpecent() {
+      const percent = Math.round(
+        ((this.waitFlag.loopTime - this.waitFlag.startTime) /
+          this.waitFlag.totalTime) *
+          100
+      );
+      return percent > 100 ? 100 : percent < 0 ? 0 : percent;
     },
     showChannelWaiting() {
       var status = this.stateChannel[this.cacheKey];
@@ -120,10 +128,6 @@ export default {
       // TODO localStorage
     },
     async updateStatus(action) {
-      if (!this.address || !this.networkVersion) {
-        return;
-      }
-
       let { status, balance, usedbalance, hash } = this.getStatusCache();
       let para = { action, balance, usedbalance, hash };
       console.log(status);
@@ -159,6 +163,10 @@ export default {
     },
     async unknownProcess(para) {
       if (para.action != "initenter") {
+        return false;
+      }
+      if (!this.address) {
+        this.setStatusCache("normal", -1, -1, null);
         return false;
       }
       let { err, info } = await this.loadingChannelInfo();
@@ -321,6 +329,9 @@ export default {
           // should check current status
           break;
         case "topup":
+          if (!this.checkLogin()) {
+            return true;
+          }
           try {
             await atn.topUpChannel(
               this.dbotAddr,
@@ -380,6 +391,8 @@ export default {
         const tx = await atn.waitTx(para.hash, undefined, 4, this.waitFlag);
         const txHash = tx.hash;
         const txStatus = tx.status;
+        this.waitFlag.loopTime =
+          this.waitFlag.startTime + this.waitFlag.totalTime;
 
         if (tx.status === 51 || tx.status == false) {
           this.setStatusCache(
@@ -398,6 +411,7 @@ export default {
           null
         );
       } catch (e) {
+        console.log("waitingTxProcess exception:", e);
         this.setStatusCache("TXErr", para.balance, para.usedbalance, para.hash);
       }
       this.updateStatus("waitTxenter");
@@ -426,6 +440,8 @@ export default {
 
       this.timer = setInterval(async () => {
         try {
+          if (this.retrySyncTimes % 2 != 0) return;
+          this.retrySyncTimes += 1;
           let { err, info } = await this.loadingChannelInfo();
           if (err) {
             if (info) {
@@ -437,7 +453,8 @@ export default {
               this.setStatusCache("normal", -1, -1, null);
             }
           } else {
-            if (this.retrySyncTimes < 10) {
+            if (this.retrySyncTimes < 20) {
+              this.waitFlag.loopTime = this.waitFlag.loopTime + 1000;
               this.retrySyncTimes += 1;
               return;
             } else {
@@ -447,6 +464,7 @@ export default {
         } catch (e) {
           this.setStatusCache("dbotErr", -1, -1, null);
         }
+        this.waitFlag.loopTime = this.waitFlag.totalTime;
         clearInterval(this.timer);
         this.timer = null;
         this.updateStatus("waitSyncenter");

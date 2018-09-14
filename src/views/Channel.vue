@@ -51,6 +51,7 @@
                     <div class="circle circle4"></div>
                     <div class="circle circle5"></div>
                     <div class="circle circle6"></div>
+                    <!--<ProgressBar :barwidth="syncpecent"></ProgressBar>-->
                   </div>
                   <p class="syncing">{{ showChannelWaiting }}</p>
                 </div>             
