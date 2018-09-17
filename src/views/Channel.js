@@ -63,6 +63,16 @@ export default {
       );
       return percent > 100 ? 100 : percent < 0 ? 0 : percent;
     },
+    syncstatus() {
+      var status = this.stateChannel[this.cacheKey];
+      if (status.status == "waitingTX" || status.status == "waitingSync") {
+        return "active";
+      }
+      if (status.status == "TXErr" || status.status == "dbotErr") {
+        return "wrong";
+      }
+      return "";
+    },
     showChannelWaiting() {
       var status = this.stateChannel[this.cacheKey];
       if (!status) return "ERR";

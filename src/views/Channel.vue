@@ -47,7 +47,7 @@
                     stateChannelStatus === 'dbotErr'"
                 >
                   <div class="wait">
-                    <Progress :percent="syncpecent" stroke-width=2 />
+                    <Progress :percent="syncpecent" :status="syncstatus" />
                   </div>
                   <div
                     v-if="
