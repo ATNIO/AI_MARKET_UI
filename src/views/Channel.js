@@ -88,7 +88,7 @@ export default {
       if (status.status == "waitingTX") {
         return "Syncing channel transaction.";
       } else if (status.status == "waitingSync") {
-        return "Dbotserver confirming transaction.";
+        return "Syncing with Dbotserver.";
       }
       if (status.status == "TXErr") {
         return "Connect blockchain network exception";
@@ -415,6 +415,7 @@ export default {
           this.updateStatus("waitTxenter");
           return;
         }
+        this.waitFlag.totalTime = 32000;
         const tx = await atn.waitTx(para.hash, undefined, 4, this.waitFlag);
         const txHash = tx.hash;
         const txStatus = tx.status;
@@ -510,6 +511,9 @@ export default {
           // only change view
           break;
         default:
+          this.waitFlag.totalTime = 10000;
+          this.waitFlag.startTime = 0;
+          this.waitFlag.loopTime = 0;
           this.setStatusCache("waitingSync", -1, -1, null);
           this.updateStatus("dbotErrcenter");
       }
