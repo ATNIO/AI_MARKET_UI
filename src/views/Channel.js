@@ -55,6 +55,9 @@ export default {
       if (status) return status.balance;
       return 0;
     },
+    stateChannelDopsit() {
+      return 100;
+    },
     syncpecent() {
       const percent = Math.round(
         ((this.waitFlag.loopTime - this.waitFlag.startTime) /

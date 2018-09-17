@@ -100,20 +100,36 @@
         justify-content: center;
         align-items: center;
         //-----------------------open
-        .title {
-          font-size: 18px;
-          color: #0d0628;
-          text-align: center;
-          margin-top: 6px;
-          margin-bottom: 12px;
+        .normal-balance {
+          display: flex;
+          height: 100%;
+          margin-top: 34px;
+          margin-bottom: 0px;
+          align-items: center;
+          flex-direction: column;
+          .title {
+            font-size: 18px;
+            color: #0d0628;
+            text-align: center;
+            margin-top: 6px;
+            margin-bottom: 12px;
+          }
+          .balance {
+            font-size: 48px;
+            line-height: 1;
+            color: #00d85a;
+            text-align: center;
+            height: 48px;
+            margin-top: 24px;
+            margin-bottom: 13px;
+          }
+          .deposit {
+            font-size: 18px;
+            color: #B1B2BD;
+            text-align: center;
+            margin-bottom: 0px;
+          }
         }
-        .balance {
-          font-size: 48px;
-          color: #00d85a;
-          text-align: center;
-          margin-bottom: 12px;
-        }
-
         .circle-wrapper {
           display: flex;
           flex-direction: column;
@@ -204,6 +220,8 @@
           display: flex;
           align-items: center;
           justify-content: center;
+          margin-top: 37px;
+          margin-bottom: 40px;
         }
 
         .top-up {
