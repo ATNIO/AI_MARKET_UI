@@ -197,8 +197,8 @@ export default new Vuex.Store({
     networkVersion(state) {
       return state.networkVersion;
     },
-    addressInDetail(state) {
-      return state.detailData.addr;
+    dbotDetail(state) {
+      return state.detailData;
     },
     endpoints(state) {
       return state.detailData.endpoints || [];
