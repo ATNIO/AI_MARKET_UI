@@ -49,6 +49,7 @@
                 >
                   <div class="wait">
                     <Progress :percent="syncpecent" :status="syncstatus" :stroke-width="3"/>
+                    <!--<ProgressBar :percent="syncpecent" :status="syncstatus" :stroke-width="3"/>-->
                   </div>
                   <div
                     v-if="
