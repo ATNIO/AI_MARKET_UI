@@ -24,7 +24,12 @@ Vue.use(VueClipboard);
 Vue.config.productionTip = false;
 
 Vue.prototype.$api = api; // 将api挂载到vue的原型上
-Vue.prototype.$atn = new Atn(window.atn3); // 挂载 atn3 实例
+
+try {
+  Vue.prototype.$atn = new Atn(window.atn3); // 挂载 atn3 实例
+} catch (e) {
+  Vue.prototype.$atn = null;
+}
 
 const requireComponent = require.context(
   // 其组件目录的相对路径

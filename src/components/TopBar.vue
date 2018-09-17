@@ -67,7 +67,7 @@
 
             <div class="personal-center">
                 <div v-show="loginShow">
-                    <Button @click="modal1 = true">login</Button>
+                    <Button @click="loginbutton">login</Button>
                 </div>
                 <div class="prefsession" v-show="!loginShow">
                     <Icon custom="icon-channel" size="24" color="#ffffff" class="icon"/>
@@ -152,8 +152,6 @@ import { mapActions, mapGetters } from "vuex";
 import Atn from "atn-js";
 import Cookies from "js-cookie";
 
-const atn = new Atn(window.atn3);
-
 export default {
   name: "TopBar",
   data() {
@@ -179,14 +177,18 @@ export default {
   mounted() {
     this.check();
 
-    this.$atn.web3.currentProvider.publicConfigStore.on(
-      "update",
-      ({ selectedAddress, networkVersion }) => {
-        this.selectedAddress = selectedAddress;
-        this.selectedNetworkVersion = networkVersion;
-        this.accountChange();
-      }
-    );
+    try {
+      this.$atn.web3.currentProvider.publicConfigStore.on(
+        "update",
+        ({ selectedAddress, networkVersion }) => {
+          this.selectedAddress = selectedAddress;
+          this.selectedNetworkVersion = networkVersion;
+          this.accountChange();
+        }
+      );
+    } catch (e) {
+      console.log("ATN wallet has not been installed");
+    }
   },
   methods: {
     ...mapActions([
@@ -256,6 +258,18 @@ export default {
           break;
       }
     },
+    loginbutton() {
+      if (this.$atn === null) {
+        this.$Modal.warning({
+          title: "Detect account has changed",
+          content: "您的浏览器没有安装ATN钱包，请安装后刷新页面",
+          okText: "confirm",
+          onOk: async () => {}
+        });
+        return;
+      }
+      this.modal1 = true;
+    },
     login(type) {
       switch (type) {
         case "metamask":
@@ -271,7 +285,7 @@ export default {
       return accounts[0];
     },
     async getNetworkID() {
-      const ID = await atn.getCurrentNetworkId();
+      const ID = await this.$atn.getCurrentNetworkId();
       return ID;
     },
     async goLogin(account, networkVersion) {
@@ -287,14 +301,16 @@ export default {
       }
 
       this.setNetworkVersion(networkVersion);
-      const params = await atn.getRegisterLoginParams(account.toLowerCase());
+      const params = await this.$atn.getRegisterLoginParams(
+        account.toLowerCase()
+      );
       const { code } = params;
 
       if (code === -32603) {
         return;
       }
 
-      const sig = await atn.getLoginSign(account.toLowerCase());
+      const sig = await this.$atn.getLoginSign(account.toLowerCase());
       const response = await login(params, sig);
       const { data, status } = response;
 
