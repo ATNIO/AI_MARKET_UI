@@ -1,7 +1,7 @@
 <template>
   <section> 
     <!-- 通道未开通 -->
-    <template v-if="stateChannelStatus === 'close'">
+    <template v-if="!isLogin || (stateChannelStatus === 'normal' && stateChannelBanlance < 0) || stateChannelStatus === null">
       <div class="inaccessible">
         <div class="wrapper">
             <p class="title">No channel was found registered for you on this Dbot</p>
@@ -34,29 +34,38 @@
 
             <div class="center">
               <div class="content">
-                <div v-if="stateChannelStatus==='synced'">
+                <div class="normal-balance" v-if="stateChannelStatus==='normal' && stateChannelBanlance >= 0">
                   <p class="title">Remaining  Balance </p>
                   <p class="balance">{{stateChannelBanlance | priceFormat}} ATN</p>
+                  <p class="deposit">Deposit: {{stateChannelDopsit}} ATN</p>
                 </div>  
                 <div 
                   class="circle-wrapper" 
                   v-else-if="
-                    stateChannelStatus === 'opening' || 
-                    stateChannelStatus === 'syncing' || 
-                    stateChannelStatus === 'closing'"
+                    stateChannelStatus === 'waitingTX' || 
+                    stateChannelStatus === 'waitingSync' ||
+                    stateChannelStatus === 'TXErr' ||
+                    stateChannelStatus === 'dbotErr'"
                 >
                   <div class="wait">
-                    <div class="circle circle1"></div>
-                    <div class="circle circle2"></div>
-                    <div class="circle circle3"></div>
-                    <div class="circle circle4"></div>
-                    <div class="circle circle5"></div>
-                    <div class="circle circle6"></div>
+                    <Progress :percent="syncpecent" :status="syncstatus" :stroke-width="3"/>
                   </div>
-                  <p class="syncing">{{ stateChannelStatus }}</p>
+                  <div
+                    v-if="
+                      stateChannelStatus === 'waitingTX' ||
+                      stateChannelStatus === 'waitingSync'"
+                  >
+                    <p class="syncing">{{ showChannelWaiting }}</p>
+                  </div>
+                  <div class="warning-wrapper" v-else>
+                    <p class="warning"> {{ showChannelWaiting }} </p>
+                    <Button class="refresh-channel" @click="refreshChannel" type="primary">
+                      <Icon type="md-refresh" />
+                      Refresh
+                    </Button>
+                  </div>
                 </div>             
-                <P class="description">A channel was found for this address.</P>
-                <div class="btn-wrapper" v-if="stateChannelStatus==='synced'">
+                <div class="btn-wrapper" v-if="stateChannelStatus==='normal' && stateChannelBanlance >= 0">
                   <Input 
                     search 
                     enter-button="TOP UP" 
