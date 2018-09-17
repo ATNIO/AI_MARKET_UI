@@ -37,7 +37,7 @@
                 <div class="normal-balance" v-if="stateChannelStatus==='normal' && stateChannelBanlance >= 0">
                   <p class="title">Remaining  Balance </p>
                   <p class="balance">{{stateChannelBanlance | priceFormat}} ATN</p>
-                  <p class="deposit">Deposit: {{stateChannelDopsit}} ATN</p>
+                  <p class="deposit">Deposit: {{stateChannelDeposit | priceFormat}} ATN</p>
                 </div>  
                 <div 
                   class="circle-wrapper" 

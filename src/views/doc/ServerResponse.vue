@@ -40,7 +40,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "ServerRes",
   computed: {
-    ...mapGetters(["serverRes", "address"]),
+    ...mapGetters(["serverRes", "address", "networkVersion"]),
     status() {
       return this.serverRes && this.serverRes[this.cacheKey]
         ? this.serverRes[this.cacheKey].status
@@ -50,7 +50,7 @@ export default {
       return this.$route.params.address;
     },
     cacheKey() {
-      return this.address + "_" + this.dbotAddr;
+      return this.networkVersion + "_" + this.address + "_" + this.dbotAddr;
     },
     response() {
       if (!(this.serverRes && this.serverRes[this.cacheKey])) return "";

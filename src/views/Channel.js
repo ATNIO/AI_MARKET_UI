@@ -55,8 +55,14 @@ export default {
       if (status) return status.balance;
       return 0;
     },
-    stateChannelDopsit() {
-      return 100;
+    stateChannelDeposit() {
+      var status = this.stateChannel[this.cacheKey];
+      if (status) {
+        return new BN(status.balance, 10)
+          .plus(new BN(status.usedbalance, 10))
+          .toString(10);
+      }
+      return 0;
     },
     syncpecent() {
       const percent = Math.round(
