@@ -198,8 +198,8 @@ export default new Vuex.Store({
     address(state) {
       return state.address;
     },
-    addressInDetail(state) {
-      return state.detailData.addr;
+    dbotDetail(state) {
+      return state.detailData;
     },
     endpoints(state) {
       return state.detailData.endpoints || [];
