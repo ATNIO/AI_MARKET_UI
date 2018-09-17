@@ -444,6 +444,9 @@ export default {
       this.updateStatus("waitTxenter");
     },
     async txErrProcess(para) {
+      if (!this.checkLogin()) {
+        return true;
+      }
       switch (para.action) {
         case "waitTxenter":
           // update view
@@ -498,6 +501,9 @@ export default {
       }, 1000);
     },
     async dbotErrProcess(para) {
+      if (!this.checkLogin()) {
+        return true;
+      }
       switch (para.action) {
         case "waitSyncenter":
         case "closeenter":
