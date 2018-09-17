@@ -16,7 +16,7 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      component: Home
+      component: Vue.prototype.$atn == null ? Home : Home
     },
     {
       path: "/detail/:address",

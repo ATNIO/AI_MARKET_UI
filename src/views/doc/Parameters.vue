@@ -36,7 +36,6 @@ import { mapGetters, mapActions } from "vuex";
 import BN from "bignumber.js";
 
 import ParameterForm from "./ParameterForm";
-const atn = new Atn(window.atn3);
 const CACHE_KEY = "DETAIL_STATE_CHANNEL";
 
 function getOptions(model, schema) {
@@ -203,7 +202,7 @@ export default {
       console.log(options);
 
       try {
-        callResult = await atn.callAPI(
+        callResult = await this.$atn.callAPI(
           this.dbotAddr,
           this.method,
           this.uri,
@@ -241,7 +240,10 @@ export default {
       let channelDetail = null;
 
       try {
-        channelDetail = await atn.getChannelDetail(this.dbotAddr, this.address);
+        channelDetail = await this.$atn.getChannelDetail(
+          this.dbotAddr,
+          this.address
+        );
       } catch (e) {
         console.error("getChannelDetail catch:", e);
 
