@@ -77,9 +77,9 @@ export default {
       var status = this.stateChannel[this.cacheKey];
       if (!status) return "ERR";
       if (status.status == "waitingTX") {
-        return "Waiting for channel transaction blockchain.";
+        return "Syncing channel transaction.";
       } else if (status.status == "waitingSync") {
-        return "Waiting for Dbotserver confirming transaction.";
+        return "Dbotserver confirming transaction.";
       }
       if (status.status == "TXErr") {
         return "Connect blockchain network exception";
