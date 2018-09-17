@@ -2,7 +2,6 @@ import { mapGetters, mapActions } from "vuex";
 import Atn from "atn-js";
 import BN from "bignumber.js";
 
-const atn = new Atn(window.atn3);
 const CACHE_KEY = "DETAIL_STATE_CHANNEL";
 
 export default {
@@ -245,23 +244,27 @@ export default {
             return true;
           }
           try {
-            const res = await atn.createChannel(
+            const res = await this.$atn.createChannel(
               this.dbotAddr,
               this.numberHandler(this.depositValue),
               this.address,
               (err, hash) => {
                 if (err || hash == null) {
-                  // 重新从网络上获取数据
-                  if (err.status == 21) {
-                    this.setStatusCache(null, -1, -1, null);
-                    this.updateStatus("initenter");
-                  }
-                  return;
+                  this.$Notice.warning({
+                    title: "打开 channel 失败",
+                    desc: "抱歉, 打开channel失败，请稍后重试"
+                  });
+                  return false;
                 }
                 this.setStatusCache("waitingTX", 0, -1, hash);
                 this.updateStatus("openenter");
               }
             );
+            // 重新从网络上获取数据
+            if (res.status == 21) {
+              this.setStatusCache(null, -1, -1, null);
+              this.updateStatus("initenter");
+            }
           } catch (e) {
             console.log(e);
             this.$Notice.warning({
@@ -277,7 +280,7 @@ export default {
           // close the channel if exist
           if (para.balance >= 0) {
             try {
-              const closeResult = await atn.closeChannel(
+              const closeResult = await this.$atn.closeChannel(
                 this.dbotAddr,
                 this.address,
                 para.usedbalance,
@@ -354,13 +357,15 @@ export default {
           return true;
         case "initenter":
           // should check current status
+          this.setStatusCache(null, -1, -1, null);
+          this.updateStatus("initenter");
           break;
         case "topup":
           if (!this.checkLogin()) {
             return true;
           }
           try {
-            await atn.topUpChannel(
+            await this.$atn.topUpChannel(
               this.dbotAddr,
               this.numberHandler(this.topupValue),
               this.address,
@@ -416,7 +421,12 @@ export default {
           return;
         }
         this.waitFlag.totalTime = 32000;
-        const tx = await atn.waitTx(para.hash, undefined, 4, this.waitFlag);
+        const tx = await this.$atn.waitTx(
+          para.hash,
+          undefined,
+          4,
+          this.waitFlag
+        );
         const txHash = tx.hash;
         const txStatus = tx.status;
         this.waitFlag.loopTime =
@@ -520,11 +530,11 @@ export default {
     },
     async loadingChannelInfo() {
       try {
-        const dchannel = await atn.getChannelDetail(
+        const dchannel = await this.$atn.getChannelDetail(
           this.dbotAddr,
           this.address
         );
-        const deposit = await atn.getChannelDeposit(
+        const deposit = await this.$atn.getChannelDeposit(
           this.dbotAddr,
           this.address
         );
