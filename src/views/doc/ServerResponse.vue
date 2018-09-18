@@ -1,5 +1,5 @@
 <template>
-  <section class="server-res" v-if="serverRes && serverRes[cacheKey]">
+  <section class="server-res" v-if="serverResCond">
     <h3>Server response</h3>
     <div class="re-header">
       <p>Code</p>
@@ -63,6 +63,9 @@ export default {
       return this.serverRes && this.serverRes[this.cacheKey]
         ? JSON.stringify(this.serverRes[this.cacheKey].headers, null, 2)
         : "";
+    },
+    serverResCond() {
+      return this.serverRes && this.serverRes[this.cacheKey];
     }
   }
 };
