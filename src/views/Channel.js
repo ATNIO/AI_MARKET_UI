@@ -436,12 +436,7 @@ export default {
           return;
         }
         this.waitFlag.totalTime = 32000;
-        const tx = await this.$atn.waitTx(
-          para.hash,
-          undefined,
-          4,
-          this.waitFlag
-        );
+        const tx = await this.$atn.waitTx(para.hash, 7000, 4, this.waitFlag);
         const txHash = tx.hash;
         const txStatus = tx.status;
         this.waitFlag.loopTime =
