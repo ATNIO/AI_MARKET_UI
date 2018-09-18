@@ -244,17 +244,25 @@ export default {
             return true;
           }
           try {
+            if (this.depositValue <= 0) {
+              this.$Notice.warning({
+                title: "打开 channel 失败",
+                desc: "请输入正确的ATN数量"
+              });
+              return false;
+            }
             const res = await this.$atn.createChannel(
               this.dbotAddr,
               this.numberHandler(this.depositValue),
               this.address,
               (err, hash) => {
-                if (err || hash == null) {
+                if (err) {
+                  return false;
+                } else if (hash == null) {
                   this.$Notice.warning({
                     title: "打开 channel 失败",
                     desc: "抱歉, 打开channel失败，请稍后重试"
                   });
-                  return false;
                 }
                 this.setStatusCache("waitingTX", 0, -1, hash);
                 this.updateStatus("openenter");
@@ -365,6 +373,13 @@ export default {
             return true;
           }
           try {
+            if (this.topupValue <= 0) {
+              this.$Notice.warning({
+                title: "topup 失败",
+                desc: "请输入正确的ATN数量"
+              });
+              return false;
+            }
             await this.$atn.topUpChannel(
               this.dbotAddr,
               this.numberHandler(this.topupValue),
