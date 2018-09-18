@@ -115,7 +115,7 @@ export default new Vuex.Store({
         delete temp[storeKey];
       }
 
-      state.serverRes = temp;
+      state.serverRes = { ...temp };
     }
   },
   actions: {
