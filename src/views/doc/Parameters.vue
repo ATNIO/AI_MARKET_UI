@@ -36,7 +36,6 @@ import { mapGetters, mapActions } from "vuex";
 import BN from "bignumber.js";
 
 import ParameterForm from "./ParameterForm";
-const atn = new Atn(window.atn3);
 const CACHE_KEY = "DETAIL_STATE_CHANNEL";
 
 function getOptions(model, schema) {
@@ -120,7 +119,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["address", "stateChannel", "serverRes"]),
+    ...mapGetters(["address", "networkVersion", "stateChannel", "serverRes"]),
     parametersType() {
       return this.param.map(parameter => parameter.in).reduce((pre, cur) => {
         pre.includes(cur) || pre.push(cur);
@@ -138,12 +137,17 @@ export default {
       return this.$route.params.address;
     },
     cacheKey() {
-      return this.address + "_" + this.dbotAddr;
+      return this.networkVersion + "_" + this.address + "_" + this.dbotAddr;
     },
     stateChannelStatus() {
       const dbotStateChannel = this.stateChannel[this.cacheKey];
-      if (!dbotStateChannel) return "close";
+      if (!dbotStateChannel) return "normal";
       return dbotStateChannel.status;
+    },
+    stateChannelBanlance() {
+      var status = this.stateChannel[this.cacheKey];
+      if (status) return status.balance;
+      return -1;
     }
   },
   watch: {
@@ -168,17 +172,14 @@ export default {
         });
         return false;
       }
-      if (this.stateChannelStatus === "close") {
+      console.log(this.stateChannelStatus, this.stateChannelBanlance);
+      if (
+        this.stateChannelStatus !== "normal" ||
+        this.stateChannelBanlance < 0
+      ) {
         this.$Notice.warning({
           title: "未检测到 state channel",
           desc: "您需要打开一个 state channel，以便成功调用该 API"
-        });
-        return false;
-      }
-      if (this.stateChannelStatus !== "synced") {
-        this.$Notice.warning({
-          title: "state channel 尚未准备好",
-          desc: "state channel 正在打开或者正在同步数据，请稍后再试"
         });
         return false;
       }
@@ -201,7 +202,7 @@ export default {
       console.log(options);
 
       try {
-        callResult = await atn.callAPI(
+        callResult = await this.$atn.callAPI(
           this.dbotAddr,
           this.method,
           this.uri,
@@ -238,13 +239,11 @@ export default {
     async getChannelDetail() {
       let channelDetail = null;
 
-      this.setStateChannel({
-        status: "syncing",
-        storeKey: this.cacheKey
-      });
-
       try {
-        channelDetail = await atn.getChannelDetail(this.dbotAddr, this.address);
+        channelDetail = await this.$atn.getChannelDetail(
+          this.dbotAddr,
+          this.address
+        );
       } catch (e) {
         console.error("getChannelDetail catch:", e);
 
@@ -269,8 +268,9 @@ export default {
         .toString(10);
 
       this.setStateChannel({
-        status: "synced",
-        banlance: depositComputed,
+        status: "normal",
+        balance: depositComputed,
+        usedbalance: balance,
         storeKey: this.cacheKey
       });
     }

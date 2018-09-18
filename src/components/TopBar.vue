@@ -67,7 +67,7 @@
 
             <div class="personal-center">
                 <div v-show="loginShow">
-                    <Button @click="modal1 = true">login</Button>
+                    <Button @click="loginbutton">login</Button>
                 </div>
                 <div class="prefsession" v-show="!loginShow">
                     <Icon custom="icon-channel" size="24" color="#ffffff" class="icon"/>
@@ -152,8 +152,6 @@ import { mapActions, mapGetters } from "vuex";
 import Atn from "atn-js";
 import Cookies from "js-cookie";
 
-const atn = new Atn(window.atn3);
-
 export default {
   name: "TopBar",
   data() {
@@ -174,22 +172,28 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["address", "currentSearchHistory"])
+    ...mapGetters(["address", "networkVersion", "currentSearchHistory"])
   },
   mounted() {
     this.check();
 
-    this.$atn.web3.currentProvider.publicConfigStore.on(
-      "update",
-      ({ selectedAddress, networkVersion }) => {
-        this.selectedAddress = selectedAddress;
-        this.accountChange();
-      }
-    );
+    try {
+      this.$atn.web3.currentProvider.publicConfigStore.on(
+        "update",
+        ({ selectedAddress, networkVersion }) => {
+          this.selectedAddress = selectedAddress;
+          this.selectedNetworkVersion = networkVersion;
+          this.accountChange();
+        }
+      );
+    } catch (e) {
+      console.log("ATN wallet has not been installed");
+    }
   },
   methods: {
     ...mapActions([
       "setAddress",
+      "setNetworkVersion",
       "setCurrentSearchHistory",
       "setToChannelList"
     ]),
@@ -211,6 +215,7 @@ export default {
         this.loginShow = true;
         this.isLogin = false;
         this.setAddress("");
+        this.setNetworkVersion("");
         return false;
       }
     },
@@ -222,7 +227,10 @@ export default {
     },
     accountChange() {
       if (this.isLogin) {
-        if (this.selectedAddress.toLowerCase() !== this.address.toLowerCase()) {
+        if (
+          this.selectedAddress.toLowerCase() !== this.address.toLowerCase() ||
+          this.selectedNetworkVersion != this.networkVersion
+        ) {
           if (!this.noticeLock) {
             this.noticeLock = true;
             this.$Modal.warning({
@@ -232,7 +240,7 @@ export default {
               okText: "confirm",
               onOk: async () => {
                 await this.logout();
-                this.goLogin(this.selectedAddress);
+                this.goLogin(this.selectedAddress, this.selectedNetworkVersion);
               }
             });
           }
@@ -250,6 +258,18 @@ export default {
           break;
       }
     },
+    loginbutton() {
+      if (this.$atn === null) {
+        this.$Modal.warning({
+          title: "Detect account has changed",
+          content: "您的浏览器没有安装ATN钱包，请安装后刷新页面",
+          okText: "confirm",
+          onOk: async () => {}
+        });
+        return;
+      }
+      this.modal1 = true;
+    },
     login(type) {
       switch (type) {
         case "metamask":
@@ -264,26 +284,33 @@ export default {
       const accounts = await eth.getAccounts();
       return accounts[0];
     },
-    async goLogin(account) {
+    async getNetworkID() {
+      const ID = await this.$atn.getCurrentNetworkId();
+      return ID;
+    },
+    async goLogin(account, networkVersion) {
       const { login } = this.$api.user;
 
       if (!account) {
         return this.notice({
           type: "warning",
-          title: "Attempt to login AI Market by MetaMask",
+          title: "Attempt to login AI Market by ATN wallet",
           desc:
-            "我们检测到您已安装MetaMask浏览器插件并尝试用MetaMask登录 AI Market，请先在您的MetaMask浏览器插件创建账户或解锁后再尝试用MetaMask解锁"
+            "我们检测到您已安装ATN钱包的浏览器插件并尝试用ATN钱包登录 AI Market，请先在您的ATN钱包浏览器插件创建账户或解锁后再尝试用ATN钱包解锁"
         });
       }
 
-      const params = await atn.getRegisterLoginParams(account.toLowerCase());
+      this.setNetworkVersion(networkVersion);
+      const params = await this.$atn.getRegisterLoginParams(
+        account.toLowerCase()
+      );
       const { code } = params;
 
       if (code === -32603) {
         return;
       }
 
-      const sig = await atn.getLoginSign(account.toLowerCase());
+      const sig = await this.$atn.getLoginSign(account.toLowerCase());
       const response = await login(params, sig);
       const { data, status } = response;
 
@@ -297,7 +324,8 @@ export default {
     },
     async loginByMetamask() {
       const account = await this.getAccounts();
-      this.goLogin(account);
+      const networkVersion = await this.getNetworkID();
+      this.goLogin(account, networkVersion);
     },
     async logout() {
       const { logout } = this.$api.user;
@@ -307,6 +335,7 @@ export default {
         this.loginShow = true;
         this.isLogin = false;
         this.setAddress();
+        this.setNetworkVersion();
         Cookies.remove("token", { path: "/" });
         Cookies.remove("token.sig", { path: "/" });
       }

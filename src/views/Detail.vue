@@ -50,7 +50,7 @@
                     </p>
                     <p class="auther">
                         <avatar
-                          :text="dbot.owner.toLowerCase()"
+                          :text="dbot.owner && dbot.owner.toLowerCase()"
                           :width="32"
                           :height="32"
                         ></avatar>
@@ -109,7 +109,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["addressInDetail", "dbots", "address", "currentItem"]),
+    ...mapGetters(["dbotDetail", "dbots", "address", "currentItem"]),
     dbotAddress() {
       return this.$route.params.address;
     },
@@ -119,7 +119,7 @@ export default {
     //   };
     // },
     dbot() {
-      return this.dbots.filter(item => this.dbotAddress === item.addr)[0];
+      return this.dbotDetail;
     },
     visibleType() {
       return this.visible ? "icon-star" : "icon-unstar";
@@ -137,7 +137,7 @@ export default {
     fetch() {
       const { getDetail } = this.$api.detail;
 
-      if (this.dbotAddress === this.addressInDetail) return;
+      if (this.dbotAddress === this.dbotDetail.addr) return;
 
       this.setDocData({});
 
@@ -147,10 +147,9 @@ export default {
           this.$Spin.hide();
 
           const { data, status } = res;
-          const { addr, create_at, endpoints, update_at, specification } = data;
-
+          const { specification } = data;
           if (status === 200) {
-            this.setDetailData({ addr, create_at, endpoints, update_at });
+            this.setDetailData(data);
 
             new Swagger({ spec: JSON.parse(specification.data) })
               .then(data => {
