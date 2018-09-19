@@ -1,6 +1,11 @@
 <template>
   <section class="server-res" v-if="serverResCond">
-    <h3>Server response</h3>
+    <div class="response-topper">
+      <h3>Server response</h3>
+      <div class="clear-btn" v-if="serverRes && serverRes[cacheKey]">
+        <Button @click="clear">Clear</Button>
+      </div>
+    </div>
     <div class="re-header">
       <p>Code</p>
       <p>Details</p>
@@ -35,7 +40,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "ServerRes",
@@ -67,13 +72,49 @@ export default {
     serverResCond() {
       return this.serverRes && this.serverRes[this.cacheKey];
     }
+  },
+  methods: {
+    ...mapActions(["setServerRes"]),
+    clear() {
+      this.setServerRes({ storeKey: this.cacheKey, data: null });
+    }
   }
 };
 </script>
 
 <style lang="less" scoped>
 .server-res {
-  margin-top: 40px;
+  margin-top: 20px;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #11124c;
+
+  .response-topper {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    .clear-btn {
+      width: 110px;
+      height: 40px;
+
+      & /deep/ .ivu-btn-default {
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
+        background: #9ea0f9;
+        font-size: 18px;
+        color: #ffffff;
+
+        &:hover {
+          background: #7c7fff;
+        }
+      }
+    }
+  }
 
   h3 {
     margin-bottom: 30px;
@@ -93,7 +134,7 @@ export default {
 
     p {
       font-size: 14px;
-      color: #727272;
+      color: #ffffff;
 
       &:first-of-type {
         flex: 1;
@@ -109,7 +150,7 @@ export default {
     p {
       margin-bottom: 16px;
       font-size: 12px;
-      color: #727272;
+      color: #ffffff;
     }
   }
 
@@ -120,6 +161,7 @@ export default {
 
   .response-code {
     flex: 1;
+    color: #ffffff;
   }
 
   .response-description {
