@@ -234,7 +234,8 @@ export default {
         // }
       } catch (e) {
         console.error("call ai:", e);
-        this.$Message.error(e);
+        this.isLoading = false;
+        this.$Message.error("请确认签名或网络");
       }
 
       this.getChannelDetail();

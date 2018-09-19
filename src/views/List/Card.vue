@@ -102,15 +102,14 @@ export default {
   }
 
   .logo {
+    margin-top: 12px;
     height: 150px;
     width: 280px;
     display: flex;
     justify-content: center;
     align-items: center;
     .image {
-      margin-top: 10px;
-      width: 50%;
-      height: 50%;
+      width: 100%;
     }
   }
 
