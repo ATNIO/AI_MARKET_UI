@@ -128,7 +128,7 @@ export default {
           callback();
         }
       },
-      validateInt: (rule, value, callback) => {
+      validateEnum: (rule, value, callback) => {
         if (rule.required == true) {
           if (value == undefined) {
             callback(new Error("Please select a value"));
@@ -177,15 +177,15 @@ export default {
               type
             }
           ];
-        } else if (cur.type == "integer") {
+        } else if (cur.enum) {
           pre[name] = [
             {
-              validator: this.validateInt,
+              validator: this.validateEnum,
               required,
               trigger
             },
             {
-              validator: this.validateInt,
+              validator: this.validateEnum,
               type,
               trigger
             }
