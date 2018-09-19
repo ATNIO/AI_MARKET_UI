@@ -277,15 +277,14 @@ export default {
         margin: 30px 0 0 40px;
 
         .logo {
-          width: 267px;
-          height: 156px;
-          margin-bottom: 20px;
+          width: 280px;
+          height: 150px;
+          margin-bottom: 25px;
           display: flex;
           justify-content: center;
           align-items: center;
           .image {
-            width: 50%;
-            height: 50%;
+            width: 100%;
           }
         }
         .tagtitle {

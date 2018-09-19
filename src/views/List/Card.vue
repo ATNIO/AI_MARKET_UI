@@ -108,9 +108,8 @@ export default {
     justify-content: center;
     align-items: center;
     .image {
-      margin-top: 10px;
-      width: 50%;
-      height: 50%;
+      margin-top: 12px;
+      width: 100%;
     }
   }
 
