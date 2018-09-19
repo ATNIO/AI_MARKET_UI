@@ -25,9 +25,6 @@
         @click="callAi"
       >Sign Balance to Execute API</Button>
     </div>
-    <div class="clear-btn" v-if="serverRes && serverRes[cacheKey]">
-      <Button @click="clear">Clear</Button>
-    </div>
   </section>
 </template>
  <script>
@@ -185,11 +182,17 @@ export default {
       }
       return true;
     },
-    clear() {
-      this.setServerRes({ storeKey: this.cacheKey, data: null });
-    },
     async callAi() {
       if (!this.checkBeforeCall()) return;
+      try {
+        const response = await this.$refs.form.handleSubmit("parameter-form");
+        if (!response) {
+          return;
+        }
+      } catch (e) {
+        console.log(e);
+        return;
+      }
 
       this.isLoading = true;
 
@@ -413,26 +416,6 @@ export default {
       background: #9ea0f9;
       border-radius: 4px;
       font-size: 18px;
-
-      &:hover {
-        background: #7c7fff;
-      }
-    }
-  }
-
-  .clear-btn {
-    width: 100%;
-    height: 50px;
-    margin-top: 16px;
-
-    & /deep/ .ivu-btn-default {
-      width: 100%;
-      height: 100%;
-      border: none;
-      outline: none;
-      background: #9ea0f9;
-      font-size: 18px;
-      color: #ffffff;
 
       &:hover {
         background: #7c7fff;
