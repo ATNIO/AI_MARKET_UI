@@ -1,5 +1,5 @@
 <template>
-  <Form refs="parameter-form" :model="paramModel" @submit.native.prevent :rules="rules">
+  <Form ref="parameter-form" :model="paramModel" @submit.native.prevent :rules="rules">
     <template v-for="(parameters, key) in parametersRender">
       <div class="wrapper" :key="key">
         <h4 class="title">{{ key | upperFirst }}</h4>
@@ -63,6 +63,7 @@
                 <!-- file -->
                 <template v-else-if="p.type === 'file'">
                   <vue-upload-component
+                    ref="upload_component"
                     :value="paramModel[p.name]" 
                     @input="val => updateFiles(val, p.name)"
                     class="upload"
@@ -116,6 +117,28 @@ export default {
   components: { Schema, VueUploadComponent },
   data() {
     return {
+      validateFile: (rule, value, callback) => {
+        if (rule.required == true) {
+          if (value.length === 0) {
+            callback(new Error("Please select your file"));
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      },
+      validateInt: (rule, value, callback) => {
+        if (rule.required == true) {
+          if (value == undefined) {
+            callback(new Error("Please select a value"));
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      },
       paramModel: {}
     };
   },
@@ -135,21 +158,49 @@ export default {
     },
     rules() {
       return this.param.reduce((pre, cur) => {
-        const { required, name, type } = cur;
+        var { required, name, type } = cur;
         const trigger = cur.enum ? "change" : "blur";
+        required = required == undefined ? false : true;
 
-        pre[name] = [
-          {
-            required,
-            trigger,
-            message: required ? "The name cannot be empty" : ""
-          },
-          {
-            type,
-            trigger
-          }
-        ];
-
+        if (cur.type == "file") {
+          pre[name] = [
+            {
+              validator: this.validateFile,
+              trigger: "input",
+              required
+            },
+            {
+              validator: this.validateFile,
+              trigger: "input",
+              type
+            }
+          ];
+        } else if (cur.type == "integer") {
+          pre[name] = [
+            {
+              validator: this.validateInt,
+              required,
+              trigger
+            },
+            {
+              validator: this.validateInt,
+              type,
+              trigger
+            }
+          ];
+        } else {
+          pre[name] = [
+            {
+              required,
+              trigger,
+              message: required ? "The name cannot be empty" : ""
+            },
+            {
+              type,
+              trigger
+            }
+          ];
+        }
         return pre;
       }, {});
     }
@@ -173,10 +224,14 @@ export default {
     }
   },
   methods: {
+    async handleSubmit(name) {
+      return await this.$refs[name].validate();
+    },
     updateFiles(val, field) {
       const files = this.paramModel[field];
 
       this.paramModel[field] = [...files, ...val];
+      this.$refs["parameter-form"].validateField(field);
     },
     handleRemove(field, file) {
       // const files = this.paramModel[field];
@@ -194,6 +249,7 @@ export default {
       const files = this.paramModel[field];
 
       this.paramModel[field].splice(files.indexOf(file), 1);
+      this.$refs["parameter-form"].validateField(field);
     }
   },
   filters: {

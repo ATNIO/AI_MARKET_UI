@@ -190,6 +190,15 @@ export default {
     },
     async callAi() {
       if (!this.checkBeforeCall()) return;
+      try {
+        const response = await this.$refs.form.handleSubmit("parameter-form");
+        if (!response) {
+          return;
+        }
+      } catch (e) {
+        console.log(e);
+        return;
+      }
 
       this.isLoading = true;
 
