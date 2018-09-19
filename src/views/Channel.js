@@ -13,7 +13,7 @@ export default {
       topupValue: "",
       storageCache: {},
       timer: null,
-      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 32000 }
+      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 42000 }
     };
   },
   props: {
@@ -435,14 +435,17 @@ export default {
           this.updateStatus("waitTxenter");
           return;
         }
-        this.waitFlag.totalTime = 32000;
-        const tx = await this.$atn.waitTx(para.hash, 7000, 4, this.waitFlag);
+        this.waitFlag.totalTime = 42000;
+        this.waitFlag.loopTime = 0;
+        this.waitFlag.startTime = 0;
+        const tx = await this.$atn.waitTx(para.hash, 8000, 4, this.waitFlag);
         const txHash = tx.hash;
         const txStatus = tx.status;
         this.waitFlag.loopTime =
-          this.waitFlag.startTime + this.waitFlag.totalTime;
+          this.waitFlag.startTime + this.waitFlag.totalTime - 5000;
 
         if (tx.status === 51 || tx.status == false) {
+          console.log("TXErr:", tx);
           this.setStatusCache(
             "TXErr",
             para.balance,
@@ -515,7 +518,8 @@ export default {
         } catch (e) {
           this.setStatusCache("dbotErr", -1, -1, null);
         }
-        this.waitFlag.loopTime = this.waitFlag.totalTime;
+        this.waitFlag.loopTime =
+          this.waitFlag.startTime + this.waitFlag.totalTime;
         clearInterval(this.timer);
         this.timer = null;
         this.updateStatus("waitSyncenter");
