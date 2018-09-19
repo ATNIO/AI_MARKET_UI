@@ -160,7 +160,9 @@ export default {
       return this.param.reduce((pre, cur) => {
         var { required, name, type } = cur;
         const trigger = cur.enum ? "change" : "blur";
-        required = required == undefined ? false : true;
+        if (required == undefined) {
+          required = false;
+        }
 
         if (cur.type == "file") {
           pre[name] = [
