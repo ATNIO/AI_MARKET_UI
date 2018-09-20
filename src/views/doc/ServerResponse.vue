@@ -21,7 +21,10 @@
             autosize
             disabled
             class="dark"
+            v-if="responseType!='audio/mpeg'"
           />
+          <AudioBar :audiofile="responseData" v-else>
+          </AudioBar>
         </div>
 
         <p>Response headers</p>
@@ -68,6 +71,16 @@ export default {
       return this.serverRes && this.serverRes[this.cacheKey]
         ? JSON.stringify(this.serverRes[this.cacheKey].headers, null, 2)
         : "";
+    },
+    responseType() {
+      try {
+        return this.serverRes[this.cacheKey].headers["content-type"];
+      } catch (e) {
+        return "text/plain";
+      }
+    },
+    responseData() {
+      return this.serverRes[this.cacheKey].data;
     },
     serverResCond() {
       return this.serverRes && this.serverRes[this.cacheKey];
