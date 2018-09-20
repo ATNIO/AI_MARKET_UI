@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="title">
-            <span class="remaining">Deposit: </span><span class="balance">{{item.deposit}}</span>
+            <span class="remaining">Deposit: </span><span class="balance">{{divideNumberHandler(item.deposit)}}</span>
         </div>
         <span class="channel">Channel Status: </span><span class="status">{{item.status}}</span>
         <span class="block">Block: </span><span class="value">{{item.open_block_number}}</span>
@@ -20,6 +20,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import BN from "bignumber.js";
 export default {
   name: "AccountRecord",
   created() {},
@@ -28,6 +29,7 @@ export default {
       type: Object,
       default: () => ({})
     }
+    // item.deposit = new BN(item.deposit, 10).toString(10);
   },
   data() {
     return {};
@@ -46,7 +48,16 @@ export default {
       return dbot;
     }
   },
-  methods: {}
+  methods: {
+    divideNumberHandler(num) {
+      // 对ATN 数字处理
+      const _num = new BN(num, 10);
+      const multi = new BN("1e18");
+      const rtn = _num.div(multi).toString(10);
+      console.log("divideNumberHandler", rtn);
+      return rtn;
+    }
+  }
 };
 </script>
 
