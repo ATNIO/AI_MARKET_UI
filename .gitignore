@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 /dist
-/deploy/ai_market_docker/*
+/deploy/ai_market_docker/www/
 /root@/
 /root@119.3.57.66/
 # local env files
