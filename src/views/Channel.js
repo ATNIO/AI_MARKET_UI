@@ -182,7 +182,6 @@ export default {
         const { data } = await this.$api.detail.getDetail(
           this.$route.params.address
         );
-        console.log(data);
         if (data.outdate) {
           console.log("dbotserver outdate:", data);
           const deposit = await this.getChainDeposit();
