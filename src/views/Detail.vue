@@ -15,7 +15,7 @@
                 <div class="logo-tag">
                     <div class="wrapper">
                         <div class="logo">
-                          <img :src="dbot.logo" alt="" class="image">
+                          <img :src="logo" alt="" class="image">
                         </div>
 
                         <span class="tagtitle"><Icon custom="icon-tag" color="#87C5FE"/> Tag:</span>
@@ -118,6 +118,12 @@ export default {
     //     backgroundImage: `url(${this.dbot.logo})`
     //   };
     // },
+    logo() {
+      if (this.dbot.outdate) {
+        return this.dbot.logo + "?x-oss-process=style/offline";
+      }
+      return this.dbot.logo;
+    },
     dbot() {
       return this.dbotDetail;
     },

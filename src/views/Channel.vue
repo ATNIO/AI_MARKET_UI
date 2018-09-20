@@ -39,6 +39,10 @@
                   <p class="balance">{{stateChannelBanlance | priceFormat}} ATN</p>
                   <p class="deposit">Deposit: {{stateChannelDeposit | priceFormat}} ATN</p>
                 </div>  
+                <div class="outdate" v-else-if="stateChannelStatus === 'outdate'">
+                  <p class="deposit" v-if="stateChannelDeposit >= 0">Deposit: {{stateChannelDeposit | priceFormat}} ATN</p>
+                  <p class="syncing">{{ showChannelWaiting }}</p>
+                </div>
                 <div 
                   class="circle-wrapper" 
                   v-else-if="

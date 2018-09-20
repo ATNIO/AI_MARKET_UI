@@ -93,6 +93,8 @@ export default {
         return "Connect blockchain network exception";
       } else if (status.status == "dbotErr") {
         return "Connect Dbotserver exception";
+      } else if (status.status == "outdate") {
+        return "Dbotserver outdate";
       }
     }
   },
@@ -158,6 +160,13 @@ export default {
       let para = { action, balance, usedbalance, hash };
       console.log(status);
       console.log(para);
+      if (this.dbot.outdate) {
+        const deposit = await this.getChainDeposit();
+        this.setStatusCache("outdate", deposit, 0, null);
+        return;
+      } else if (status == "outdate") {
+        status = null;
+      }
       var ret = true;
       switch (status) {
         case null:
@@ -195,6 +204,7 @@ export default {
         this.setStatusCache("normal", -1, -1, null);
         return false;
       }
+
       let { err, info } = await this.loadingChannelInfo();
       if (err) {
         if (info == null) {
@@ -540,6 +550,17 @@ export default {
           this.waitFlag.loopTime = 0;
           this.setStatusCache("waitingSync", -1, -1, null);
           this.updateStatus("dbotErrcenter");
+      }
+    },
+    async getChainDeposit() {
+      try {
+        const deposit = await this.$atn.getChannelDeposit(
+          this.dbotAddr,
+          this.address
+        );
+        return deposit;
+      } catch (e) {
+        return -1;
       }
     },
     async loadingChannelInfo() {
