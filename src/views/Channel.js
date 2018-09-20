@@ -13,7 +13,8 @@ export default {
       topupValue: "",
       storageCache: {},
       timer: null,
-      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 42000 }
+      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 42000 },
+      leaveFlag: true
     };
   },
   props: {
@@ -30,6 +31,12 @@ export default {
           console.log("network or address has been changed");
           this.updateStatus("initenter");
         }
+      }
+    },
+    dbotAddr: {
+      immediate: false,
+      handler(val) {
+        this.updateStatus("initenter");
       }
     }
   },
@@ -93,10 +100,13 @@ export default {
         return "Connect blockchain network exception";
       } else if (status.status == "dbotErr") {
         return "Connect Dbotserver exception";
+      } else if (status.status == "outdate") {
+        return "Dbotserver outdate";
       }
     }
   },
   mounted() {
+    this.leaveFlag = false;
     this.updateStatus("initenter");
   },
   beforeDestroy() {
@@ -104,6 +114,7 @@ export default {
     clearInterval(this.timer);
     this.timer = null;
     this.waitFlag.flag = false;
+    this.leaveFlag = true;
   },
   methods: {
     ...mapActions(["setStateChannel"]),
@@ -111,13 +122,13 @@ export default {
       this.updateStatus("open");
     },
     async topup() {
-      this.updateStatus("topup");
+      await this.updateStatus("topup");
     },
     async closeChannel() {
-      this.updateStatus("close");
+      await this.updateStatus("close");
     },
     async refreshChannel() {
-      this.updateStatus("refresh");
+      await this.updateStatus("refresh");
     },
     numberHandler(num) {
       // 对ATN 数字处理
@@ -154,10 +165,35 @@ export default {
       // TODO localStorage
     },
     async updateStatus(action) {
+      if (this.leaveFlag) {
+        console.log("this page is closed", this.cacheKey);
+        if (this.timer != null) {
+          clearInterval(this.timer);
+          this.timer = null;
+        }
+        return;
+      }
+
       let { status, balance, usedbalance, hash } = this.getStatusCache();
       let para = { action, balance, usedbalance, hash };
       console.log(status);
       console.log(para);
+      try {
+        const { data } = await this.$api.detail.getDetail(
+          this.$route.params.address
+        );
+        console.log(data);
+        if (data.outdate) {
+          console.log("dbotserver outdate:", data);
+          const deposit = await this.getChainDeposit();
+          this.setStatusCache("outdate", deposit, 0, null);
+          return;
+        } else if (status == "outdate") {
+          status = null;
+        }
+      } catch (e) {
+        console.log("get outdate status exception", e);
+      }
       var ret = true;
       switch (status) {
         case null:
@@ -180,7 +216,7 @@ export default {
           ret = await this.dbotErrProcess(para);
           break;
         default:
-          console.log("status cannot be processed");
+          console.log("status cannot be processed", status);
           break;
       }
       if (!ret) {
@@ -195,25 +231,26 @@ export default {
         this.setStatusCache("normal", -1, -1, null);
         return false;
       }
+
       let { err, info } = await this.loadingChannelInfo();
       if (err) {
         if (info == null) {
           this.setStatusCache("normal", -1, -1, null);
-          this.updateStatus("unknownenter");
+          await this.updateStatus("unknownenter");
           return;
         }
         const remainbalance = new BN(info.deposit, 10)
           .minus(new BN(info.balance, 10))
           .toString(10);
         this.setStatusCache("normal", remainbalance, info.balance, null);
-        this.updateStatus("unknownenter");
+        await this.updateStatus("unknownenter");
         return;
       } else {
         if (info) {
           console.log(info);
         }
         this.setStatusCache("waitingSync", -1, -1, null);
-        this.updateStatus("unknownenter");
+        await this.updateStatus("unknownenter");
       }
     },
     checkLogin() {
@@ -255,7 +292,7 @@ export default {
               this.dbotAddr,
               this.numberHandler(this.depositValue),
               this.address,
-              (err, hash) => {
+              async (err, hash) => {
                 if (err) {
                   return false;
                 } else if (hash == null) {
@@ -265,13 +302,13 @@ export default {
                   });
                 }
                 this.setStatusCache("waitingTX", 0, -1, hash);
-                this.updateStatus("openenter");
+                await this.updateStatus("openenter");
               }
             );
             // 重新从网络上获取数据
             if (res.status == 21) {
               this.setStatusCache(null, -1, -1, null);
-              this.updateStatus("initenter");
+              await this.updateStatus("initenter");
             }
           } catch (e) {
             console.log(e);
@@ -280,7 +317,7 @@ export default {
               desc: "抱歉, 打开channel失败，请检查网络和签名"
             });
             this.setStatusCache("normal", para.balance, para.usedbalance, null);
-            this.updateStatus("openenter");
+            await this.updateStatus("openenter");
             return true;
           }
           break;
@@ -327,7 +364,7 @@ export default {
                   para.usedbalance,
                   null
                 );
-                this.updateStatus("closeenter");
+                await this.updateStatus("closeenter");
                 return false;
               } else if (closeResult.status === 32) {
                 // Get Delete Close_Signature From DbotServer Error
@@ -341,7 +378,7 @@ export default {
                   para.usedbalance,
                   null
                 );
-                this.updateStatus("closeenter");
+                await this.updateStatus("closeenter");
                 return false;
               }
             } catch (e) {
@@ -357,16 +394,16 @@ export default {
                 para.usedbalance,
                 null
               );
-              this.updateStatus("closeenter");
+              await this.updateStatus("closeenter");
               return false;
             }
           }
-          this.updateStatus("closeenter");
+          await this.updateStatus("closeenter");
           return true;
         case "initenter":
           // should check current status
           this.setStatusCache(null, -1, -1, null);
-          this.updateStatus("initenter");
+          await this.updateStatus("initenter");
           break;
         case "topup":
           if (!this.checkLogin()) {
@@ -384,7 +421,7 @@ export default {
               this.dbotAddr,
               this.numberHandler(this.topupValue),
               this.address,
-              (err, hash) => {
+              async (err, hash) => {
                 if (err || hash == null) {
                   this.$Notice.warning({
                     title: "topup channel 失败",
@@ -398,7 +435,7 @@ export default {
                   para.usedbalance,
                   hash
                 );
-                this.updateStatus("topupenter");
+                await this.updateStatus("topupenter");
               }
             );
           } catch (e) {
@@ -432,7 +469,7 @@ export default {
             para.usedbalance,
             para.hash
           );
-          this.updateStatus("waitTxenter");
+          await this.updateStatus("waitTxenter");
           return;
         }
         this.waitFlag.totalTime = 42000;
@@ -452,7 +489,7 @@ export default {
             para.usedbalance,
             para.hash
           );
-          this.updateStatus("waitTxenter");
+          await this.updateStatus("waitTxenter");
           return;
         }
         this.setStatusCache(
@@ -465,7 +502,7 @@ export default {
         console.log("waitingTxProcess exception:", e);
         this.setStatusCache("TXErr", para.balance, para.usedbalance, para.hash);
       }
-      this.updateStatus("waitTxenter");
+      await this.updateStatus("waitTxenter");
     },
     async txErrProcess(para) {
       if (!this.checkLogin()) {
@@ -479,11 +516,15 @@ export default {
           return true;
       }
       this.setStatusCache("waitingTX", 0, -1, para.hash);
-      this.updateStatus("txErrenter");
+      await this.updateStatus("txErrenter");
       return true;
     },
     async waitingSyncProcess(para) {
       // change view
+      if (para.action == "waitSyncenter") {
+        console.log("waitSyncenter Syncing status");
+        return true;
+      }
 
       // 加一个保护，防止程序BUG启动多个定时器
       if (this.timer != null) {
@@ -494,6 +535,18 @@ export default {
 
       this.timer = setInterval(async () => {
         try {
+          if (this.leaveFlag) {
+            console.log(
+              "this page is closed, timer should stop",
+              this.cacheKey
+            );
+            if (this.timer != null) {
+              clearInterval(this.timer);
+              this.timer = null;
+            }
+            return;
+          }
+
           if (this.retrySyncTimes % 2 != 0) return;
           this.retrySyncTimes += 1;
           let { err, info } = await this.loadingChannelInfo();
@@ -522,7 +575,7 @@ export default {
           this.waitFlag.startTime + this.waitFlag.totalTime;
         clearInterval(this.timer);
         this.timer = null;
-        this.updateStatus("waitSyncenter");
+        await this.updateStatus("waitSyncenter");
       }, 1000);
     },
     async dbotErrProcess(para) {
@@ -539,7 +592,18 @@ export default {
           this.waitFlag.startTime = 0;
           this.waitFlag.loopTime = 0;
           this.setStatusCache("waitingSync", -1, -1, null);
-          this.updateStatus("dbotErrcenter");
+          await this.updateStatus("dbotErrcenter");
+      }
+    },
+    async getChainDeposit() {
+      try {
+        const deposit = await this.$atn.getChannelDeposit(
+          this.dbotAddr,
+          this.address
+        );
+        return deposit;
+      } catch (e) {
+        return -1;
       }
     },
     async loadingChannelInfo() {

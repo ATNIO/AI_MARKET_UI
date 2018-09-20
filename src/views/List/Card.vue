@@ -1,7 +1,7 @@
 <template>
   <li class="card" @click="_click">
     <div class="logo">
-      <img :src="item.logo" alt="" class="image">
+      <img :src="itemlogo" alt="" class="image">
     </div>
     <div class="content">
       <h2>{{ item.name }}</h2>
@@ -53,6 +53,14 @@ export default {
   //     };
   //   }
   // },
+  computed: {
+    itemlogo() {
+      if (this.item.outdate) {
+        //return this.item.logooutdate;
+      }
+      return this.item.logo;
+    }
+  },
   methods: {
     ...mapActions(["setTabsValue"]),
     _click() {
