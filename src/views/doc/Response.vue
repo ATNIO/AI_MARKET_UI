@@ -96,7 +96,6 @@ export default {
 
   &-description {
     width: 650px;
-    height: 40px;
     padding-left: 16px;
     margin-bottom: 16px;
     display: flex;
