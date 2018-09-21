@@ -1,5 +1,8 @@
 <template>
   <li class="card" @click="_click">
+    <div class="typelogo">
+      <img :src="typeitemlogo" alt="" class="image">
+    </div>
     <div class="logo">
       <img :src="itemlogo" alt="" class="image">
     </div>
@@ -59,6 +62,13 @@ export default {
         //return this.item.logooutdate;
       }
       return this.item.logo;
+    },
+    typeitemlogo() {
+      return (
+        "https://ai-market-ui-img.oss-cn-hangzhou.aliyuncs.com/" +
+        this.item.category +
+        ".svg"
+      );
     }
   },
   methods: {
@@ -107,6 +117,20 @@ export default {
   &:hover {
     transform: translate3d(0, -2px, 0);
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .typelogo {
+    margin-top: 6px;
+    margin-left: 6px;
+    border-radius: 4px;
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    background: #797af8;
+    .image {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   .logo {

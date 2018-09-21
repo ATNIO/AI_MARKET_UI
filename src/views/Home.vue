@@ -125,7 +125,7 @@ export default {
 
   .container {
     min-height: 500px;
-    margin-left: 20px;
+    margin-left: 30px;
     flex: 1;
     position: relative;
 
