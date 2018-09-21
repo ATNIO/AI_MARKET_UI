@@ -395,8 +395,7 @@ export default {
           return true;
         case "initenter":
           // should check current status
-          this.setStatusCache(null, -1, -1, null);
-          await this.updateStatus("initenter");
+          await this.unknownProcess({ action: "initenter" });
           break;
         case "topup":
           if (!this.checkLogin()) {
