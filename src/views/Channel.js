@@ -578,6 +578,12 @@ export default {
         case "waitSyncenter":
         case "closeenter":
           // only change view
+          try {
+            const deposit = await this.getChainDeposit();
+            this.setStatusCache("dbotErr", deposit, 0, null);
+          } catch (e) {
+            console.log("try get deposit failed", e);
+          }
           break;
         default:
           this.waitFlag.totalTime = 10000;

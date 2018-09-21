@@ -39,17 +39,25 @@
                   <p class="balance">{{stateChannelBanlance | priceFormat}} ATN</p>
                   <p class="deposit">Deposit: {{stateChannelDeposit | priceFormat}} ATN</p>
                 </div>  
-                <div class="outdate" v-else-if="stateChannelStatus === 'outdate'">
+                <div class="force-close" v-else-if="stateChannelStatus === 'outdate' || stateChannelStatus === 'dbotErr'">
                   <p class="deposit" v-if="stateChannelDeposit >= 0">Deposit: {{stateChannelDeposit | priceFormat}} ATN</p>
                   <p class="syncing">{{ showChannelWaiting }}</p>
+                  <div class="force-wrapper">
+                      <Button class="refresh-left" @click="refreshChannel" type="primary">
+                        <Icon type="md-refresh" />
+                        Refresh
+                      </Button>
+                      <!--<Button class="refresh-left" @click="forceCloseChannel" type="primary">
+                        ForceClose
+                      </Button>-->
+                  </div>
                 </div>
                 <div 
                   class="circle-wrapper" 
                   v-else-if="
                     stateChannelStatus === 'waitingTX' || 
                     stateChannelStatus === 'waitingSync' ||
-                    stateChannelStatus === 'TXErr' ||
-                    stateChannelStatus === 'dbotErr'"
+                    stateChannelStatus === 'TXErr'"
                 >
                   <div class="wait">
                     <Progress :percent="syncpecent" :status="syncstatus" :stroke-width="3"/>
