@@ -32,12 +32,6 @@ export default {
           this.updateStatus("initenter");
         }
       }
-    },
-    dbotAddr: {
-      immediate: false,
-      handler(val) {
-        this.updateStatus("initenter");
-      }
     }
   },
   computed: {
