@@ -29,6 +29,7 @@ export default {
   margin-bottom: 24px;
   padding: 10px;
   border-radius: 4px;
+  width: 650px;
 
   &.normal {
     background: rgba(0, 0, 0, 0.05);
