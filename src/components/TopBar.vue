@@ -7,10 +7,11 @@
                     <span class="title">AI Market</span>
                 </div>
             </router-link>
-            <div class="center">
-              <Dropdown placement="bottom-end" v-on:on-click="_click" class="transform">
-                <Icon custom="icon-transform" color="#fff" size="20" ></Icon>
-                <DropdownMenu slot="list">
+            <div class="top-right">
+              <div class="center">
+                <Dropdown placement="bottom-end" v-on:on-click="_click" class="transform">
+                  <Icon custom="icon-transform" color="#fff" size="20" ></Icon>
+                  <DropdownMenu slot="list">
                     <DropdownItem name="Faucet">
                         <a href="https://faucet-test.atnio.net/">Faucet</a>
                     </DropdownItem>
@@ -20,30 +21,29 @@
                     <DropdownItem name="Explore">
                       <a href="https://explorer-test.atnio.net/">Explore</a>
                     </DropdownItem>
-
-                </DropdownMenu>
-            </Dropdown>
-            <div id="fade" class="black_overlay" v-if="fadeShow()" @click="clearSearch"></div>
-            <div class="search">
-                <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch" v-on:on-change="searchValueChange"/>
-                <div class="search-history" v-if="searchHistoryShow">
-                  <ul mode="out-in" v-cloak>
-                    <li v-for="(value,index) in currentSearchHistory" class="search-history-option" @mouseover="moveHistory(index)" :key="index">
-                      <span :class="{historySelected:index==now}" class="search-history-detail" @click="selectHistory(value)">{{value}}</span>
-                      <a href="#" class="search-history-delete" @click="deleteSearchHistory(index);">Delete</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="search-empty" v-if="searchEmpty">Sorry, the result is empty.</div>
-                <div class="search-select" v-if="searchShow">
-                    <!--
-                    <div class="search-top">
+                  </DropdownMenu>
+                </Dropdown>
+                <div id="fade" class="black_overlay" v-if="fadeShow()" @click="clearSearch"></div>
+                <div class="search">
+                    <Input prefix="ios-search" placeholder="Search APIs" v-model=search1 class="searchinput" v-on:on-keyup="searchEvent" v-on:on-focus="readySearch" v-on:on-change="searchValueChange"/>
+                    <div class="search-history" v-if="searchHistoryShow">
+                      <ul mode="out-in" v-cloak>
+                        <li v-for="(value,index) in currentSearchHistory" class="search-history-option" @mouseover="moveHistory(index)" :key="index">
+                          <span :class="{historySelected:index==now}" class="search-history-detail" @click="selectHistory(value)">{{value}}</span>
+                          <a href="#" class="search-history-delete" @click="deleteSearchHistory(index);">Delete</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="search-empty" v-if="searchEmpty">Sorry, the result is empty.</div>
+                    <div class="search-select" v-if="searchShow">
+                      <!--
+                      <div class="search-top">
                         <span class="search-dbots">Dbots</span>
                         <a href="#" class="search-more" @click="more();">More</a>
-                    </div>
-                    <hr class="search-hr"></hr>
-                    -->
-                    <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
+                      </div>
+                      <hr class="search-hr"></hr>
+                      -->
+                      <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
                         <li v-for="(value,index) in searchResult" :class="{selectback:index==now}" 
                             class="search-select-option" @mouseover="selectHover(index)" @click="selectClick(value)" 
                             :key="index">
@@ -59,24 +59,23 @@
                                 </div>
                             </div>
                         </li>
-                    </transition-group>
+                      </transition-group>
+                    </div>
                 </div>
-            </div>
-            </div>
+              </div>
             
 
-            <div class="personal-center">
+              <div class="personal-center">
                 <div v-show="loginShow">
                     <Button @click="loginbutton">login</Button>
                 </div>
                 <div class="prefsession" v-show="!loginShow">
-                    <Icon custom="icon-channel" size="24" color="#ffffff" class="icon"/>
+                    <router-link to="/my-account/AccountChannelList">
+                      <Icon custom="icon-channel" size="24" color="#ffffff" class="icon" @click="changelist"/>
+                    </router-link>
                     <Dropdown placement="bottom-end" v-on:on-click="_click">
                         <div class="avatar-wrapper">
-                          <router-link to="/my-account/AccountChannelList">
-                            <avatar :text="address.toLowerCase()" @click="changelist"></avatar>
-                          </router-link>
-                            
+                            <avatar :text="address.toLowerCase()"></avatar>
                             <Icon custom="icon-allow" color="#fff"></Icon>
                         </div>
                         <DropdownMenu slot="list">
@@ -89,6 +88,7 @@
                         </DropdownMenu>
                     </Dropdown>
                 </div>
+              </div>
             </div>
 
             <Modal
@@ -548,12 +548,6 @@ export default {
     justify-content: space-between;
     align-items: center;
 
-    .center {
-      display: flex;
-      flex-direction: row;
-      margin-left: -120px;
-    }
-
     .i-title {
       display: flex;
       align-items: center;
@@ -564,194 +558,208 @@ export default {
         height: 50px;
       }
       .title {
+        width: 90px;
         font-size: 20px;
         color: #ffffff;
       }
     }
-    .transform {
-      text-align: center;
-      margin-right: 20px;
-      margin-top: 6px;
-      z-index: 1000;
+    .top-right {
+      margin-left: 100px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-      a {
-        color: #3f485c;
-        font-family: SourceHanSansCN-Bold;
-        font-size: 16px;
-      }
-    }
-
-    .search {
-      width: 590px;
-      height: 30px;
-      z-index: 1000;
-      .search-empty {
-        width: 590px;
-        height: 45px;
-        line-height: 45px;
-        font-size: 18px;
-        box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
-        background-color: #fff;
-        padding-bottom: 27px;
-        border-radius: 4px;
-        margin-top: 6px;
-        padding-left: 30px;
-      }
-      .search-history {
-        border-radius: 4px;
-        margin-top: 8px;
-        width: 590px;
-        max-height: 600px;
-        background-color: #fff;
-        overflow: auto;
-        .search-history-option {
-          box-sizing: border-box;
-          height: 20px;
-          margin-left: 30px;
+      .center {
+        display: flex;
+        flex-direction: row;
+        margin-left: 20px;
+        .transform {
+          text-align: center;
           margin-right: 30px;
-          .search-history-detail {
-            width: 480px;
-            overflow: hidden;
-            float: left;
-          }
-          .search-history-delete {
-            float: right;
-          }
-          .historySelected {
-            color: #797bf8;
+          margin-top: 6px;
+          z-index: 1000;
+
+          a {
+            color: #3f485c;
+            font-family: SourceHanSansCN-Bold;
+            font-size: 16px;
           }
         }
-      }
-      .search-history li {
-        list-style-type: none;
-        padding: 0;
-        margin-left: 30px;
-        margin-right: 30px;
-        border: 0px solid #d4d4d4;
-        border-top: none;
-        background-color: #fff;
-        width: 407;
-      }
-      .search-select {
-        border-radius: 4px;
-        margin-top: 6px;
-        top: 45px;
-        width: 590px;
-        max-height: 600px;
-        border: 1px solid #d4d4d4;
-        background-color: #fff;
-        padding-bottom: 27px;
-        overflow: auto;
-        .search-top {
-          height: 18px;
-          background-color: #fff;
-          margin-top: 30px;
-          margin-bottom: 1px;
-          margin-left: 30px;
-          margin-right: 30px;
-          padding: 0px;
-          .search-dbots {
-            float: left;
-          }
-          .search-more {
-            float: right;
-          }
-        }
-        .search-hr {
-          margin-top: 2px;
-          margin-bottom: 23px;
-          padding: 0px;
-          margin-left: 30px;
-          margin-right: 30px;
-          height: 0px;
-        }
-      }
 
-      .search-select li {
-        list-style-type: none;
-        padding: 0;
-        margin-top: 24px;
-        margin-left: 30px;
-        margin-right: 30px;
-        border: 0px solid #d4d4d4;
-        border-top: none;
-        background-color: #fff;
-        width: 407;
-      }
-      .search-select-option {
-        box-sizing: border-box;
-        height: 88px;
-        padding: 7px 10px;
-        .logo-tag {
-          display: flex;
-          flex-direction: row;
-          .item-image-padding {
-            width: 88px;
+        .search {
+          width: 590px;
+          height: 30px;
+          z-index: 1000;
+          .search-empty {
+            width: 590px;
+            height: 45px;
+            line-height: 45px;
+            font-size: 18px;
+            box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
+            background-color: #fff;
+            padding-bottom: 27px;
+            border-radius: 4px;
+            margin-top: 6px;
+            padding-left: 30px;
+          }
+          .search-history {
+            border-radius: 4px;
+            margin-top: 8px;
+            width: 590px;
+            max-height: 600px;
+            background-color: #fff;
+            overflow: auto;
+            .search-history-option {
+              box-sizing: border-box;
+              height: 20px;
+              margin-left: 30px;
+              margin-right: 30px;
+              .search-history-detail {
+                width: 480px;
+                overflow: hidden;
+                float: left;
+              }
+              .search-history-delete {
+                float: right;
+              }
+              .historySelected {
+                color: #797bf8;
+              }
+            }
+          }
+          .search-history li {
+            list-style-type: none;
+            padding: 0;
+            margin-left: 30px;
+            margin-right: 30px;
+            border: 0px solid #d4d4d4;
+            border-top: none;
+            background-color: #fff;
+            width: 407;
+          }
+          .search-select {
+            border-radius: 4px;
+            margin-top: 6px;
+            top: 45px;
+            width: 590px;
+            max-height: 600px;
+            border: 1px solid #d4d4d4;
+            background-color: #fff;
+            padding-bottom: 27px;
+            overflow: auto;
+            .search-top {
+              height: 18px;
+              background-color: #fff;
+              margin-top: 30px;
+              margin-bottom: 1px;
+              margin-left: 30px;
+              margin-right: 30px;
+              padding: 0px;
+              .search-dbots {
+                float: left;
+              }
+              .search-more {
+                float: right;
+              }
+            }
+            .search-hr {
+              margin-top: 2px;
+              margin-bottom: 23px;
+              padding: 0px;
+              margin-left: 30px;
+              margin-right: 30px;
+              height: 0px;
+            }
+          }
+
+          .search-select li {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 24px;
+            margin-left: 30px;
+            margin-right: 30px;
+            border: 0px solid #d4d4d4;
+            border-top: none;
+            background-color: #fff;
+            width: 407;
+          }
+          .search-select-option {
+            box-sizing: border-box;
             height: 88px;
+            padding: 7px 10px;
+            .logo-tag {
+              display: flex;
+              flex-direction: row;
+              .item-image-padding {
+                width: 88px;
+                height: 88px;
+                display: flex;
+                align-items: center;
+                .item-image {
+                  width: 100%;
+                }
+              }
+              .item-right {
+                display: flex;
+                flex-direction: column;
+                margin-left: 16px;
+                .item-title-style {
+                  width: 407px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
+                .item-ignore-style {
+                  color: #b1b2bd;
+                  width: 407px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
+              }
+            }
+          }
+          .selectback {
+            background-color: #eee !important;
+            cursor: pointer;
+          }
+        }
+      }
+      .personal-center {
+        .prefsession {
+          display: flex;
+          align-items: center;
+
+          .icon {
+            margin-right: 40px;
+          }
+          .via {
+            margin-left: 7px;
+          }
+
+          .personal {
             display: flex;
             align-items: center;
-            .item-image {
-              width: 100%;
-            }
+            width: 100%;
+            height: 100%;
           }
-          .item-right {
+
+          .avatar-wrapper {
             display: flex;
-            flex-direction: column;
-            margin-left: 16px;
-            .item-title-style {
-              width: 407px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            }
-            .item-ignore-style {
-              color: #b1b2bd;
-              width: 407px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            }
+            align-items: center;
+          }
+
+          .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 100%;
+            overflow: hidden;
+            box-shadow: none;
+            // border:1px solid #ffffff !important;
+            margin-right: 10px;
           }
         }
-      }
-      .selectback {
-        background-color: #eee !important;
-        cursor: pointer;
-      }
-    }
-    .personal-center {
-      .prefsession {
-        display: flex;
-        align-items: center;
-      }
-
-      .icon {
-        margin-right: 40px;
-      }
-      .via {
-        margin-left: 7px;
-      }
-
-      .personal {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-      }
-
-      .avatar-wrapper {
-        display: flex;
-        align-items: center;
-      }
-
-      .avatar {
-        width: 38px;
-        height: 38px;
-        border-radius: 100%;
-        overflow: hidden;
-        box-shadow: none;
-        // border:1px solid #ffffff !important;
-        margin-right: 10px;
       }
     }
   }
