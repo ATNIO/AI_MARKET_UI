@@ -113,6 +113,10 @@ export default {
     uri: {
       type: String,
       default: ""
+    },
+    produces: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
@@ -198,6 +202,11 @@ export default {
 
       const paramsModel = this.$refs.form.paramModel;
       const options = getOptions(paramsModel, this.param);
+
+      //TODO provide a select button
+      if (this.produces[0] == "audio/mpeg") {
+        options.responseType = "blob";
+      }
 
       options.method = this.method;
       let callResult = null;

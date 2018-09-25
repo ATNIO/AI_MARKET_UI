@@ -80,7 +80,10 @@ export default {
       }
     },
     responseData() {
-      return this.serverRes[this.cacheKey].data;
+      const data = this.serverRes[this.cacheKey].data;
+      const blob = new Blob([data], { type: "audio/wav" });
+      const blobUrl = URL.createObjectURL(blob);
+      return blobUrl;
     },
     serverResCond() {
       return this.serverRes && this.serverRes[this.cacheKey];

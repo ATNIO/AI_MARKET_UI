@@ -30,6 +30,7 @@
         :price="endpoint.price"
         :method="endpoint.method"
         :uri="endpoint.uri"
+        :produces="produces"
       ></Parameters>
 
       <!-- 我来组成 server res -->
@@ -77,6 +78,9 @@ export default {
     },
     isDeprecated() {
       return this.content.deprecated;
+    },
+    produces() {
+      return this.content.produces;
     },
     parameters() {
       return this.content.parameters || [];
