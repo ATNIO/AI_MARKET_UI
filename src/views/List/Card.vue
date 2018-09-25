@@ -101,7 +101,7 @@ export default {
 <style lang="less" scoped>
 .card {
   width: 280px;
-  margin: 0 20px 10px 0;
+  margin: 0 20px 20px 0;
   flex: 0 0 auto;
   background: #ffffff;
   // box-shadow: 3px 0 10px 0 rgba(200, 199, 232, 0.5);
