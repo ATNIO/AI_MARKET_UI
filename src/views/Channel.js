@@ -13,7 +13,7 @@ export default {
       topupValue: "",
       storageCache: {},
       timer: null,
-      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 42000 },
+      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 40000 },
       leaveFlag: true
     };
   },
@@ -464,7 +464,7 @@ export default {
           await this.updateStatus("waitTxenter");
           return;
         }
-        this.waitFlag.totalTime = 42000;
+        this.waitFlag.totalTime = 40000;
         this.waitFlag.loopTime = 0;
         this.waitFlag.startTime = 0;
         const tx = await this.$atn.waitTx(para.hash, 8000, 4, this.waitFlag);
@@ -552,8 +552,11 @@ export default {
               this.setStatusCache("normal", -1, -1, null);
             }
           } else {
-            if (this.retrySyncTimes < 20) {
-              this.waitFlag.loopTime = this.waitFlag.loopTime + 1000;
+            if (this.retrySyncTimes < 8) {
+              this.waitFlag.loopTime =
+                this.waitFlag.loopTime +
+                1000 +
+                (1000 * this.retrySyncTimes) / 100;
               this.retrySyncTimes += 1;
               return;
             } else {
@@ -586,7 +589,7 @@ export default {
           }
           break;
         default:
-          this.waitFlag.totalTime = 10000;
+          this.waitFlag.totalTime = 5000;
           this.waitFlag.startTime = 0;
           this.waitFlag.loopTime = 0;
           this.setStatusCache("waitingSync", -1, -1, null);
