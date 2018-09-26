@@ -115,9 +115,13 @@ export default {
   },
   methods: {
     async getBalance() {
-      this.$atn.web3.eth.getBalance(this.address).then(balance => {
-        this.balance = this.$atn.web3.utils.fromWei(balance);
-      });
+      try {
+        await this.$atn.web3.eth.getBalance(this.address).then(balance => {
+          this.balance = this.$atn.web3.utils.fromWei(balance);
+        });
+      } catch (e) {
+        this.balance = 0;
+      }
     }
   }
 };
