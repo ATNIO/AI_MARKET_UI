@@ -26,20 +26,20 @@ $ yarn lint
 ## Documentation
 ```bash
 .
-├── deploy -------------- 部署
-├── public -------------- 公共文件
-└── src ----------------- 主要搬砖区域
-    ├── assets ---------- 资源目录
-    │   ├── styles ------ 样式
-    │   └── fonts ------- 字体相关
-    ├── common ---------- 公共方法
-    │   └── api --------- api 相关
-    ├── components ------ 公共组件
-    └── views ----------- 页面组件
-        ├── List -------- home 页面的列表
-        └── doc --------- detail 页面的 endpoint 部分
+├── deploy -------------- deploy files
+├── public -------------- public files 
+└── src ----------------- source code
+    ├── assets ---------- asset files
+    │   ├── styles ------ style files 
+    │   └── fonts ------- font relation
+    ├── common ---------- common func
+    │   └── api --------- api relation
+    ├── components ------ common components
+    └── views ----------- page components
+        ├── List -------- home page list
+        └── doc --------- detail page endpoint part
 ```
-注: 使用 [iView](https://www.iviewui.com/) 开源 UI 库。
+note: use [iView](https://www.iviewui.com/) open source UI lib.
 
 see [Vue.js](https://vuejs.org/) for more detail.
 
