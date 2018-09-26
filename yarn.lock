@@ -1243,9 +1243,9 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-atn-js@^0.1.24:
-  version "0.1.32"
-  resolved "https://registry.yarnpkg.com/atn-js/-/atn-js-0.1.32.tgz#3ae752617e42e8b52e2ca225dde3d512fbfd98e1"
+atn-js@^0.1.45:
+  version "0.1.45"
+  resolved "https://registry.yarnpkg.com/atn-js/-/atn-js-0.1.45.tgz#ea219ad909d4f30ec9dd7d72c7379e5f19caafcb"
   dependencies:
     axios "^0.18.0"
     bn.js "^4.11.8"

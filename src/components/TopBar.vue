@@ -81,10 +81,10 @@
                         <DropdownMenu slot="list">
                             <DropdownItem name="personal">
                                 <router-link to="/my-account/AccountProfile" class="personal">
-                                    个人中心
+                                    My profile
                                 </router-link>
                             </DropdownItem>
-                            <DropdownItem name="logout">logout</DropdownItem>
+                            <DropdownItem name="logout">Logout</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
