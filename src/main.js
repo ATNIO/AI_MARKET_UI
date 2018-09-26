@@ -1,5 +1,4 @@
 import Vue from "vue";
-import ElementUI from "element-ui";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -21,7 +20,6 @@ import "json-schema-view-js/dist/style.min.css";
 
 Vue.use(iView, { locale });
 Vue.use(VueClipboard);
-Vue.use(ElementUI);
 
 Vue.config.productionTip = false;
 

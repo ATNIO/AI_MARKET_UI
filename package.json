@@ -23,7 +23,6 @@
         "cross-fetch": "0.0.8",
         "dayjs": "^1.7.5",
         "deep-extend": "^0.5.1",
-        "element-ui": "^2.4.7",
         "encode-3986": "^1.0.0",
         "fast-json-patch": "^2.0.6",
         "isomorphic-form-data": "0.0.1",
