@@ -120,7 +120,8 @@ export default {
     // },
     logo() {
       if (this.dbot.outdate) {
-        return this.dbot.logo + "?x-oss-process=style/offline";
+        const logostr = this.dbot.logo;
+        return logostr.substring(0, logostr.length - 4) + "-offline.png";
       }
       return this.dbot.logo;
     },

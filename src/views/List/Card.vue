@@ -59,7 +59,8 @@ export default {
   computed: {
     itemlogo() {
       if (this.item.outdate) {
-        //return this.item.logooutdate;
+        const logostr = this.item.logo;
+        return logostr.substring(0, logostr.length - 4) + "-offline.png";
       }
       return this.item.logo;
     },
