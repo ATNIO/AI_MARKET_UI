@@ -210,6 +210,12 @@ export default {
           this.loginShow = false;
           this.isLogin = data.err;
           return true;
+        } else {
+          this.loginShow = true;
+          this.isLogin = false;
+          this.setAddress("");
+          this.setNetworkVersion("");
+          return false;
         }
       } else {
         this.loginShow = true;
