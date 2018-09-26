@@ -24,7 +24,7 @@ $ yarn lint
 ```
 
 ## Documentation
-
+```bash
 .
 ├── deploy -------------- 部署
 ├── public -------------- 公共文件
@@ -38,7 +38,7 @@ $ yarn lint
     └── views ----------- 页面组件
         ├── List -------- home 页面的列表
         └── doc --------- detail 页面的 endpoint 部分
-
+```
 注: 使用 [iView](https://www.iviewui.com/) 开源 UI 库。
 
 see [Vue.js](https://vuejs.org/) for more detail.
