@@ -81,7 +81,7 @@
                         <DropdownMenu slot="list">
                             <DropdownItem name="personal">
                                 <router-link to="/my-account/AccountProfile" class="personal">
-                                    My profile
+                                    My Profile
                                 </router-link>
                             </DropdownItem>
                             <DropdownItem name="logout">Logout</DropdownItem>
