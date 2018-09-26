@@ -200,28 +200,33 @@ export default {
     changelist() {
       this.setToChannelList("1");
     },
+    setUnLogin() {
+      this.loginShow = true;
+      this.isLogin = false;
+      this.setAddress("");
+      this.setNetworkVersion("");
+      return false;
+    },
     async check() {
       const { check } = this.$api.user;
       const account = this.address;
       if (account.replace(/(^\s*)|(\s*$)/g, "").length != 0) {
-        const response = await check(account);
-        const { status, data } = response;
-        if (status === 200 && data.err) {
-          this.loginShow = false;
-          this.isLogin = data.err;
-          return true;
-        } else {
-          this.loginShow = true;
-          this.isLogin = false;
-          this.setAddress("");
-          this.setNetworkVersion("");
-          return false;
+        try {
+          const response = await check(account);
+          const { status, data } = response;
+          if (status === 200 && data.err) {
+            this.loginShow = false;
+            this.isLogin = data.err;
+            return true;
+          } else {
+            this.setUnLogin();
+            return false;
+          }
+        } catch (e) {
+          this.setUnLogin();
         }
       } else {
-        this.loginShow = true;
-        this.isLogin = false;
-        this.setAddress("");
-        this.setNetworkVersion("");
+        this.setUnLogin();
         return false;
       }
     },
