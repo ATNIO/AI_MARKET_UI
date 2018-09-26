@@ -1,5 +1,10 @@
 # AI_MARKET_UI
 
+[![GitHub issues](https://img.shields.io/github/issues/ATNIO/AI_MARKET_UI.svg)](https://github.com/ATNIO/AI_MARKET_UI/issues)
+[![GitHub forks](https://img.shields.io/github/forks/ATNIO/AI_MARKET_UI.svg)](https://github.com/ATNIO/AI_MARKET_UI/network)
+[![GitHub stars](https://img.shields.io/github/stars/ATNIO/AI_MARKET_UI.svg)](https://github.com/ATNIO/AI_MARKET_UI/stargazers)
+[![GitHub license](https://img.shields.io/github/license/ATNIO/AI_MARKET_UI.svg)](https://github.com/ATNIO/AI_MARKET_UI/blob/master/LICENSE)
+
 ## Introduction
 AI_MARKET_UI is the frontend of AI Market which is a decentralized platform to provide AI services from plenty of AI providers.
 Only one key is needed to access all kind of AI services.
