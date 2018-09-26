@@ -3,4 +3,6 @@
  */
 const env = process.env.NODE_ENV;
 
-export default (env === "development" ? "/api/" : "/api/v1/");
+export default (env === "development"
+  ? "/api/"
+  : "https://market-test-api.atnio.net/api/v1/");
