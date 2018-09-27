@@ -15,16 +15,18 @@
       <div class="response-detail">
         <p>Response body</p>
         <div class="response-description">
+          <AudioBar :audiofile="responseData" v-if="responseType=='audio/mpeg' || responseType == 'audio/mp3'">
+          </AudioBar>
+          <img :src="responseData" v-else-if="responseType=='image/jpeg'">
+          </img>
           <Input 
             :value="response" 
             type="textarea" 
             autosize
             disabled
             class="dark"
-            v-if="responseType!='audio/mpeg' && responseType != 'audio/mp3'"
+            v-else
           />
-          <AudioBar :audiofile="responseData" v-else>
-          </AudioBar>
         </div>
 
         <p>Response headers</p>
