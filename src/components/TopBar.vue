@@ -477,6 +477,10 @@ export default {
         name: "detail",
         params: { address: value.dbot_address }
       });
+      this.$router.push({
+        name: "/"
+      });
+      this.$router.go(-1);
       var currentHistories = this.currentSearchHistory;
       const search1 = this.search1.trim();
       var index = currentHistories.indexOf(search1);
