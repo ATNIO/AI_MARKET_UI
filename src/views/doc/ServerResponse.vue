@@ -85,7 +85,7 @@ export default {
     },
     responseData() {
       const data = this.serverRes[this.cacheKey].data;
-      const blob = new Blob([data], { type: "audio/wav" });
+      const blob = new Blob([data]);
       const blobUrl = URL.createObjectURL(blob);
       return blobUrl;
     },
@@ -192,8 +192,8 @@ export default {
       width: 250px;
       height: 200px;
       .image {
-        width: 100%;
-        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
       }
     }
 
