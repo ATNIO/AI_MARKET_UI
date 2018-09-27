@@ -17,8 +17,10 @@
         <div class="response-description">
           <AudioBar :audiofile="responseData" v-if="responseType=='audio/mpeg' || responseType == 'audio/mp3'">
           </AudioBar>
-          <img :src="responseData" v-else-if="responseType=='image/jpeg'">
-          </img>
+          <div class="image-shown" v-else-if="responseType=='image/jpeg'">
+            <img class="image" :src="responseData">
+            <img/> 
+          </div>
           <Input 
             :value="response" 
             type="textarea" 
@@ -185,6 +187,15 @@ export default {
   .response-description {
     width: 650px;
     margin-bottom: 16px;
+
+    .image-shown {
+      width: 250px;
+      height: 200px;
+      .image {
+        width: 100%;
+        height: 100%;
+      }
+    }
 
     & /deep/ .ivu-input[disabled] {
       cursor: text;
