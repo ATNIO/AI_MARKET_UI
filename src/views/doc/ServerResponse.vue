@@ -21,7 +21,7 @@
             autosize
             disabled
             class="dark"
-            v-if="responseType!='audio/mpeg'"
+            v-if="responseType!='audio/mpeg' && responseType != 'audio/mp3'"
           />
           <AudioBar :audiofile="responseData" v-else>
           </AudioBar>

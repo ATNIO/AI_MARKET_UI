@@ -204,7 +204,7 @@ export default {
       const options = getOptions(paramsModel, this.param);
 
       //TODO provide a select button
-      if (this.produces[0] == "audio/mpeg") {
+      if (this.produces[0] == "audio/mpeg" || this.produces[0] == "audio/mp3") {
         options.responseType = "blob";
       }
 
