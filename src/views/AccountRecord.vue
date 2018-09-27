@@ -3,7 +3,7 @@
         <div class="title">
             <span class="remaining">Deposit: </span><span class="balance">{{divideNumberHandler(item.deposit)}} ATN</span>
         </div>
-        <span class="channel">Channel Status: </span><span class="status">{{item.status}}</span>
+        <span class="channel">Channel Status: </span><span class="status" :style="{'color': item.status=='OPEN' ? '#00d85a' : '#ff5655'}">{{item.status}}</span>
         <span class="block">Block: </span><span class="value">{{item.open_block_number}}</span>
         <div class="img"></div>
         <div class="goods">
