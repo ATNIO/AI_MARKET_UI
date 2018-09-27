@@ -45,8 +45,12 @@
         }
         & /deep/ .ivu-input-search {
           width: 138px;
-          background: #797bf8 !important;
-          border-color: #797bf8 !important;
+          background: #797af8 !important;
+          border-color: #797af8 !important;
+          &:hover {
+            background: #5c5ff7 !important;
+            border-color: #797af8 !important;
+          }
         }
       }
     }
@@ -159,6 +163,12 @@
             	outline: none;
             	cursor: pointer;
             }
+            & /deep/ .ivu-btn-primary {
+              background: #797af8;
+              &:hover {
+                background: #5c5ff7;
+              }
+            }
           }
         } 
         .circle-wrapper {
@@ -236,6 +246,12 @@
             outline: none;
             cursor: pointer;
           }
+          & /deep/ .ivu-btn-primary {
+            background: #797af8;
+            &:hover {
+              background: #5c5ff7;
+            }
+          }
         }
         //----------------back
         .description {
@@ -270,15 +286,18 @@
           }
           & /deep/ .ivu-input-search {
             width: 90px;
-            background: #797bf8 !important;
-            border-color: #797bf8 !important;
+            background: #797af8 !important;
+            border-color: #797af8 !important;
+            &:hover {
+              background: #5c5ff7 !important;
+              border-color: #5c5ff7 !important;
+            }
           }
         }
         .close-channel {
           margin-left: 10px;
           width: 90px;
           height: 52px;
-          background: #ff5655;
           border-radius: 4px;
           font-size: 14px;
           color: #fff;
@@ -287,6 +306,12 @@
           border: none;
           outline: none;
           cursor: pointer;
+        }
+        & /deep/ .ivu-btn-primary {
+          background: #ff5655;
+          &:hover {
+            background: #ff0055;
+          }
         }
       }
     }

@@ -88,7 +88,7 @@
                     v-model="topupValue"
                     v-on:on-search="topup"
                   />
-                  <button class="close-channel" @click="closeChannel">CLOSE</button>
+                  <Button type="primary" class="close-channel" @click="closeChannel">CLOSE</Button>
                 </div>
               </div>
             </div>  
