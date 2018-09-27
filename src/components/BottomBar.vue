@@ -9,7 +9,7 @@
         <Icon custom="icon-elegram" size="40"/>
         <span>Telegram</span>
       </a>
-      <a href="">
+      <a href="mailto:contact@atn.io">
         <Icon custom="icon-email" size="40"/>
         <span>Email</span>
       </a>
