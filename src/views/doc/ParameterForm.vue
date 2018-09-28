@@ -25,6 +25,13 @@
                   ></Schema>
                 </template>
 
+                <template v-else-if="p.type === 'boolean'">
+                  <i-switch v-model='paramModel[p.name]' style="width: 45px">
+                    <span slot="open">on</span>
+                    <span slot="close">off</span>
+                  </i-switch>
+                </template>
+
                 <!-- select -->
                 <template v-else-if="p.enum">
                   <Select 
@@ -213,6 +220,8 @@ export default {
       handler(val) {
         this.paramModel = val.reduce((pre, cur) => {
           if (cur.enum) {
+            pre[cur.name] = cur.default;
+          } else if (cur.type === "boolean") {
             pre[cur.name] = cur.default;
           } else if (cur.type === "file") {
             pre[cur.name] = [];
