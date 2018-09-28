@@ -51,6 +51,9 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "ServerRes",
+  mounted() {
+    this.clear();
+  },
   computed: {
     ...mapGetters(["serverRes", "address", "networkVersion"]),
     status() {
