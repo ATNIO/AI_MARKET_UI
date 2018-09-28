@@ -423,16 +423,16 @@ export default {
     }
 
     & /deep/ .ivu-btn-primary {
-      height: 40px;
+      height: 50px;
       padding: 0 24px;
       border: none;
       outline: none;
-      background: #9ea0f9;
+      background: #797af8;
       border-radius: 4px;
       font-size: 18px;
 
       &:hover {
-        background: #7c7fff;
+        background: #5c5ff7;
       }
     }
   }

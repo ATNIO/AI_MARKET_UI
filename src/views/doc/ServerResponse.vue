@@ -128,12 +128,12 @@ export default {
         height: 100%;
         border: none;
         outline: none;
-        background: #9ea0f9;
+        background: #797af8;
         font-size: 18px;
         color: #ffffff;
 
         &:hover {
-          background: #7c7fff;
+          background: #5c5ff7;
         }
       }
     }
