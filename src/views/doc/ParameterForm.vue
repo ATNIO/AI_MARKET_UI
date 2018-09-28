@@ -146,6 +146,9 @@ export default {
           callback();
         }
       },
+      validateBoolean: (rule, value, callback) => {
+        callback();
+      },
       paramModel: {}
     };
   },
@@ -171,7 +174,18 @@ export default {
           required = false;
         }
 
-        if (cur.type == "file") {
+        if (cur.type == "boolean") {
+          pre[name] = [
+            {
+              validator: this.validateBoolean,
+              required: false
+            },
+            {
+              validator: this.validateBoolean,
+              type
+            }
+          ];
+        } else if (cur.type == "file") {
           pre[name] = [
             {
               validator: this.validateFile,
