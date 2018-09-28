@@ -14,7 +14,10 @@ export default {
       storageCache: {},
       timer: null,
       waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 40000 },
-      leaveFlag: true
+      leaveFlag: true,
+      topupLoading: false,
+      closeLoading: false,
+      depositLoading: false
     };
   },
   props: {
@@ -112,14 +115,22 @@ export default {
   },
   methods: {
     ...mapActions(["setStateChannel"]),
-    nextStep(value) {
-      this.updateStatus("open");
+    async nextStep(value) {
+      this.depositLoading = true;
+      await this.updateStatus("open");
+      this.depositValue = "";
+      this.depositLoading = false;
     },
     async topup() {
+      this.topupLoading = true;
       await this.updateStatus("topup");
+      this.topupValue = "";
+      this.topupLoading = false;
     },
     async closeChannel() {
+      this.closeLoading = true;
       await this.updateStatus("close");
+      this.closeLoading = false;
     },
     async refreshChannel() {
       await this.updateStatus("refresh");

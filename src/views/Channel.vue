@@ -10,14 +10,14 @@
               <p class="step-one"><Icon custom="icon-add" color="#87C5FE" size="20"/> deposit some ATN to open a channel with this Dbot</p>
               <p class="step-two"><Icon custom="icon-sign" color="#87C5FE" size="20"/> For each transfer , sign a message confirming the balance with the new transferred amount.</p>
               <Input 
-                search 
-                enter-button="Deposit" 
                 placeholder=" 0 ATN" 
                 size="large" 
                 class="search" 
-                v-on:on-search="nextStep" 
-                v-model="depositValue"
-              />
+                v-model="depositValue">
+                <Button :loading="depositLoading" type="primary" class="deposit-btn" slot="append" @click="nextStep">
+                  Deposit
+                </Button>
+              </Input>
             </div>
         </div>
       </div>
@@ -80,15 +80,16 @@
                 </div>             
                 <div class="btn-wrapper" v-if="stateChannelStatus==='normal' && stateChannelBanlance >= 0">
                   <Input 
-                    search 
-                    enter-button="TOP UP" 
                     placeholder=" 0 ATN" 
                     size="large" 
                     class="top-up" 
-                    v-model="topupValue"
-                    v-on:on-search="topup"
-                  />
-                  <Button type="primary" class="close-channel" @click="closeChannel">CLOSE</Button>
+                    v-model="topupValue">
+                    <Button :loading="topupLoading" type="primary" class="top-up-btn" slot="append" @click="topup">
+                      <span v-if="!topupLoading">TOP UP</span>
+                      <span v-else>TOP UP</span>
+                    </Button>
+                  </Input>
+                  <Button :loading="closeLoading" type="primary" class="close-channel" @click="closeChannel">CLOSE</Button>
                 </div>
               </div>
             </div>  
