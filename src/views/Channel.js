@@ -75,6 +75,15 @@ export default {
       );
       return percent > 100 ? 100 : percent < 0 ? 0 : percent;
     },
+    waitcolor() {
+      let color = "#2db7f5";
+      if (this.syncstatus == "wrong") {
+        color = "#ff5500";
+      } else if (this.syncpecent == 100) {
+        color = "#5cb85c";
+      }
+      return color;
+    },
     syncstatus() {
       var status = this.stateChannel[this.cacheKey];
       if (status.status == "waitingTX" || status.status == "waitingSync") {

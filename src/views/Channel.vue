@@ -60,7 +60,11 @@
                     stateChannelStatus === 'TXErr'"
                 >
                   <div class="wait">
-                    <Progress :percent="syncpecent" :status="syncstatus" :stroke-width="3"/>
+                    <i-circle :percent="syncpecent" :stroke-color="waitcolor">
+                       <Icon v-if="syncstatus=='wrong'" type="ios-close" size="50" style="color:#ff5500"></Icon>
+                       <Icon v-else-if="syncpecent == 100" type="ios-checkmark" size="60" style="color:#5cb85c"></Icon>
+                       <span v-else style="font-size:24px">{{ syncpecent }}%</span>
+                    </i-circle>
                     <!--<ProgressBar :percent="syncpecent" :status="syncstatus" :stroke-width="3"/>-->
                   </div>
                   <div
