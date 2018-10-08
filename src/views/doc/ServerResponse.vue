@@ -15,16 +15,20 @@
       <div class="response-detail">
         <p>Response body</p>
         <div class="response-description">
+          <AudioBar :audiofile="responseData" v-if="responseType=='audio/mpeg' || responseType == 'audio/mp3'">
+          </AudioBar>
+          <div class="image-shown" v-else-if="responseType=='image/jpeg'">
+            <img class="image" :src="responseData">
+            <img/> 
+          </div>
           <Input 
             :value="response" 
             type="textarea" 
             autosize
             disabled
             class="dark"
-            v-if="responseType!='audio/mpeg'"
+            v-else
           />
-          <AudioBar :audiofile="responseData" v-else>
-          </AudioBar>
         </div>
 
         <p>Response headers</p>
@@ -47,6 +51,9 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "ServerRes",
+  mounted() {
+    this.clear();
+  },
   computed: {
     ...mapGetters(["serverRes", "address", "networkVersion"]),
     status() {
@@ -81,7 +88,7 @@ export default {
     },
     responseData() {
       const data = this.serverRes[this.cacheKey].data;
-      const blob = new Blob([data], { type: "audio/wav" });
+      const blob = new Blob([data]);
       const blobUrl = URL.createObjectURL(blob);
       return blobUrl;
     },
@@ -121,12 +128,12 @@ export default {
         height: 100%;
         border: none;
         outline: none;
-        background: #9ea0f9;
+        background: #797af8;
         font-size: 18px;
         color: #ffffff;
 
         &:hover {
-          background: #7c7fff;
+          background: #5c5ff7;
         }
       }
     }
@@ -183,6 +190,15 @@ export default {
   .response-description {
     width: 650px;
     margin-bottom: 16px;
+
+    .image-shown {
+      width: 250px;
+      height: 200px;
+      .image {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
 
     & /deep/ .ivu-input[disabled] {
       cursor: text;

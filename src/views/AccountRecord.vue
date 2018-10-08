@@ -1,16 +1,16 @@
 <template>
     <div class="card">
         <div class="title">
-            <span class="remaining">Deposit: </span><span class="balance">{{divideNumberHandler(item.deposit)}}</span>
+            <span class="remaining">Deposit: </span><span class="balance">{{divideNumberHandler(item.deposit)}} ATN</span>
         </div>
-        <span class="channel">Channel Status: </span><span class="status">{{item.status}}</span>
+        <span class="channel">Channel Status: </span><span class="status" :style="{'color': item.status=='OPEN' ? '#00d85a' : '#ff5655'}">{{item.status}}</span>
         <span class="block">Block: </span><span class="value">{{item.open_block_number}}</span>
         <div class="img"></div>
         <div class="goods">
             <div class="logo" :style="logo"></div>
             <div class="content">
-                <p class="name">{{dbot.name}}</p>
-                <span class="address">Address: </span><span class="price">{{dbot.addr}}</span>
+                <p class="name">{{item.name}}</p>
+                <span class="address">Address: </span><span class="price">{{item.receiver}}</span>
             </div>
 
 
@@ -35,17 +35,10 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["dbots"]),
     logo() {
       return {
-        backgroundImage: `url(${this.dbot.logo})`
+        backgroundImage: `url(${this.item.logo})`
       };
-    },
-    dbot() {
-      const dbot = this.dbots.filter(
-        dbot => this.item.receiver === dbot.addr
-      )[0];
-      return dbot;
     }
   },
   methods: {
@@ -125,11 +118,11 @@ export default {
     display: flex;
     flex-direction: row;
     .logo {
-      width: 120px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       background-repeat: no-repeat;
       background-position: center center;
-      background-size: 70% 70%;
+      background-size: 100% 70%;
       border: 2px solid #87c5ff;
       border-radius: 80%;
     }
@@ -149,7 +142,7 @@ export default {
       .price {
         display: inline-block;
         font-size: 14px;
-        width: 62px;
+        width: 100px;
         height: 21px;
         padding-top: 6px;
         overflow: hidden;

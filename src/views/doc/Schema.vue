@@ -1,9 +1,9 @@
 <template>
   <section class="schema-wrapper">
     <div class="view-change">
-      <span :class="{ dark: currentView === 0 }" @click="currentView = 0">Example Value</span>
-      <span>&#8739;</span>
       <span :class="{ dark: currentView === 1 }" @click="currentView = 1">Model</span>
+      <span>&#8739;</span>
+      <span :class="{ dark: currentView === 0 }" @click="currentView = 0">Example Value</span>
     </div>
     <Input 
       v-if="currentView === 0"
@@ -54,7 +54,7 @@ export default {
   components: { SchemaModel },
   data() {
     return {
-      currentView: 0
+      currentView: 1
     };
   },
   props: {

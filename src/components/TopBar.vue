@@ -108,7 +108,7 @@
                         <span class="login">Connect to the </span>
                         <span class="wallet">ATN browser wallet.</span>
                     </div>
-                    <button class="metamask-button" @click="login('metamask')">Connect to ATN Wallet.</button>
+                    <Button class="metamask-button" :loading="isLoading" @click="login('metamask')">Connect to ATN Wallet.</Button>
                 </Card>
 
                 <!-- <Card class="ledger">
@@ -168,7 +168,8 @@ export default {
       searchSize: 10,
       searchingFlag: false,
       searchEmpty: false,
-      searchHistoryShow: false
+      searchHistoryShow: false,
+      isLoading: false
     };
   },
   computed: {
@@ -281,10 +282,16 @@ export default {
       }
       this.modal1 = true;
     },
-    login(type) {
+    async login(type) {
       switch (type) {
         case "metamask":
-          this.loginByMetamask();
+          this.isLoading = true;
+          try {
+            await this.loginByMetamask();
+          } catch (e) {
+            this.isLoading = false;
+          }
+          this.isLoading = false;
           break;
         default:
           break;
@@ -336,7 +343,7 @@ export default {
     async loginByMetamask() {
       const account = await this.getAccounts();
       const networkVersion = await this.getNetworkID();
-      this.goLogin(account, networkVersion);
+      await this.goLogin(account, networkVersion);
     },
     async logout() {
       const { logout } = this.$api.user;
@@ -477,6 +484,10 @@ export default {
         name: "detail",
         params: { address: value.dbot_address }
       });
+      this.$router.push({
+        name: "/"
+      });
+      this.$router.go(-1);
       var currentHistories = this.currentSearchHistory;
       const search1 = this.search1.trim();
       var index = currentHistories.indexOf(search1);

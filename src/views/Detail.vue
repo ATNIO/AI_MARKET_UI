@@ -6,7 +6,7 @@
             <div class="breadcrumb">
                 <Breadcrumb separator=">">
                     <BreadcrumbItem to="/" class="current-item">{{currentItem | upperFirst }}</BreadcrumbItem>
-                    <BreadcrumbItem to="/detail">{{dbot.name}}</BreadcrumbItem>
+                    <BreadcrumbItem :to=dbot.addr>{{dbot.name}}</BreadcrumbItem>
                 </Breadcrumb>
             </div>
 

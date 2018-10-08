@@ -13,8 +13,11 @@ export default {
       topupValue: "",
       storageCache: {},
       timer: null,
-      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 42000 },
-      leaveFlag: true
+      waitFlag: { flag: true, startTime: 0, loopTime: 0, totalTime: 40000 },
+      leaveFlag: true,
+      topupLoading: false,
+      closeLoading: false,
+      depositLoading: false
     };
   },
   props: {
@@ -72,6 +75,15 @@ export default {
       );
       return percent > 100 ? 100 : percent < 0 ? 0 : percent;
     },
+    waitcolor() {
+      let color = "#2db7f5";
+      if (this.syncstatus == "wrong") {
+        color = "#ff5500";
+      } else if (this.syncpecent == 100) {
+        color = "#5cb85c";
+      }
+      return color;
+    },
     syncstatus() {
       var status = this.stateChannel[this.cacheKey];
       if (status.status == "waitingTX" || status.status == "waitingSync") {
@@ -112,14 +124,22 @@ export default {
   },
   methods: {
     ...mapActions(["setStateChannel"]),
-    nextStep(value) {
-      this.updateStatus("open");
+    async nextStep(value) {
+      this.depositLoading = true;
+      await this.updateStatus("open");
+      this.depositValue = "";
+      this.depositLoading = false;
     },
     async topup() {
+      this.topupLoading = true;
       await this.updateStatus("topup");
+      this.topupValue = "";
+      this.topupLoading = false;
     },
     async closeChannel() {
+      this.closeLoading = true;
       await this.updateStatus("close");
+      this.closeLoading = false;
     },
     async refreshChannel() {
       await this.updateStatus("refresh");
@@ -464,7 +484,7 @@ export default {
           await this.updateStatus("waitTxenter");
           return;
         }
-        this.waitFlag.totalTime = 42000;
+        this.waitFlag.totalTime = 40000;
         this.waitFlag.loopTime = 0;
         this.waitFlag.startTime = 0;
         const tx = await this.$atn.waitTx(para.hash, 8000, 4, this.waitFlag);
@@ -552,8 +572,11 @@ export default {
               this.setStatusCache("normal", -1, -1, null);
             }
           } else {
-            if (this.retrySyncTimes < 20) {
-              this.waitFlag.loopTime = this.waitFlag.loopTime + 1000;
+            if (this.retrySyncTimes < 8) {
+              this.waitFlag.loopTime =
+                this.waitFlag.loopTime +
+                1000 +
+                (1000 * this.retrySyncTimes) / 100;
               this.retrySyncTimes += 1;
               return;
             } else {
@@ -586,7 +609,7 @@ export default {
           }
           break;
         default:
-          this.waitFlag.totalTime = 10000;
+          this.waitFlag.totalTime = 5000;
           this.waitFlag.startTime = 0;
           this.waitFlag.loopTime = 0;
           this.setStatusCache("waitingSync", -1, -1, null);

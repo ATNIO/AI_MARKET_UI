@@ -11,7 +11,6 @@
                     <p class="address-name">ACCOUNT ADDRESS:</p>
                     <p class="address-value">{{address}}</p>
                 </div>
-                <div id="qrcode" class="QRcode"></div>
 
             </div>
 
@@ -41,7 +40,6 @@
 <script>
 import BN from "bignumber.js";
 import { mapGetters } from "vuex";
-import QRCode from "qrcodejs2";
 
 export default {
   name: "AccountProfile",
@@ -103,22 +101,9 @@ export default {
       const c = new BN(18, 10);
 
       return a.multipliedBy(b.pow(c)).toString(10);
-    },
-    qrcode() {
-      let qrcode = new QRCode("qrcode", {
-        width: 120,
-        height: 120, // 高度
-        text: this.address // 二维码内容
-        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-        // background: '#f0f'
-        // foreground: '#ff0'
-      });
-      console.log(qrcode);
     }
   },
-  mounted() {
-    this.qrcode();
-  }
+  mounted() {}
 };
 </script>
 

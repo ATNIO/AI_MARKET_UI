@@ -45,8 +45,26 @@
         }
         & /deep/ .ivu-input-search {
           width: 138px;
-          background: #797bf8 !important;
-          border-color: #797bf8 !important;
+          background: #797af8 !important;
+          border-color: #797af8 !important;
+          &:hover {
+            background: #5c5ff7 !important;
+            border-color: #797af8 !important;
+          }
+        }
+        .deposit-btn {
+          width: 138px;
+          height: 48px;
+          font-size: 14px;
+          color: #fff;
+          border-radius: 0px 4px 4px 0px;
+          border: 1px #787bf7 solid;
+        }
+        & /deep/ .ivu-btn-primary {
+          background: #797af8;
+          &:hover {
+            background: #5c5ff7;
+          }
         }
       }
     }
@@ -159,6 +177,12 @@
             	outline: none;
             	cursor: pointer;
             }
+            & /deep/ .ivu-btn-primary {
+              background: #797af8;
+              &:hover {
+                background: #5c5ff7;
+              }
+            }
           }
         } 
         .circle-wrapper {
@@ -169,8 +193,10 @@
         //---------------------------loading
         .wait {
           display: flex;
+          flex-direction: column;
           justify-content: space-between;
-          width: 334px;
+          align-items: center;
+          width: 100%;
 
           .circle {
             width: 9px;
@@ -236,6 +262,12 @@
             outline: none;
             cursor: pointer;
           }
+          & /deep/ .ivu-btn-primary {
+            background: #797af8;
+            &:hover {
+              background: #5c5ff7;
+            }
+          }
         }
         //----------------back
         .description {
@@ -261,7 +293,7 @@
           width: 270px;
           height: 50px;
           border-radius: 4px;
-          border: 1px #787bf7 solid;
+          border: 1px #797af8 solid;
 
           & /deep/ .ivu-input-large {
             height: 50px;
@@ -270,15 +302,32 @@
           }
           & /deep/ .ivu-input-search {
             width: 90px;
-            background: #797bf8 !important;
-            border-color: #797bf8 !important;
+            background: #797af8 !important;
+            border-color: #797af8 !important;
+            &:hover {
+              background: #5c5ff7 !important;
+              border-color: #5c5ff7 !important;
+            }
+          }
+          .top-up-btn {
+            width: 90px;
+            height: 48px;
+            font-size: 14px;
+            color: #fff;
+            border-radius: 0px 4px 4px 0px;
+            border: 1px #787bf7 solid;
+          }
+          & /deep/ .ivu-btn-primary {
+            background: #797af8;
+            &:hover {
+              background: #5c5ff7;
+            }
           }
         }
         .close-channel {
           margin-left: 10px;
           width: 90px;
           height: 52px;
-          background: #ff5655;
           border-radius: 4px;
           font-size: 14px;
           color: #fff;
@@ -287,6 +336,12 @@
           border: none;
           outline: none;
           cursor: pointer;
+        }
+        & /deep/ .ivu-btn-primary {
+          background: #ff5655;
+          &:hover {
+            background: #ff0055;
+          }
         }
       }
     }
