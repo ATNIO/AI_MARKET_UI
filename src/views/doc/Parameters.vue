@@ -186,7 +186,8 @@ export default {
       }
       if (
         this.stateChannelBanlance.length < this.price.length ||
-        this.stateChannelBanlance < this.price
+        (this.stateChannelBanlance.length == this.price.length &&
+          this.stateChannelBanlance < this.price)
       ) {
         this.$Notice.warning({
           title: "余额不足",
