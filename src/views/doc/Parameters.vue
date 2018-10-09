@@ -184,6 +184,16 @@ export default {
         });
         return false;
       }
+      if (
+        this.stateChannelBanlance.length < this.price.length ||
+        this.stateChannelBanlance < this.price
+      ) {
+        this.$Notice.warning({
+          title: "余额不足",
+          desc: "您需要增加state channel余额，以便成功调用该 API"
+        });
+        return false;
+      }
       return true;
     },
     async callAi() {
