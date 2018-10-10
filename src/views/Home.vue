@@ -3,7 +3,7 @@
 
     <!-- QRcode -->
     <div style="width:150px; height: 150px;position:fixed;left:0;bottom:3%;">
-      <img src="../assets/QRcode.jpg" alt="" style="width:100px; height: 100px; margin-left:25px">
+      <img src="../assets/QRcode.jpeg" alt="" style="width:100px; height: 100px; margin-left:25px">
       <p style="font-size:14px; width:100%;text-align:center;">扫码关注官方公众号</p>
     </div>
     <!-- QRcode -->
