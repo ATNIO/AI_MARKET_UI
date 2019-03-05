@@ -71,7 +71,7 @@
                                     size="20"
                                     color="#797bf8"
                             />
-                            <span class="star-count">{{this.likeCount}}</span>
+                            <span class="star-count">{{dbot.collect_count.upcount}}</span>
                         </p>
                         <p class="update">update: {{dbot.update_at | timeFormat}}</p>
                     </div>
